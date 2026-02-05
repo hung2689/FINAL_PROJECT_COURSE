@@ -1,0 +1,19 @@
+body {
+    font-family: 'Inter', sans-serif;
+    --checkbox-tick-svg: url('data:image/svg+xml,%3csvg viewBox=%270 0 16 16%27 fill=%27rgb(16,27,13)%27 xmlns=%27http://www.w3.org/2000/svg%27%3e%3cpath d=%27M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z%27/%3e%3c/svg%3e');
+}
+.custom-checkbox:checked {
+    background-image: var(--checkbox-tick-svg);
+}
+input:invalid,
+textarea:invalid,
+select:invalid {
+    box-shadow: none !important;
+    border-color: #d3e7cf !important; /* border bình thường */
+}
+
+/* Khi focus cũng không đỏ */
+input:invalid:focus {
+    box-shadow: 0 0 0 2px rgba(55, 236, 19, 0.2) !important; /* primary */
+    border-color: #37ec13 !important;
+}

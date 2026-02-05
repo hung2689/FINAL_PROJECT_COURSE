@@ -1,0 +1,11 @@
+body {
+    font-family: 'Inter', sans-serif;
+}
+/* Custom scrollbar for better IT aesthetics */
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-thumb {
+    background: #37ec13;
+    border-radius: 10px;
+}

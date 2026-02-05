@@ -1,0 +1,17 @@
+D:\FPTU\semeter_4\PRJ\CourseITProject\src\main\java\courseitproject\JakartaRestConfiguration.java
+D:\FPTU\semeter_4\PRJ\CourseITProject\src\main\java\courseitproject\model\Role.java
+D:\FPTU\semeter_4\PRJ\CourseITProject\src\main\java\courseitproject\model\UserRole.java
+D:\FPTU\semeter_4\PRJ\CourseITProject\src\main\java\courseitproject\model\Users.java
+D:\FPTU\semeter_4\PRJ\CourseITProject\src\main\java\courseitproject\resources\JakartaEE10Resource.java
+D:\FPTU\semeter_4\PRJ\CourseITProject\src\main\java\courseitproject\utils\OtpUtil.java
+D:\FPTU\semeter_4\PRJ\CourseITProject\src\main\java\courseitproject\model\Teacher.java
+D:\FPTU\semeter_4\PRJ\CourseITProject\src\main\java\courseitproject\utils\JPAUtil.java
+D:\FPTU\semeter_4\PRJ\CourseITProject\src\main\java\courseitproject\config\EmailInformationConfig.java
+D:\FPTU\semeter_4\PRJ\CourseITProject\src\main\java\courseitproject\dao\base\BaseDAO.java
+D:\FPTU\semeter_4\PRJ\CourseITProject\src\main\java\courseitproject\model\Student.java
+D:\FPTU\semeter_4\PRJ\CourseITProject\src\main\java\courseitproject\service\IUserService.java
+D:\FPTU\semeter_4\PRJ\CourseITProject\src\main\java\courseitproject\dao\base\GenericDAO.java
+D:\FPTU\semeter_4\PRJ\CourseITProject\src\main\java\courseitproject\utils\EmailUtil.java
+D:\FPTU\semeter_4\PRJ\CourseITProject\src\main\java\courseitproject\controller\auther\AutherServlet.java
+D:\FPTU\semeter_4\PRJ\CourseITProject\src\main\java\courseitproject\controller\details\CourseServlet.java
+D:\FPTU\semeter_4\PRJ\CourseITProject\src\main\java\courseitproject\service\UserServiceImp.java
