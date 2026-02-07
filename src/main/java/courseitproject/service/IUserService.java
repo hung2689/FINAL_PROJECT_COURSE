@@ -14,8 +14,11 @@ public interface IUserService {
 
     public Users findUserById(int id);
 
-      public void register(Users user, String roleName);
-       public void UserSendEmail(String email);
-       public boolean UserVerifyRegister(String email,String otp);
+    public void register(Users user, String roleName);
 
+    public void UserSendEmail(String email);
+
+    public boolean UserVerifyRegister(String email, String otp);
+    
+ 
 }

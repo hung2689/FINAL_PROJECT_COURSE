@@ -5,7 +5,6 @@
 package courseitproject.model;
 
 import jakarta.persistence.Basic;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,18 +12,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.Date;
 
 /**
@@ -42,7 +36,10 @@ import java.util.Date;
     @NamedQuery(name = "Users.findByPassword", query = "SELECT u FROM Users u WHERE u.password = :password"),
     @NamedQuery(name = "Users.findByFullName", query = "SELECT u FROM Users u WHERE u.fullName = :fullName"),
     @NamedQuery(name = "Users.findByStatus", query = "SELECT u FROM Users u WHERE u.status = :status"),
-    @NamedQuery(name = "Users.findByCreatedAt", query = "SELECT u FROM Users u WHERE u.createdAt = :createdAt")})
+    @NamedQuery(name = "Users.findByCreatedAt", query = "SELECT u FROM Users u WHERE u.createdAt = :createdAt"),
+    @NamedQuery(name = "Users.findByProvider", query = "SELECT u FROM Users u WHERE u.provider = :provider"),
+    @NamedQuery(name = "Users.findByProviderId", query = "SELECT u FROM Users u WHERE u.providerId = :providerId"),
+    @NamedQuery(name = "Users.findByEmailVerified", query = "SELECT u FROM Users u WHERE u.emailVerified = :emailVerified")})
 public class Users implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -51,37 +48,37 @@ public class Users implements Serializable {
     @Basic(optional = false)
     @Column(name = "user_id")
     private Integer userId;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 50)
+    @Size(max = 255)
     @Column(name = "username")
     private String username;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 100)
+    @Size(max = 255)
     @Column(name = "email")
     private String email;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
+    @Size(max = 255)
     @Column(name = "password")
     private String password;
-    @Size(max = 100)
+    @Size(max = 255)
     @Column(name = "full_name")
     private String fullName;
-    @Size(max = 20)
+    @Size(max = 255)
     @Column(name = "status")
     private String status;
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime  createdAt;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
-    private Collection<UserRole> userRoleCollection;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "users")
-    private Teacher teacher;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "users")
-    private Student student;
+    private Date createdAt;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 20)
+    @Column(name = "provider")
+    private String provider;
+    @Size(max = 255)
+    @Column(name = "provider_id")
+    private String providerId;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "email_verified")
+    private boolean emailVerified;
 
     public Users() {
     }
@@ -90,11 +87,10 @@ public class Users implements Serializable {
         this.userId = userId;
     }
 
-    public Users(Integer userId, String username, String email, String password) {
+    public Users(Integer userId, String provider, boolean emailVerified) {
         this.userId = userId;
-        this.username = username;
-        this.email = email;
-        this.password = password;
+        this.provider = provider;
+        this.emailVerified = emailVerified;
     }
 
     public Integer getUserId() {
@@ -145,37 +141,36 @@ public class Users implements Serializable {
         this.status = status;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 
-    @XmlTransient
-    public Collection<UserRole> getUserRoleCollection() {
-        return userRoleCollection;
+    public String getProvider() {
+        return provider;
     }
 
-    public void setUserRoleCollection(Collection<UserRole> userRoleCollection) {
-        this.userRoleCollection = userRoleCollection;
+    public void setProvider(String provider) {
+        this.provider = provider;
     }
 
-    public Teacher getTeacher() {
-        return teacher;
+    public String getProviderId() {
+        return providerId;
     }
 
-    public void setTeacher(Teacher teacher) {
-        this.teacher = teacher;
+    public void setProviderId(String providerId) {
+        this.providerId = providerId;
     }
 
-    public Student getStudent() {
-        return student;
+    public boolean getEmailVerified() {
+        return emailVerified;
     }
 
-    public void setStudent(Student student) {
-        this.student = student;
+    public void setEmailVerified(boolean emailVerified) {
+        this.emailVerified = emailVerified;
     }
 
     @Override
@@ -200,7 +195,7 @@ public class Users implements Serializable {
 
     @Override
     public String toString() {
-        return "courseitproject.model.Users[ userId=" + userId + " ]"+fullName;
+        return "courseitproject.model.Users[ userId=" + userId + " ]";
     }
     
 }

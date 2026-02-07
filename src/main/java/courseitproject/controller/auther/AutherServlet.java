@@ -19,6 +19,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -109,6 +110,11 @@ public class AutherServlet extends HttpServlet {
 
         String otp = request.getParameter("otp");
         String email = (String) session.getAttribute("REG_EMAIL");
+        if (otp == null || email == null) {
+            request.setAttribute("otpError", "Please enter the OTP.");
+            request.getRequestDispatcher("/views/auth/registerOtp.jsp").forward(request, response);
+            return;
+        }
 
         if (!userService.UserVerifyRegister(email, otp)) {
             request.setAttribute("otpError", "Invalid or expired OTP");
@@ -129,8 +135,7 @@ public class AutherServlet extends HttpServlet {
         user.setFullName(fullname);
         user.setPassword(hashedPwd);
         user.setStatus("ACTIVE");
-        user.setCreatedAt(LocalDateTime.now());
-
+        user.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
         // XÓA SESSION TẠM
         session.removeAttribute("REG_FULLNAME");
         session.removeAttribute("REG_USERNAME");
@@ -139,6 +144,14 @@ public class AutherServlet extends HttpServlet {
         session.removeAttribute("REG_ROLE");
         try {
             userService.register(user, role);
+            if ("TEACHER".equalsIgnoreCase(role)) {
+
+                // lưu user vào session để dùng ở bước tiếp
+                session.setAttribute("PENDING_TEACHER_USER", user);
+
+                response.sendRedirect(request.getContextPath() + "/teacherRegister");
+                return;
+            }
             request.setAttribute("registerSuccess", "true");
             request.getRequestDispatcher("/views/auth/registerOtp.jsp").forward(request, response);
         } catch (Exception e) {
@@ -183,9 +196,9 @@ public class AutherServlet extends HttpServlet {
                 c.setPath("/");
                 response.addCookie(c);
             }
-            response.sendRedirect(request.getContextPath()+"/shop");
+            response.sendRedirect(request.getContextPath() + "/shop");
 
-        }else {
+        } else {
             request.setAttribute("error", "Invalid username/email or password");
             request.getRequestDispatcher("views/auth/login.jsp").forward(request, response);
         }

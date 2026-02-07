@@ -91,7 +91,7 @@
                             <span>Giỏ hàng</span>
                         </button>
                         <div class="h-8 w-[1px] bg-gray-200"></div>
-                        <button class="px-6 py-2 rounded-full bg-primary text-[#132210] text-sm font-bold hover:bg-[#2dd111] transition-colors">
+                        <button ac class="px-6 py-2 rounded-full bg-primary text-[#132210] text-sm font-bold hover:bg-[#2dd111] transition-colors">
                             Đăng nhập
                         </button>
                     </div>

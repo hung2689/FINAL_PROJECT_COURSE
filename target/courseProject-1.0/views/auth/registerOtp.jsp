@@ -161,10 +161,10 @@
                     <span>Nền tảng đào tạo lập trình hàng đầu</span>
                 </div>
             </div>
-             <div class="w-full lg:w-[60%] flex items-center justify-center p-8 bg-background-light dark:bg-background-dark">
+            <div class="w-full lg:w-[60%] flex items-center justify-center p-8 bg-background-light dark:bg-background-dark">
                 <c:choose>
 
-                     <c:when test="${not empty registerSuccess}">
+                    <c:when test="${not empty registerSuccess}">
                         <div class="text-center py-10">
                             <div class="mb-6">
                                 <span class="material-symbols-outlined text-green-500 text-6xl">
@@ -188,7 +188,7 @@
                         </div>
                     </c:when>
 
-                     <c:otherwise>
+                    <c:otherwise>
                         <div class="max-w-md w-full">
                             <div class="bg-white dark:bg-zinc-900 shadow-xl rounded-xl p-10 border border-gray-100 dark:border-zinc-800">
                                 <div class="text-center mb-10">
@@ -196,7 +196,7 @@
                                     <p class="text-zinc-500 dark:text-zinc-400">Vui lòng nhập mã 6 chữ số đã được gửi</p>
                                 </div>
                                 <form  form action="${pageContext.request.contextPath}/otpRegister" method="POST">
-                                     <div class="flex justify-between gap-2 mb-8">
+                                    <div class="flex justify-between gap-2 mb-8">
                                         <input class="otp-input w-12 h-14 sm:w-14 sm:h-16 text-center text-2xl font-bold border-2 border-gray-200 dark:border-zinc-700 rounded-lg focus:border-primary focus:ring-0 bg-transparent dark:text-white transition-colors" maxlength="1" placeholder="-" type="text"  />
                                         <input class="otp-input w-12 h-14 sm:w-14 sm:h-16 text-center text-2xl font-bold border-2 border-gray-200 dark:border-zinc-700 rounded-lg focus:border-primary focus:ring-0 bg-transparent dark:text-white transition-colors" maxlength="1" placeholder="-" type="text"        />
                                         <input class="otp-input w-12 h-14 sm:w-14 sm:h-16 text-center text-2xl font-bold border-2 border-primary rounded-lg focus:border-primary focus:ring-0 bg-transparent dark:text-white transition-colors outline-none" maxlength="1" placeholder="-" type="text"/>
@@ -207,9 +207,17 @@
                                     <div class="text-center mb-8">
                                         <p class="text-sm text-zinc-500 flex items-center justify-center gap-1">
                                             <span class="material-symbols-outlined text-sm">timer</span>
-                                            Gửi lại mã sau <span class="font-bold text-zinc-900 dark:text-white">00:45</span>
+                                            Gửi lại mã sau
+                                            <span id="countdown" class="font-bold text-zinc-900 dark:text-white">01:00</span>
                                         </p>
+                                        <button id="resendBtn"
+                                                class="hidden text-primary font-semibold hover:underline mt-2"
+                                                onclick="window.location.href = 'resend-otp'">
+                                            Resend OTP
+                                        </button>
+
                                     </div>
+
                                     <button class="w-full bg-gradient-to-r from-primary to-[#2cc50f] text-zinc-900 py-4 rounded-lg font-bold text-lg hover:opacity-90 transition-all shadow-lg shadow-primary/20 mb-6">
                                         Xác thực Email
                                     </button>
@@ -227,7 +235,7 @@
 
                                 </form>
                             </div>
-                             <div class="mt-8 text-center">
+                            <div class="mt-8 text-center">
                                 <p class="text-zinc-400 text-xs">
                                     © 2024 DevLearn E-learning Platform. Mọi quyền được bảo lưu.
                                 </p>
@@ -242,4 +250,26 @@
 
             </div>
         </div>
+        <script>
+            let timeLeft = 60; // 60 giây
+            const countdownEl = document.getElementById("countdown");
+
+            const timer = setInterval(() => {
+                let minutes = Math.floor(timeLeft / 60);
+                let seconds = timeLeft % 60;
+
+                countdownEl.textContent =
+                        String(minutes).padStart(2, '0') + ":" +
+                        String(seconds).padStart(2, '0');
+
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    countdownEl.textContent = "00:00";
+                    document.getElementById("resendBtn").classList.remove("hidden");
+                }
+
+                timeLeft--;
+            }, 1000);
+        </script>
+
     </body></html>

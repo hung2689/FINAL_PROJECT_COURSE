@@ -106,25 +106,25 @@
                     <form class="space-y-5" action="register" method="POST">
                         <div>
                             <label class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5"  for="username">User Name</label>
-                            <input class="w-full px-4 py-3 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-zinc-400" id="username" name="username" placeholder="John Doe" type="text"/>
+                            <input required class="w-full px-4 py-3 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-zinc-400" id="username" name="username" placeholder="John Doe" type="text"/>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5" for="fullname">Full Name</label>
-                            <input class="w-full px-4 py-3 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-zinc-400" id="fullname" name="fullname" placeholder="John Doe" type="text"/>
+                            <input required class="w-full px-4 py-3 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-zinc-400" id="fullname" name="fullname" placeholder="John Doe" type="text"/>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5" for="email">Email address</label>
-                            <input class="w-full px-4 py-3 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-zinc-400" id="email" name="email" placeholder="name@university.edu" type="email"/>
+                            <input required class="w-full px-4 py-3 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-zinc-400" id="email" name="email" placeholder="name@university.edu" type="email"/>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5" for="password">Password</label>
-                            <input class="w-full px-4 py-3 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-zinc-400" id="password" name="password" placeholder="••••••••" type="password"/>
+                            <input required class="w-full px-4 py-3 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-zinc-400" id="password" name="password" placeholder="••••••••" type="password"/>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5" for="role">
                                 You are joining as:
                             </label>
-                            <select
+                            <select required
                                 id="role"
                                 name="role"
                                 class="w-full px-4 py-3 rounded-lg border border-zinc-200 dark:border-zinc-700 
