@@ -127,13 +127,13 @@
                                              id="skill-container">
 
                                             <input
-
+                                                 
                                                 id="skill-input"
                                                 class="bg-transparent border-none focus:ring-0 text-sm flex-1 min-w-[150px] text-slate-600 dark:text-slate-300"
                                                 placeholder="Type a skill and press Enter..."
                                                 type="text"
                                                 />
-                                            <input type="hidden" name="specialization" id="specialization-hidden">
+                                            <input  type="hidden" name="specialization" id="specialization-hidden">
 
                                         </div>
                                         <p class="text-xs text-slate-500">Press enter to add multiple skills that you are qualified to teach.</p>
@@ -143,7 +143,7 @@
                                         <div class="space-y-3">
                                             <label class="block text-sm font-bold text-slate-900 dark:text-slate-200" for="experience">Years of Professional Experience</label>
                                             <div class="relative">
-                                                <input name="year" class="w-full pl-4 pr-10 py-3 bg-slate-50 dark:bg-background-dark/60 border border-slate-200 dark:border-emerald-900/40 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all dark:text-white" id="experience" min="0" placeholder="e.g. 5" type="number"/>
+                                                <input required name="year" class="w-full pl-4 pr-10 py-3 bg-slate-50 dark:bg-background-dark/60 border border-slate-200 dark:border-emerald-900/40 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all dark:text-white" id="experience" min="0" placeholder="e.g. 5" type="number"/>
                                                 <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-slate-400">
                                                     <span class="material-symbols-outlined">timeline</span>
                                                 </div>
@@ -193,7 +193,7 @@
                                                 PDF, DOCX (Maximum 5MB)
                                             </p>
 
-                                            <input
+                                            <input  required 
                                                 name="cv"
                                                 id="cv-input"
                                                 class="hidden"

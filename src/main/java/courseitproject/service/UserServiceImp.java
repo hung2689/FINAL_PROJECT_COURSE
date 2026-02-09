@@ -144,14 +144,112 @@ public class UserServiceImp implements IUserService {
                 + "Empowering your programming journey"
         );
     }
+
     @Override
-    public boolean UserVerifyRegister(String email,String otp){
-        if(otputil.verify(email, otp)){
+    public boolean UserVerifyRegister(String email, String otp) {
+        if (otputil.verify(email, otp)) {
             return true;
-        }else{
+        } else {
             return false;
         }
-        
+
+    }
+
+    @Override
+    public Users createGoogleUser(Users user) {
+        EntityManager em = JPAUtil.getEntityManager();
+        EntityTransaction tx = em.getTransaction();
+
+        try {
+            tx.begin();
+
+            user.setStatus("PENDING");
+            userDAO.save(em, user);
+
+            Role userRole = em.createQuery(
+                    "SELECT r FROM Role r WHERE r.roleName = 'USER'",
+                    Role.class
+            ).getSingleResult();
+
+            UserRole ur = new UserRole();
+            ur.setUserId(user);
+            ur.setRoleId(userRole);
+            userRoleDAO.save(em, ur);
+
+            tx.commit();
+            return user;
+
+        } catch (Exception e) {
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+            throw e;
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
+    public void completeProfile(
+            int userId,
+            String username,
+            String fullName,
+            String roleName
+    ) {
+        EntityManager em = JPAUtil.getEntityManager();
+        EntityTransaction tx = em.getTransaction();
+
+        try {
+            tx.begin();
+
+            Users user = em.find(Users.class, userId);
+            user.setUsername(username);
+            user.setFullName(fullName);
+            user.setStatus("ACTIVE");
+            user.setEmailVerified(true);
+
+            // xóa role USER
+            em.createQuery(
+                    "DELETE FROM UserRole ur WHERE ur.userId.userId = :uid"
+            ).setParameter("uid", userId).executeUpdate();
+
+            Role role = em.createQuery(
+                    "SELECT r FROM Role r WHERE r.roleName = :name",
+                    Role.class
+            ).setParameter("name", roleName)
+                    .getSingleResult();
+
+            UserRole ur = new UserRole();
+            ur.setUserId(user);
+            ur.setRoleId(role);
+            userRoleDAO.save(em, ur);
+
+            if ("STUDENT".equalsIgnoreCase(roleName)) {
+                Student st = new Student();
+                st.setStudentId(userId);
+                st.setUsers(user);
+                st.setLevel("BEGINNER");
+                studentDAO.save(em, st);
+            }
+
+            if ("TEACHER".equalsIgnoreCase(roleName)) {
+                Teacher t = new Teacher();
+                t.setTeacherId(userId);
+                t.setUsers(user);
+                t.setApprovalStatus("PENDING");
+                teacherDAO.save(em, t);
+            }
+
+            tx.commit();
+
+        } catch (Exception e) {
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+            throw e;
+        } finally {
+            em.close();
+        }
     }
 
 }

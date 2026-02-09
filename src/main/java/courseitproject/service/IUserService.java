@@ -19,6 +19,13 @@ public interface IUserService {
     public void UserSendEmail(String email);
 
     public boolean UserVerifyRegister(String email, String otp);
-    
- 
+
+    public Users createGoogleUser(Users user);
+
+    public void completeProfile(
+            int userId,
+            String username,
+            String fullName,
+            String roleName
+    );
 }

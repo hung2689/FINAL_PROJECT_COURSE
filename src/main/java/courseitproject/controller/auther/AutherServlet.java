@@ -4,10 +4,7 @@
  */
 package courseitproject.controller.auther;
 
-import courseitproject.model.Role;
-import courseitproject.model.Student;
-import courseitproject.model.Teacher;
-import courseitproject.model.UserRole;
+
 import courseitproject.model.Users;
 import courseitproject.service.IUserService;
 import courseitproject.service.UserServiceImp;
@@ -136,6 +133,8 @@ public class AutherServlet extends HttpServlet {
         user.setPassword(hashedPwd);
         user.setStatus("ACTIVE");
         user.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
+        user.setProvider("local");
+        user.setEmailVerified(true);
         // XÓA SESSION TẠM
         session.removeAttribute("REG_FULLNAME");
         session.removeAttribute("REG_USERNAME");
@@ -175,33 +174,66 @@ public class AutherServlet extends HttpServlet {
 
     protected void postLogin(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         String input = request.getParameter("input");
         String password = request.getParameter("password");
         String remember = request.getParameter("remember");
+
+        // 1. Tìm user theo username hoặc email
         Users user = userService.findUserByUsername(input);
         if (user == null) {
             user = userService.findUserByEmail(input);
         }
-        if (user != null && BCrypt.checkpw(password, user.getPassword())) {
-            HttpSession session = request.getSession();
-            session.setAttribute("USER", user);
-            if (remember != null) {
-                Cookie cookies = new Cookie("INPUT_COOKIE", input);
-                cookies.setMaxAge(7 * 24 * 60 * 60);
-                cookies.setPath("/");
-                response.addCookie(cookies);
-            } else {
-                Cookie c = new Cookie("INPUT_COOKIE", "");
-                c.setMaxAge(0);
-                c.setPath("/");
-                response.addCookie(c);
-            }
-            response.sendRedirect(request.getContextPath() + "/shop");
 
-        } else {
-            request.setAttribute("error", "Invalid username/email or password");
+        // 2. Không tìm thấy user
+        if (user == null) {
+            request.setAttribute("error", "Sai tên đăng nhập/email hoặc mật khẩu");
             request.getRequestDispatcher("views/auth/login.jsp").forward(request, response);
+            return;
         }
+
+        // 3. User đăng nhập bằng GOOGLE → chặn login thường
+        if ("GOOGLE".equalsIgnoreCase(user.getProvider())) {
+            request.setAttribute("error",
+                    "Sai tài khoản hoặc mật khẩu");
+            request.getRequestDispatcher("views/auth/login.jsp").forward(request, response);
+            return;
+        }
+
+        // 4. Phòng thủ: password null (tránh BCrypt crash)
+        if (user.getPassword() == null) {
+            request.setAttribute("error",
+                    "Tài khoản này không hỗ trợ đăng nhập bằng mật khẩu.");
+            request.getRequestDispatcher("views/auth/login.jsp").forward(request, response);
+            return;
+        }
+
+        // 5. Check mật khẩu
+        if (!BCrypt.checkpw(password, user.getPassword())) {
+            request.setAttribute("error", "Sai tên đăng nhập/email hoặc mật khẩu");
+            request.getRequestDispatcher("views/auth/login.jsp").forward(request, response);
+            return;
+        }
+
+        // 6. Login thành công
+        HttpSession session = request.getSession();
+        session.setAttribute("USER", user);
+
+        // 7. Remember me
+        if (remember != null) {
+            Cookie cookie = new Cookie("INPUT_COOKIE", input);
+            cookie.setMaxAge(7 * 24 * 60 * 60);
+            cookie.setPath("/");
+            response.addCookie(cookie);
+        } else {
+            Cookie cookie = new Cookie("INPUT_COOKIE", "");
+            cookie.setMaxAge(0);
+            cookie.setPath("/");
+            response.addCookie(cookie);
+        }
+
+        // 8. Redirect
+        response.sendRedirect(request.getContextPath() + "/shop");
     }
 
 }

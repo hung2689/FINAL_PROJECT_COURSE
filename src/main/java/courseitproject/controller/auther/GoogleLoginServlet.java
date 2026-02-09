@@ -16,6 +16,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 /**
  *
@@ -24,10 +27,11 @@ import jakarta.servlet.http.HttpServletResponse;
 @WebServlet(name = "GoogleLoginServlet", urlPatterns = {"/login-google"})
 public class GoogleLoginServlet extends HttpServlet {
 
-    private   GoogleAuthService googleService  ;
-    private  IUserService userService ;
-    
-    public void init(){
+    private GoogleAuthService googleService;
+    private IUserService userService;
+
+    @Override
+    public void init() {
         googleService = new GoogleAuthService();
         userService = new UserServiceImp();
     }
@@ -55,21 +59,24 @@ public class GoogleLoginServlet extends HttpServlet {
                 user.setProvider("GOOGLE");
                 user.setProviderId(ggUser.getSub());
                 user.setEmailVerified(false);
+                user.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
 
-                userService.register(user,"USER");
+                userService.createGoogleUser(user);
             }
-
+            user = userService.findUserByEmail(user.getEmail());
             req.getSession().setAttribute("USER", user);
 
             if (!user.getEmailVerified()) {
-                resp.sendRedirect("complete-profile.jsp");
+                resp.sendRedirect(req.getContextPath() +"/complete-profile") ;
             } else {
-                resp.sendRedirect(req.getContextPath()+"/shop");
+                resp.sendRedirect(req.getContextPath() + "/shop");
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            resp.sendRedirect("login.jsp?error=google");
+           
         }
     }
+
+    
 }

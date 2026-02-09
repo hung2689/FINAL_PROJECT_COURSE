@@ -24,4 +24,5 @@ courseitproject\controller\auther\TeacherRegister.class
 courseitproject\model\Student.class
 courseitproject\service\IUserService.class
 courseitproject\utils\EmailUtil.class
+courseitproject\controller\auther\CompleteProfile.class
 courseitproject\model\UserRole.class

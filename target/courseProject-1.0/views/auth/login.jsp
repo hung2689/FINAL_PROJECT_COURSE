@@ -5,6 +5,8 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <!DOCTYPE html>
 <html class="dark" lang="vi"><head>
 
@@ -151,6 +153,22 @@
                         <span class="material-symbols-outlined">arrow_forward</span>
                     </button>
                 </form>
+                <c:if test="${not empty error}">
+                    <div class="relative flex items-start gap-3 p-4 rounded-xl 
+                         bg-red-500/10 border border-red-500/30 
+                         text-red-400 text-sm animate-shake">
+
+                        <span class="material-symbols-outlined text-red-400 text-xl">
+                            error
+                        </span>
+
+                        <div class="flex-1">
+                            <p class="font-semibold">Đăng nhập thất bại</p>
+                            <p class="text-red-300/80">${error}</p>
+                        </div>
+                    </div>
+                </c:if>
+
                 <div class="flex flex-col items-center gap-6">
                     <div class="flex items-center w-full gap-4">
                         <div class="h-px bg-white/10 flex-1"></div>
