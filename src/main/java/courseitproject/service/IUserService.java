@@ -28,4 +28,6 @@ public interface IUserService {
             String fullName,
             String roleName
     );
+    boolean updatePasswordByEmail(String email, String hashedPassword);
+
 }

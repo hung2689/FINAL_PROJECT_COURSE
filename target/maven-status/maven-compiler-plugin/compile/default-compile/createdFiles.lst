@@ -5,11 +5,13 @@ courseitproject\model\Teacher.class
 courseitproject\dao\base\GenericDAO.class
 courseitproject\dao\base\BaseDAO.class
 courseitproject\model\Users.class
+courseitproject\filter\AuthFilter.class
 courseitproject\config\GoogleConfig.class
 courseitproject\service\TeacherServiceImp.class
 courseitproject\JakartaRestConfiguration.class
 courseitproject\service\GoogleAuthService.class
 courseitproject\controller\auther\AutherServlet.class
+courseitproject\filter\BlockJsp.class
 courseitproject\utils\OtpUtil.class
 courseitproject\resources\JakartaEE10Resource.class
 courseitproject\service\ITeacherService.class

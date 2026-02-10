@@ -4,7 +4,6 @@
  */
 package courseitproject.controller.auther;
 
-
 import courseitproject.model.Users;
 import courseitproject.service.IUserService;
 import courseitproject.service.UserServiceImp;
@@ -24,7 +23,7 @@ import org.mindrot.jbcrypt.BCrypt;
  *
  * @author ASUS
  */
-@WebServlet(name = "autherServlet", urlPatterns = {"/login", "/register", "/otpRegister"})
+@WebServlet(name = "autherServlet", urlPatterns = {"/login", "/register", "/otpRegister", "/forget", "/reset","/otpverify"})
 public class AutherServlet extends HttpServlet {
 
     private IUserService userService;
@@ -44,13 +43,10 @@ public class AutherServlet extends HttpServlet {
             getRegister(request, response);
         } else if (uri.contains("login")) {
             getLogin(request, response);
+        } else if (uri.contains("forget")) {
+            getForget(request, response);
         }
 
-    }
-
-    protected void getRegisterOtp(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        request.getRequestDispatcher("/views/auth/registerOtp.jsp").forward(request, response);
     }
 
     @Override
@@ -63,8 +59,130 @@ public class AutherServlet extends HttpServlet {
             postRegister(request, response);
         } else if (uri.contains("login")) {
             postLogin(request, response);
+        } else if (uri.contains("forget")) {
+            postForget(request, response);
+        } else if (uri.contains("reset")) {
+            postReset(request, response);
+        }else if (uri.contains("otpverify")) {
+            postForgetVerifyOtp(request, response);
         }
 
+    }
+
+    protected void postReset(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        HttpSession session = request.getSession(false);
+        if (session == null) {
+            response.sendRedirect(request.getContextPath() + "/forget");
+            return;
+        }
+
+        String email = (String) session.getAttribute("REG_EMAIL");
+        if (email == null) {
+            response.sendRedirect(request.getContextPath() + "/forget");
+            return;
+        }
+
+        String password = request.getParameter("password");
+        String repassword = request.getParameter("repassword");
+
+        // 1️⃣ Validate
+        if (password == null || repassword == null || password.isBlank()) {
+            request.setAttribute("errorPass", "Vui lòng nhập đầy đủ mật khẩu");
+            request.setAttribute("mode", "reset");
+            request.getRequestDispatcher("/views/auth/login.jsp")
+                    .forward(request, response);
+            return;
+        }
+
+        if (!password.equals(repassword)) {
+            request.setAttribute("errorPass", "Mật khẩu không khớp");
+            request.setAttribute("mode", "reset");
+            request.getRequestDispatcher("/views/auth/login.jsp")
+                    .forward(request, response);
+            return;
+        }
+
+        if (password.length() < 6) {
+            request.setAttribute("errorPass", "Mật khẩu phải có ít nhất 6 ký tự");
+            request.setAttribute("mode", "reset");
+            request.getRequestDispatcher("/views/auth/login.jsp")
+                    .forward(request, response);
+            return;
+        }
+
+        String hashedPwd = BCrypt.hashpw(password, BCrypt.gensalt());
+
+        boolean updated = userService.updatePasswordByEmail(email, hashedPwd);
+        if (!updated) {
+            request.setAttribute("errorPass", "Không thể cập nhật mật khẩu");
+            request.setAttribute("mode", "reset");
+            request.getRequestDispatcher("/views/auth/login.jsp")
+                    .forward(request, response);
+            return;
+        }
+
+        session.removeAttribute("ALLOW_RESET_PASSWORD");
+        session.removeAttribute("REG_EMAIL");
+
+        request.setAttribute("resetSuccess", "true");
+        request.getRequestDispatcher("/views/auth/login.jsp?mode=success")
+                .forward(request, response);
+    }
+
+    protected void getForget(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        request.getRequestDispatcher("/views/auth/login.jsp?mode=forgot").forward(request, response);
+    }
+
+    protected void getRegisterOtp(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        request.getRequestDispatcher("/views/auth/registerOtp.jsp").forward(request, response);
+    }
+
+    protected void postForget(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String email = request.getParameter("email");
+        if (userService.findUserByEmail(email) == null) {
+            request.setAttribute("errorForget", "Tài khoản không tồn tại");
+            request.getRequestDispatcher("/views/auth/login.jsp?mode=forgot").forward(request, response);
+            return;
+        }
+        HttpSession session = request.getSession();
+        session.setAttribute("REG_EMAIL", email);
+        // chuyển trang OTP
+
+        request.setAttribute("mode", "otp");
+        request.getRequestDispatcher("/views/auth/login.jsp")
+                .forward(request, response);
+        new Thread(() -> {
+            userService.UserSendEmail(email);
+        }).start();
+    }
+
+    protected void postForgetVerifyOtp(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        HttpSession session = request.getSession();
+
+        String otp = request.getParameter("otp");
+        String email = (String) session.getAttribute("REG_EMAIL");
+        if (otp == null || email == null) {
+            request.setAttribute("otpError", "Please enter the OTP.");
+            request.getRequestDispatcher("/views/auth/login.jsp?mode=otp").forward(request, response);
+            return;
+        }
+
+        if (!userService.UserVerifyRegister(email, otp)) {
+            request.setAttribute("otpError", "Invalid or expired OTP");
+             request.getRequestDispatcher("/views/auth/login.jsp?mode=otp").forward(request, response);
+            return;
+        }
+        session.setAttribute("ALLOW_RESET_PASSWORD", true);
+        request.setAttribute("mode", "reset");
+        request.getRequestDispatcher("/views/auth/login.jsp")
+                .forward(request, response);
     }
 
     protected void postRegister(HttpServletRequest request, HttpServletResponse response)
@@ -92,12 +210,11 @@ public class AutherServlet extends HttpServlet {
         session.setAttribute("REG_PASSWORD", password);
         session.setAttribute("REG_ROLE", role);
 
-        // gửi OTP
-        userService.UserSendEmail(email);
-
         // chuyển trang OTP
         response.sendRedirect(request.getContextPath() + "/otpRegister");
-
+        new Thread(() -> {
+            userService.UserSendEmail(email);
+        }).start();
     }
 
     protected void postRegisterVerifyOtp(HttpServletRequest request, HttpServletResponse response)

@@ -252,4 +252,38 @@ public class UserServiceImp implements IUserService {
         }
     }
 
+    @Override
+    public boolean updatePasswordByEmail(String email, String hashedPassword) {
+
+        EntityManager em = JPAUtil.getEntityManager();
+        EntityTransaction tx = em.getTransaction();
+
+        try {
+            tx.begin();
+
+            Users user = userDAO.findOneByField(em, "email", email);
+            if (user == null) {
+                return false;
+            }
+
+            user.setPassword(hashedPassword);
+            
+
+            userDAO.update(em, user);
+
+            tx.commit();
+            return true;
+
+        } catch (Exception e) {
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+            return false;
+
+        } finally {
+            em.close();
+        }
+    }
+
 }
