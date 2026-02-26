@@ -7,6 +7,10 @@
     <class>courseitproject.model.UserRole</class>
     <class>courseitproject.model.Teacher</class>
     <class>courseitproject.model.Student</class>
+    <class>courseitproject.model.Enrollment</class>
+    <class>courseitproject.model.CourseCategory</class>
+    <class>courseitproject.model.Course</class>
+    <class>courseitproject.model.CourseTeacher</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <!-- Provider JPA (EclipseLink hoặc Hibernate) -->
     <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>

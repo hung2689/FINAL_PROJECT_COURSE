@@ -5,12 +5,14 @@
 package courseitproject.model;
 
 import jakarta.persistence.Basic;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
@@ -18,7 +20,9 @@ import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 
 /**
@@ -44,9 +48,11 @@ public class Student implements Serializable {
     @Column(name = "date_of_birth")
     @Temporal(TemporalType.DATE)
     private Date dateOfBirth;
-    @Size(max = 50)
+    @Size(max = 255)
     @Column(name = "level")
     private String level;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "studentId")
+    private Collection<Enrollment> enrollmentCollection;
     @JoinColumn(name = "student_id", referencedColumnName = "user_id", insertable = false, updatable = false)
     @OneToOne(optional = false)
     private Users users;
@@ -80,6 +86,15 @@ public class Student implements Serializable {
 
     public void setLevel(String level) {
         this.level = level;
+    }
+
+    @XmlTransient
+    public Collection<Enrollment> getEnrollmentCollection() {
+        return enrollmentCollection;
+    }
+
+    public void setEnrollmentCollection(Collection<Enrollment> enrollmentCollection) {
+        this.enrollmentCollection = enrollmentCollection;
     }
 
     public Users getUsers() {

@@ -54,7 +54,13 @@ public class TeacherServiceImp implements ITeacherService {
     public Teacher findTeacherById(int id) {
         EntityManager em = JPAUtil.getEntityManager();
         try {
-            return teacherDAO.findById(em, id);
+            return em.createQuery(
+                    "SELECT t FROM Teacher t WHERE t.teacherId = :id AND t.approvalStatus = 'APPROVED'",
+                    Teacher.class)
+                    .setParameter("id", id)
+                    .getResultStream()
+                    .findFirst()
+                    .orElse(null);
         } finally {
             em.close();
         }

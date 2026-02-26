@@ -350,6 +350,7 @@ public class AutherServlet extends HttpServlet {
         }
 
         // 8. Redirect
+        
         response.sendRedirect(request.getContextPath() + "/shop");
     }
 

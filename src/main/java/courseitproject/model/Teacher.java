@@ -5,18 +5,23 @@
 package courseitproject.model;
 
 import jakarta.persistence.Basic;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.MapsId;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
+import java.util.Collection;
 
 /**
  *
@@ -36,22 +41,23 @@ public class Teacher implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "teacher_id")
     private Integer teacherId;
-    @Size(max = 100)
+    @Size(max = 255)
     @Column(name = "specialization")
     private String specialization;
     @Column(name = "experience_year")
     private Integer experienceYear;
-    @Size(max = 20)
+    @Size(max = 255)
     @Column(name = "approval_status")
     private String approvalStatus;
     @Size(max = 255)
     @Column(name = "cv_url")
     private String cvUrl;
-    @JoinColumn(name = "teacher_id", referencedColumnName = "user_id", insertable = false, updatable = false)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "teacherId")
+    private Collection<CourseTeacher> courseTeacherCollection;
+    @MapsId
+    @JoinColumn(name = "teacher_id")
     @OneToOne(optional = false)
     private Users users;
 
@@ -102,6 +108,15 @@ public class Teacher implements Serializable {
         this.cvUrl = cvUrl;
     }
 
+    @XmlTransient
+    public Collection<CourseTeacher> getCourseTeacherCollection() {
+        return courseTeacherCollection;
+    }
+
+    public void setCourseTeacherCollection(Collection<CourseTeacher> courseTeacherCollection) {
+        this.courseTeacherCollection = courseTeacherCollection;
+    }
+
     public Users getUsers() {
         return users;
     }
@@ -134,5 +149,5 @@ public class Teacher implements Serializable {
     public String toString() {
         return "courseitproject.model.Teacher[ teacherId=" + teacherId + " ]";
     }
-    
+
 }

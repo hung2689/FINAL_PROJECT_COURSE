@@ -5,6 +5,7 @@
 package courseitproject.model;
 
 import jakarta.persistence.Basic;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,13 +13,17 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 
 /**
@@ -67,9 +72,7 @@ public class Users implements Serializable {
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 20)
+    @Size(max = 255)
     @Column(name = "provider")
     private String provider;
     @Size(max = 255)
@@ -79,6 +82,12 @@ public class Users implements Serializable {
     @NotNull
     @Column(name = "email_verified")
     private boolean emailVerified;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
+    private Collection<UserRole> userRoleCollection;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "users")
+    private Teacher teacher;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "users")
+    private Student student;
 
     public Users() {
     }
@@ -87,9 +96,8 @@ public class Users implements Serializable {
         this.userId = userId;
     }
 
-    public Users(Integer userId, String provider, boolean emailVerified) {
+    public Users(Integer userId, boolean emailVerified) {
         this.userId = userId;
-        this.provider = provider;
         this.emailVerified = emailVerified;
     }
 
@@ -171,6 +179,31 @@ public class Users implements Serializable {
 
     public void setEmailVerified(boolean emailVerified) {
         this.emailVerified = emailVerified;
+    }
+
+    @XmlTransient
+    public Collection<UserRole> getUserRoleCollection() {
+        return userRoleCollection;
+    }
+
+    public void setUserRoleCollection(Collection<UserRole> userRoleCollection) {
+        this.userRoleCollection = userRoleCollection;
+    }
+
+    public Teacher getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(Teacher teacher) {
+        this.teacher = teacher;
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
     }
 
     @Override

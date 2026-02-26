@@ -15,7 +15,6 @@ import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlTransient;
@@ -41,9 +40,7 @@ public class Role implements Serializable {
     @Basic(optional = false)
     @Column(name = "role_id")
     private Integer roleId;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 50)
+    @Size(max = 255)
     @Column(name = "role_name")
     private String roleName;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "roleId")
@@ -54,11 +51,6 @@ public class Role implements Serializable {
 
     public Role(Integer roleId) {
         this.roleId = roleId;
-    }
-
-    public Role(Integer roleId, String roleName) {
-        this.roleId = roleId;
-        this.roleName = roleName;
     }
 
     public Integer getRoleId() {
