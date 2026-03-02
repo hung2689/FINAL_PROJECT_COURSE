@@ -457,84 +457,98 @@
 
                 <jsp:include page="../common/userbuttom.jsp" />
 
-                <script>
-                        (function () {
-                            const cards = document.querySelectorAll('.course-card');
-                            const grid = document.getElementById('courseGrid');
-                            const noResults = document.getElementById('noResults');
-                            const visibleCount = document.getElementById('visibleCount');
-                            const priceSlider = document.getElementById('priceRange');
-                            const priceDisplay = document.getElementById('priceDisplay');
-                            const rangeFill = document.getElementById('rangeFill');
-                            const categoryForm = document.getElementById('categoryForm');
+               <script>
+    (function () {
+        const cards = document.querySelectorAll('.course-card');
+        const grid = document.getElementById('courseGrid');
+        const noResults = document.getElementById('noResults');
+        const visibleCount = document.getElementById('visibleCount');
+        const priceSlider = document.getElementById('priceRange');
+        const priceDisplay = document.getElementById('priceDisplay');
+        const rangeFill = document.getElementById('rangeFill');
+        const categoryForm = document.getElementById('categoryForm');
 
-                            /* ── helpers ── */
-                            function fmt(v) {
-                                return '$' + Number(v).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-                            }
+        /* ── helpers ── */
+        function fmt(v) {
+            return '$' + Number(v).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
 
-                            function updateRangeFill() {
-                                if (!priceSlider || !rangeFill) return;
-                                const pct = ((priceSlider.value - priceSlider.min) / (priceSlider.max - priceSlider.min)) * 100;
-                                rangeFill.style.width = pct + '%';
-                                if (priceDisplay) priceDisplay.textContent = fmt(priceSlider.value);
-                            }
+        function updateRangeFill() {
+            if (!priceSlider || !rangeFill) return;
+            const pct = ((priceSlider.value - priceSlider.min) / (priceSlider.max - priceSlider.min)) * 100;
+            rangeFill.style.width = pct + '%';
+            if (priceDisplay) priceDisplay.textContent = fmt(priceSlider.value);
+        }
 
-                            /* ── Category: auto-submit on radio change ── */
-                            if (categoryForm) {
-                                const radios = categoryForm.querySelectorAll('input[name="categoryId"]');
-                                radios.forEach(function (radio) {
-                                    radio.addEventListener('change', function () {
-                                        categoryForm.submit();
-                                    });
-                                });
-                            }
+        /* ── Category: auto-submit khi chọn Danh mục ── */
+        if (categoryForm) {
+            const radios = categoryForm.querySelectorAll('input[name="categoryId"]');
+            radios.forEach(function (radio) {
+                radio.addEventListener('change', function () {
+                    // Cập nhật URL trực tiếp để không làm mất các bộ lọc khác
+                    const p = new URLSearchParams(window.location.search);
+                    p.set('categoryId', this.value);
+                    p.set('page', '1');
+                    window.location.search = p.toString();
+                });
+            });
+        }
 
-                            /* ── Price slider ── */
-                            if (priceSlider) {
-                                priceSlider.addEventListener('input', function () {
-                                    updateRangeFill();
-                                });
-                                updateRangeFill();
-                            }
+        /* ── Price slider: Auto-lọc khi kéo giá ── */
+        if (priceSlider) {
+            // Sự kiện 1: Đổi số liệu và màu lúc đang kéo
+            priceSlider.addEventListener('input', function () {
+                updateRangeFill();
+            });
+            
+            // Sự kiện 2: Auto reload trang (lọc) khi nhả chuột
+            priceSlider.addEventListener('change', function () {
+                const p = new URLSearchParams(window.location.search);
+                p.set('maxPrice', this.value);
+                p.set('page', '1');
+                window.location.search = p.toString();
+            });
 
-                            /* ── Search suggest ── */
-                            const input = document.getElementById('searchInput');
-                            const suggestBox = document.getElementById('suggestBox');
-                            if (input && suggestBox) {
-                                input.addEventListener('keyup', function () {
-                                    const kw = this.value.trim();
-                                    if (!kw.length) { suggestBox.classList.add('hidden'); return; }
-                                    fetch('${pageContext.request.contextPath}/searchSuggest?keyword=' + encodeURIComponent(kw))
-                                        .then(r => r.json())
-                                        .then(data => {
-                                            suggestBox.innerHTML = '';
-                                            if (!data.length) { suggestBox.classList.add('hidden'); return; }
-                                            data.forEach(t => {
-                                                const d = document.createElement('div');
-                                                d.className = 'px-5 py-3 hover:bg-emerald-50 cursor-pointer text-sm font-medium text-slate-700 border-b border-emerald-50 last:border-0 transition-colors';
-                                                d.textContent = t;
-                                                d.onclick = () => { input.value = t; input.form.submit(); };
-                                                suggestBox.appendChild(d);
-                                            });
-                                            suggestBox.classList.remove('hidden');
-                                        })
-                                        .catch(e => console.error('Search error:', e));
-                                });
-                                document.addEventListener('click', e => {
-                                    if (!suggestBox.contains(e.target) && e.target !== input) suggestBox.classList.add('hidden');
-                                });
-                            }
+            updateRangeFill();
+        }
 
-                            /* ── Sort ── */
-                            window.updateSort = function (v) {
-                                const p = new URLSearchParams(window.location.search);
-                                p.set('sort', v);
-                                p.set('page', '1');
-                                window.location.search = p.toString();
-                            };
-                        })();
-                </script>
+        /* ── Search suggest ── */
+        const input = document.getElementById('searchInput');
+        const suggestBox = document.getElementById('suggestBox');
+        if (input && suggestBox) {
+            input.addEventListener('keyup', function () {
+                const kw = this.value.trim();
+                if (!kw.length) { suggestBox.classList.add('hidden'); return; }
+                fetch('${pageContext.request.contextPath}/searchSuggest?keyword=' + encodeURIComponent(kw))
+                    .then(r => r.json())
+                    .then(data => {
+                        suggestBox.innerHTML = '';
+                        if (!data.length) { suggestBox.classList.add('hidden'); return; }
+                        data.forEach(t => {
+                            const d = document.createElement('div');
+                            d.className = 'px-5 py-3 hover:bg-emerald-50 cursor-pointer text-sm font-medium text-slate-700 border-b border-emerald-50 last:border-0 transition-colors';
+                            d.textContent = t;
+                            d.onclick = () => { input.value = t; input.form.submit(); };
+                            suggestBox.appendChild(d);
+                        });
+                        suggestBox.classList.remove('hidden');
+                    })
+                    .catch(e => console.error('Search error:', e));
+            });
+            document.addEventListener('click', e => {
+                if (!suggestBox.contains(e.target) && e.target !== input) suggestBox.classList.add('hidden');
+            });
+        }
+
+        /* ── Sort ── */
+        window.updateSort = function (v) {
+            const p = new URLSearchParams(window.location.search);
+            p.set('sort', v);
+            p.set('page', '1');
+            window.location.search = p.toString();
+        };
+    })();
+</script>
             </body>
 
             </html>
