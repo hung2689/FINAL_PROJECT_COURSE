@@ -1,179 +1,330 @@
-<%-- 
-    Document   : register
-    Created on : Feb 4, 2026, 8:32:35 PM
-    Author     : ASUS
---%>
+<%@page contentType="text/html" pageEncoding="UTF-8" %>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+        <!DOCTYPE html>
+        <html lang="en">
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8"/>
-        <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-        <title>DevLearn - Authentication Portal</title>
-        <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
-        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-        <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+        <head>
+            <meta charset="utf-8" />
+            <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+            <title>DevLearn - Create Account</title>
+            <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+            <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+                rel="stylesheet" />
+            <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+            <link
+                href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+                rel="stylesheet" />
 
-        <script>
-            tailwind.config = {
-                darkMode: "class",
-                theme: {
-                    extend: {
-                        colors: {
-                            primary: "#37ec13",
-                            "background-light": "#f6f8f6",
-                            "background-dark": "#132210",
-                        },
-                        fontFamily: {
-                            display: ["Inter", "sans-serif"]
-                        },
-                        borderRadius: {
-                            DEFAULT: "0.25rem",
-                            lg: "0.5rem",
-                            xl: "0.75rem",
-                            full: "9999px"
+            <style type="text/tailwindcss">
+                @layer utilities {
+            .glass-card {
+                @apply bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl shadow-2xl;
+            }
+            .glass-input {
+                @apply bg-white/5 border border-white/20 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-500/30 rounded-xl px-4 pt-6 pb-2 text-white outline-none transition-all duration-300 w-full;
+            }
+            .floating-label {
+                @apply absolute left-4 top-4 text-zinc-400 text-sm transition-all duration-300 pointer-events-none peer-focus:text-xs peer-focus:-translate-y-2 peer-focus:text-emerald-400 peer-valid:text-xs peer-valid:-translate-y-2;
+            }
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #064e3b 50%, #000000 100%);
+            position: relative;
+        }
+
+        /* Subtle Noise Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Radial Glow behind card */
+        .glow-bg {
+            position: absolute;
+            top: 50%;
+            right: 25%;
+            transform: translate(50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, transparent 60%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Fade-in Animation */
+        .animate-fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+        </head>
+
+        <body class="min-h-screen flex items-center justify-center p-4 md:p-8 text-white">
+            <div class="glow-bg hidden lg:block"></div>
+
+            <div
+                class="w-full max-w-[1200px] mx-auto flex flex-col lg:flex-row items-center gap-12 lg:gap-20 z-10 relative animate-fade-in">
+
+                <!-- Left Column: Branding -->
+                <div class="w-full lg:w-1/2 flex flex-col gap-8 lg:pr-8 text-center lg:text-left">
+                    <div class="flex items-center gap-3 justify-center lg:justify-start">
+                        <div
+                            class="w-12 h-12 bg-emerald-500 rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(16,185,129,0.4)]">
+                            <span class="material-icons text-zinc-900 font-bold text-2xl">terminal</span>
+                        </div>
+                        <span class="text-3xl font-bold tracking-tight text-white">DevLearn</span>
+                    </div>
+
+                    <h1 class="font-bold text-5xl leading-tight">
+                        Master the art of <br class="hidden lg:block" />
+                        <span
+                            class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-[#39FF14]">coding</span>
+                        with us.
+                    </h1>
+
+                    <p class="text-lg text-slate-300 leading-relaxed max-w-lg mx-auto lg:mx-0">
+                        Join 50,000+ developers building the future with cloud, AI and full-stack.
+                    </p>
+
+                    <ul class="space-y-4 mt-4 hidden md:block">
+                        <li class="flex items-center gap-3 text-slate-200">
+                            <div
+                                class="w-6 h-6 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400">
+                                <span class="material-symbols-outlined text-sm">check</span>
+                            </div>
+                            <span class="text-lg">Project-based learning</span>
+                        </li>
+                        <li class="flex items-center gap-3 text-slate-200">
+                            <div
+                                class="w-6 h-6 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400">
+                                <span class="material-symbols-outlined text-sm">check</span>
+                            </div>
+                            <span class="text-lg">Industry mentors</span>
+                        </li>
+                        <li class="flex items-center gap-3 text-slate-200">
+                            <div
+                                class="w-6 h-6 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400">
+                                <span class="material-symbols-outlined text-sm">check</span>
+                            </div>
+                            <span class="text-lg">Career roadmap</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Right Column: Form Card -->
+                <div class="w-full lg:w-1/2 max-w-md lg:max-w-xl mx-auto">
+                    <div class="glass-card p-8 md:p-10">
+                        <h2 class="text-3xl font-bold mb-8 text-center">Create your account</h2>
+
+                        <!-- Social Buttons -->
+                        <div class="mb-8">
+                            <a href="https://accounts.google.com/o/oauth2/v2/auth?client_id=392403100271-apt84m1lcgr7l581fhpkfbginiak48jv.apps.googleusercontent.com&redirect_uri=http://localhost:8080/CourseITProject/login-google&response_type=code&scope=openid%20email%20profile&prompt=select_account"
+                                class="flex items-center justify-center gap-3 w-full py-3 px-6 bg-white text-zinc-800 rounded-full font-medium shadow-md hover:shadow-lg hover:scale-[1.02] transition-all duration-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"
+                                    class="w-5 h-5 flex-shrink-0">
+                                    <path fill="#EA4335"
+                                        d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
+                                    <path fill="#4285F4"
+                                        d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
+                                    <path fill="#FBBC05"
+                                        d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" />
+                                    <path fill="#34A853"
+                                        d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
+                                    <path fill="none" d="M0 0h48v48H0z" />
+                                </svg>
+                                Sign in with Google
+                            </a>
+                        </div>
+
+                        <!-- Divider -->
+                        <div class="relative mb-8 text-center text-sm">
+                            <div class="absolute inset-0 flex items-center">
+                                <div class="w-full border-t border-white/10"></div>
+                            </div>
+                            <span
+                                class="relative bg-transparent px-4 text-zinc-400 font-medium tracking-widest text-xs uppercase"
+                                style="background-color: transparent;">OR CONTINUE WITH</span>
+                        </div>
+
+                        <!-- Form -->
+                        <form action="register" method="POST" class="space-y-5">
+
+                            <div class="relative">
+                                <input type="text" id="username" name="username" required class="glass-input peer"
+                                    autocomplete="off" />
+                                <label for="username" class="floating-label">Username</label>
+                            </div>
+
+                            <div class="relative">
+                                <input type="text" id="fullname" name="fullname" required class="glass-input peer"
+                                    autocomplete="off" />
+                                <label for="fullname" class="floating-label">Full Name</label>
+                            </div>
+
+                            <div class="relative">
+                                <input type="email" id="email" name="email" required class="glass-input peer"
+                                    autocomplete="off" />
+                                <label for="email" class="floating-label">Email</label>
+                            </div>
+
+                            <div class="relative">
+                                <input type="password" id="password" name="password" required
+                                    class="glass-input peer pr-12" autocomplete="new-password"
+                                    oninput="checkStrength(this.value)" />
+                                <label for="password" class="floating-label">Password</label>
+                                <button type="button"
+                                    class="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white transition-colors"
+                                    onclick="togglePassword('password', this)">
+                                    <span class="material-symbols-outlined text-xl">visibility</span>
+                                </button>
+                            </div>
+
+                            <!-- Password Strength Bar -->
+                            <div class="w-full h-1.5 bg-white/10 rounded-full overflow-hidden mt-1 opacity-0 transition-opacity duration-300"
+                                id="strength-container">
+                                <div id="strength-bar" class="h-full bg-red-500 w-0 transition-all duration-300"></div>
+                            </div>
+
+                            <div class="relative">
+                                <input type="password" id="repassword" name="repassword" required
+                                    class="glass-input peer pr-12" autocomplete="new-password" />
+                                <label for="repassword" class="floating-label">Confirm Password</label>
+                                <button type="button"
+                                    class="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white transition-colors"
+                                    onclick="togglePassword('repassword', this)">
+                                    <span class="material-symbols-outlined text-xl">visibility</span>
+                                </button>
+                            </div>
+
+                            <!-- Role Select - styled to match -->
+                            <div class="relative">
+                                <select required id="role" name="role"
+                                    class="glass-input peer appearance-none text-white pb-2 [&:not(:valid)]:text-transparent cursor-pointer">
+                                    <option value="" disabled selected class="text-zinc-900">Select Role</option>
+                                    <option value="STUDENT" class="text-zinc-900">Student</option>
+                                    <option value="TEACHER" class="text-zinc-900">Teacher</option>
+                                </select>
+                                <label for="role" class="floating-label !-translate-y-2 !text-xs !text-emerald-400">You
+                                    are joining as</label>
+                                <span
+                                    class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none">expand_more</span>
+                            </div>
+
+                            <!-- Terms -->
+                            <div class="flex items-start gap-3 pt-2">
+                                <div class="flex items-center h-5">
+                                    <input id="terms" name="terms" type="checkbox" required
+                                        class="w-4 h-4 rounded border-white/20 bg-white/5 text-emerald-500 focus:ring-emerald-500/50 focus:ring-offset-0 cursor-pointer" />
+                                </div>
+                                <label for="terms" class="text-sm text-zinc-300 cursor-pointer">
+                                    I agree to the <a href="#"
+                                        class="text-emerald-400 hover:text-emerald-300 hover:underline transition-colors">Terms
+                                        of Service</a> and <a href="#"
+                                        class="text-emerald-400 hover:text-emerald-300 hover:underline transition-colors">Privacy
+                                        Policy</a>
+                                </label>
+                            </div>
+
+                            <!-- Error Msg -->
+                            <c:if test="${not empty userError}">
+                                <p
+                                    class="text-red-400 text-sm text-center bg-red-500/10 py-2 rounded-lg border border-red-500/20">
+                                    ${userError}
+                                </p>
+                            </c:if>
+
+                            <button type="submit"
+                                class="w-full bg-gradient-to-r from-emerald-400 to-emerald-600 text-white font-bold text-lg py-4 rounded-xl shadow-xl hover:shadow-[0_0_20px_rgba(52,211,153,0.4)] hover:scale-[1.01] active:scale-[0.99] transition-all duration-300 mt-6">
+                                Create Account
+                            </button>
+                        </form>
+
+                        <!-- Footer -->
+                        <p class="text-center text-zinc-400 mt-8 text-sm">
+                            Already have an account?
+                            <a href="login?action=login"
+                                class="text-emerald-400 font-semibold hover:text-emerald-300 hover:underline transition-colors ml-1">Sign
+                                in</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                // Set inputs to valid if they have value on load (browser autofill)
+                document.addEventListener('DOMContentLoaded', () => {
+                    document.querySelectorAll('.glass-input').forEach(input => {
+                        if (input.value) {
+                            input.setAttribute('valid', 'true');
                         }
+                    })
+                });
+
+                const selects = document.querySelectorAll('select.glass-input');
+                selects.forEach(select => {
+                    select.addEventListener('change', () => {
+                        if (select.value) {
+                            select.classList.remove('[&:not(:valid)]:text-transparent');
+                        }
+                    });
+                });
+
+                // Toggle Password Visibility
+                function togglePassword(inputId, btn) {
+                    const input = document.getElementById(inputId);
+                    const icon = btn.querySelector('span');
+
+                    if (input.type === 'password') {
+                        input.type = 'text';
+                        icon.textContent = 'visibility_off';
+                    } else {
+                        input.type = 'password';
+                        icon.textContent = 'visibility';
                     }
                 }
-            }
-        </script>
 
-    </head>
-    <body class="bg-background-light dark:bg-background-dark font-display min-h-screen flex items-center justify-center p-6">
-        <div class="w-full max-w-5xl flex flex-col md:flex-row bg-white dark:bg-zinc-900 rounded-xl shadow-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800">
-            <!-- Sidebar / Visual Section -->
-            <div class="hidden md:flex md:w-1/2 bg-zinc-900 relative overflow-hidden flex-col justify-between p-12">
-                <div class="relative z-10">
-                    <div class="flex items-center gap-2 mb-8">
-                        <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center shadow-[0_0_20px_rgba(55,236,19,0.4)]">
-                            <span class="material-icons text-zinc-900 font-bold">terminal</span>
-                        </div>
-                        <span class="text-2xl font-bold text-white tracking-tight">DevLearn</span>
-                    </div>
-                    <h2 class="text-4xl font-bold text-white leading-tight mb-6">Master the art of <span class="text-primary">coding</span> with us.</h2>
-                    <p class="text-zinc-400 text-lg leading-relaxed">Join 50,000+ IT students learning cloud architecture, full-stack development, and AI engineering.</p>
-                </div>
-                <div class="relative z-10 flex flex-col gap-6">
-                    <div class="flex items-center gap-4">
-                        <div class="flex -space-x-3">
-                            <img class="w-10 h-10 rounded-full border-2 border-zinc-900 object-cover" data-alt="User profile avatar of a male student" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgYHFWnemRC59oDvfdcK65KhNu21njaDtg_XBQNXGhblfR-IubgA06M9gcXAXEJwz7Or3G29HpNfhD0-tpb4vEKotDNDguzoSwEzP25pp0WoPljFCi2sopA0MBEavLf7wKQCirJNLRVp5RRkNt9VId_-UoCtz4Tvdl11QyUL-yoGHbyCacAlQW_N5FmuK9-U9DrhIX2gQrXUSQXWhULmX8flgehToTsKSdFddXO4H3rwxGA9_HsTRfAFBokl1o64SZkP41rzgRqpY"/>
-                            <img class="w-10 h-10 rounded-full border-2 border-zinc-900 object-cover" data-alt="User profile avatar of a female student" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCtra0VjaqP25sFM7q8xzN_o2I4jThfjZhMkP-G430EUta_gABoeY_C0wvAxzDcrVjK8rW9dmLfOallFEzWG2FQteeOYymMZ07464deSqbAnGxaNmTNyXT95qPoRsapos0iKYB4qEEAbav20IlHder2Aq2ef1XHgfI6erSjuz2ercMf_3k_VB95y82nhiu8HrGZ25y-6nf0dJxquiWcj7mq4ya1VCTGgatxWnVnYXKd5lLwFHCi2bnjx_CXPVlG_KFcCP7s2Vq5S9s"/>
-                            <img class="w-10 h-10 rounded-full border-2 border-zinc-900 object-cover" data-alt="User profile avatar of a student" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBE1Xs5kZDZEo_XxxA6OMdhCrJQEdMuF_oaCJ2Kxz0-oa--HYD8jfqsLsO5roCkN99eZkixQKN9EKHzrrTabtjL8oeRQaQB8pR_D61gBrk15rxBb0x4BeJPEI26bgA3iNQRSDs4cPKlKiW0culmH8FuERLoN_lFIsaKRv0k6R__dYRBK0l6MyDErbcrwZB_PLh-nLpnIxBwiQyHrX0jHyM-e4i9Kg2pE0ILoiluE9LQmhcYMXQbEomAEuKqBei8keRw6WG5gU6eYYY"/>
-                        </div>
-                        <p class="text-sm text-zinc-400">Trusted by students worldwide</p>
-                    </div>
-                </div>
-                <!-- Abstract Background Pattern -->
-                <div class="absolute inset-0 opacity-10">
-                    <div class="absolute -right-20 -top-20 w-96 h-96 bg-primary rounded-full blur-[120px]"></div>
-                    <div class="absolute -left-20 -bottom-20 w-96 h-96 bg-primary rounded-full blur-[120px]"></div>
-                    <div class="absolute inset-0" style="background-image: radial-gradient(circle at 2px 2px, #37ec13 1px, transparent 0); background-size: 40px 40px;"></div>
-                </div>
-            </div>
-            <!-- Form Section -->
-            <div class="w-full md:w-1/2 p-8 md:p-16 flex flex-col justify-center">
-                <!-- Header Links (Desktop only) -->
-                <div class="flex justify-end mb-8 text-sm">
-                    <p class="text-zinc-500 dark:text-zinc-400">Already a member? <a class="text-primary font-semibold hover:underline" href="login?action=login">Sign In</a></p>
-                </div>
-                <div class="max-w-md mx-auto w-full">
-                    <div class="mb-10 text-center md:text-left">
-                        <h1 class="text-3xl font-bold text-zinc-900 dark:text-white mb-2">Create an account</h1>
-                        <p class="text-zinc-500 dark:text-zinc-400">Start your 14-day free trial and explore our courses.</p>
-                    </div>
-                    <!-- Auth Buttons -->
-                    <div class="grid grid-cols-2 gap-4 mb-8">
-                        <button class="flex items-center justify-center gap-2 py-2.5 px-4 border border-zinc-200 dark:border-zinc-700 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors duration-200">
-                            <img alt="Google" class="w-5 h-5" src="https://lh3.googleusercontent.com/aida-public/AB6AXuASt5OhKTm5RGy6OW7req_MBwEt-kQfaYENmTaUgG4RjBq0KZW3_3FlJCv1DIDAEgDEr7FRaB9UnUZb0KUgZ9v8ZxuxuEBBXPZXkRj4-nYn-l17Sdh4McHLZS9AOqhug2FeinOiGD_2l7jRgrHdXWO__0YwgDsPi_RZmvulq31JDZoiQEiSoRnUI6FDE9S51yMlO1LGi4eBDPa-NC76dpD-JaUcZdfpFNqJ-DKSv4791ZK6RTTj5AkIOl69K92KTYVsBb0PTXPvD9I"/>
-                            <span class="text-sm font-medium text-zinc-700 dark:text-zinc-300">Google</span>
-                        </button>
-                        <button class="flex items-center justify-center gap-2 py-2.5 px-4 border border-zinc-200 dark:border-zinc-700 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors duration-200">
-                            <img alt="GitHub" class="w-5 h-5 dark:invert" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCV6qJR6kgWap5jLvuZoRuxoNh6R8uo9AK-9gcX9nTITtWEK35eI2ig-9YPenI3PrLM7KPTgqj8oRJHY57wXpN17BnmXwLciSzL0V36FguStq-qv00X31gREnrPpRAqxM1a7oN7fswQqwFWEbGCzx0WfMVgRFAMPZXe7shq70nOJydAcLpwJB_nbO29TCry5vsDTQAdZNvilM-6Vl_Gy7KigxuEC4J-Zd9KPHklckzVSQwZo5FUpMlWTbD5_GeYevQMx_4Fj5FSim8"/>
-                            <span class="text-sm font-medium text-zinc-700 dark:text-zinc-300">GitHub</span>
-                        </button>
-                    </div>
-                    <div class="relative mb-8">
-                        <div class="absolute inset-0 flex items-center">
-                            <div class="w-full border-t border-zinc-200 dark:border-zinc-700"></div>
-                        </div>
-                        <div class="relative flex justify-center text-sm uppercase">
-                            <span class="bg-white dark:bg-zinc-900 px-4 text-zinc-500 dark:text-zinc-400">Or continue with</span>
-                        </div>
-                    </div>
-                    <form class="space-y-5" action="register" method="POST">
-                        <div>
-                            <label class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5"  for="username">User Name</label>
-                            <input required class="w-full px-4 py-3 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-zinc-400" id="username" name="username" placeholder="John Doe" type="text"/>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5" for="fullname">Full Name</label>
-                            <input required class="w-full px-4 py-3 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-zinc-400" id="fullname" name="fullname" placeholder="John Doe" type="text"/>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5" for="email">Email address</label>
-                            <input required class="w-full px-4 py-3 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-zinc-400" id="email" name="email" placeholder="name@university.edu" type="email"/>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5" for="password">Password</label>
-                            <input required class="w-full px-4 py-3 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-zinc-400" id="password" name="password" placeholder="••••••••" type="password"/>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5" for="role">
-                                You are joining as:
-                            </label>
-                            <select required
-                                id="role"
-                                name="role"
-                                class="w-full px-4 py-3 rounded-lg border border-zinc-200 dark:border-zinc-700 
-                                bg-white dark:bg-zinc-800 
-                                text-zinc-900 dark:text-white 
-                                focus:ring-2 focus:ring-primary focus:border-primary 
-                                outline-none transition-all"
-                                >
-                                <option value="" disabled selected>-- Select your role --</option>
-                                <option value="TEACHER">Teacher</option>
-                                <option value="STUDENT">Student</option>
-                            </select>
-                        </div>
-                        <div class="flex items-start gap-3 pt-2">
-                            <div class="flex items-center h-5">
-                                <input class="w-4 h-4 text-primary border-zinc-300 rounded focus:ring-primary accent-primary" id="terms" name="terms" type="checkbox"/>
-                            </div>
-                            <label class="text-sm text-zinc-500 dark:text-zinc-400" for="terms">
-                                I agree to the <a class="text-primary hover:underline font-medium" href="#">Terms of Service</a> and <a class="text-primary hover:underline font-medium" href="#">Privacy Policy</a>.
-                            </label>  
+                // Password Strength Checker
+                function checkStrength(password) {
+                    const container = document.getElementById('strength-container');
+                    const bar = document.getElementById('strength-bar');
 
-                        </div>
-                        <button class="w-full bg-primary hover:bg-primary/90 text-zinc-900 font-bold py-3.5 rounded-lg shadow-lg shadow-primary/20 transition-all duration-200 transform active:scale-[0.98] mt-4" type="submit">
-                            Create Account
-                        </button>
-                    </form>
-                    <c:if test="${not empty userError}">
-                        <p class="mt-3 text-sm text-red-500 text-center">
-                            ${userError}
-                        </p>
-                    </c:if>
+                    if (!password) {
+                        container.style.opacity = '0';
+                        return;
+                    }
 
-                    <p class="mt-8 text-center text-sm text-zinc-500 dark:text-zinc-400 md:hidden">
-                        Already a member? <a class="text-primary font-semibold hover:underline" href="#">Log In</a>
-                    </p>
-                    <div class="mt-12 pt-8 border-t border-zinc-100 dark:border-zinc-800 flex flex-wrap justify-center gap-6 text-xs text-zinc-400">
-                        <a class="hover:text-primary transition-colors" href="#">Documentation</a>
-                        <a class="hover:text-primary transition-colors" href="#">Help Center</a>
-                        <a class="hover:text-primary transition-colors" href="#">Security</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Mode Toggle Floating Button -->
-        <div class="fixed bottom-6 right-6">
-            <button class="p-3 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-full shadow-lg text-zinc-600 dark:text-zinc-300 hover:text-primary dark:hover:text-primary transition-colors" onclick="document.documentElement.classList.toggle('dark')">
-                <span class="material-icons block dark:hidden">dark_mode</span>
-                <span class="material-icons hidden dark:block">light_mode</span>
-            </button>
-        </div>
-    </body>
-</html>
+                    container.style.opacity = '1';
+                    let strength = 0;
+
+                    if (password.length >= 8) strength += 25;
+                    if (password.match(/[a-z]+/)) strength += 25;
+                    if (password.match(/[A-Z]+/)) strength += 25;
+                    if (password.match(/[0-9!@#$%^&*()]+/)) strength += 25;
+
+                    bar.style.width = strength + '%';
+
+                    if (strength <= 25) {
+                        bar.className = 'h-full transition-all duration-300 bg-red-500';
+                    } else if (strength <= 50) {
+                        bar.className = 'h-full transition-all duration-300 bg-orange-500';
+                    } else if (strength <= 75) {
+                        bar.className = 'h-full transition-all duration-300 bg-yellow-500';
+                    } else {
+                        bar.className = 'h-full transition-all duration-300 bg-emerald-500';
+                    }
+                }
+            </script>
+        </body>
+
+        </html>

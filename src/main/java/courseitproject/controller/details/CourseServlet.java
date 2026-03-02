@@ -19,11 +19,13 @@ public class CourseServlet extends HttpServlet {
     private final ICourseService courseService =
             new CourseServiceImp();
 
-    private final ICourseCategoryService categoryService =
+     private final ICourseCategoryService categoryService =
             new CourseCategoryServiceImp();
 
     private static final int PAGE_SIZE = 8;
-
+      
+    
+ 
     @Override
     protected void doGet(HttpServletRequest request,
                          HttpServletResponse response)

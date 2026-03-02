@@ -174,62 +174,99 @@ public class CourseAdminServlet extends HttpServlet {
 
     protected void postUpdateCourse(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            int course_id = Integer.parseInt(request.getParameter("course_id"));
 
-            // ===== 1. LẤY DATA TỪ FORM =====
+        try {
+
+            // ===== 1. LẤY & VALIDATE ID =====
+            String courseIdRaw = request.getParameter("course_id");
+            if (courseIdRaw == null || courseIdRaw.trim().isEmpty()) {
+                throw new Exception("Course ID is required");
+            }
+
+            int course_id = Integer.parseInt(courseIdRaw);
+
+            Course course = courseService.findById(course_id);
+            if (course == null) {
+                throw new Exception("Course not found");
+            }
+
+            // ===== 2. LẤY DATA TỪ FORM =====
             String title = request.getParameter("title");
             String description = request.getParameter("description");
             String raw_price = request.getParameter("price");
             String level = request.getParameter("level");
             String raw_category_id = request.getParameter("category_id");
             String status = request.getParameter("status");
+            String teacher_id_raw = request.getParameter("teacher_id");
 
-            int teacher_id = Integer.parseInt(request.getParameter("teacher_id"));
-            Teacher teacher = teacherService.findTeacherById(teacher_id);
-
-            if (teacher == null) {
-                request.setAttribute("ERROR", "Teacher not found");
-                request.getRequestDispatcher("views/admin/course/courseManagement.jsp")
-                        .forward(request, response);
-                return;
-            }
             if (status == null) {
                 status = "INACTIVE";
             }
 
+            // ===== 3. VALIDATE & PARSE =====
+            BigDecimal price;
+            try {
+                price = new BigDecimal(raw_price);
+            } catch (Exception e) {
+                throw new Exception("Invalid price format");
+            }
+
+            int category_id;
+            try {
+                category_id = Integer.parseInt(raw_category_id);
+            } catch (Exception e) {
+                throw new Exception("Invalid category ID");
+            }
+
+            // ===== 4. VALIDATE TEACHER (TRƯỚC KHI UPDATE) =====
+            Integer teacher_id = null;
+
+            if (teacher_id_raw != null && !teacher_id_raw.trim().isEmpty()) {
+
+                try {
+                    teacher_id = Integer.parseInt(teacher_id_raw);
+                } catch (Exception e) {
+                    throw new Exception("Invalid teacher ID");
+                }
+
+                Teacher teacher = teacherService.findTeacherById(teacher_id);
+
+                if (teacher == null) {
+                    throw new Exception("Teacher not found");
+                }
+            }
+
+            // ===== 5. UPLOAD ẢNH NẾU CÓ =====
             Part filePart = request.getPart("url");
-
-            BigDecimal price = new BigDecimal(raw_price);
-            int category_id = Integer.parseInt(raw_category_id);
-
-            Course course = courseService.findById(course_id);
-
             if (filePart != null && filePart.getSize() > 0) {
-                // Có upload ảnh mới
                 String imgUrl = uploadService.uploadCv(filePart);
                 course.setThumbnailUrl(imgUrl);
             }
 
-            // tao course object
+            // ===== 6. UPDATE COURSE =====
             course.setTitle(title);
             course.setDescription(description);
             course.setPrice(price);
             course.setLevel(level);
             course.setCategoryId(new CourseCategory(category_id));
             course.setStatus(status);
+
             courseService.updateCourse(course);
 
-            courseService.assignTeacherToCourse(course_id, teacher_id);
+            // ===== 7. ASSIGN TEACHER NẾU CÓ =====
+            if (teacher_id != null) {
+                courseService.assignTeacherToCourse(course_id, teacher_id);
+            }
 
             response.sendRedirect(request.getContextPath() + "/courseAdmin");
+
         } catch (Exception e) {
+
             e.printStackTrace();
-            request.setAttribute("ERROR", e.toString());
+            request.setAttribute("ERROR", e.getMessage());
             request.getRequestDispatcher("views/admin/course/courseManagement.jsp")
                     .forward(request, response);
         }
-
     }
 
     protected void getUpdateCourse(HttpServletRequest request, HttpServletResponse response)

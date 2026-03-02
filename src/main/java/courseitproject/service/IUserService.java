@@ -26,8 +26,15 @@ public interface IUserService {
             int userId,
             String username,
             String fullName,
-            String roleName
-    );
+            String roleName);
+
     boolean updatePasswordByEmail(String email, String hashedPassword);
 
+    public List<Role> findRolesByUserId(int userId);
+
+    boolean updateFullName(int id, String fullName);
+
+    boolean checkPassword(int id, String plainPassword);
+
+    boolean updatePassword(int id, String newHashedPassword);
 }

@@ -4,6 +4,8 @@
  */
 package courseitproject.controller.auther;
 
+import courseitproject.model.Role;
+import courseitproject.model.UserRole;
 import courseitproject.model.Users;
 import courseitproject.service.IUserService;
 import courseitproject.service.UserServiceImp;
@@ -17,13 +19,14 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.List;
 import org.mindrot.jbcrypt.BCrypt;
 
 /**
  *
  * @author ASUS
  */
-@WebServlet(name = "autherServlet", urlPatterns = {"/login", "/register", "/otpRegister", "/forget", "/reset","/otpverify"})
+@WebServlet(name = "autherServlet", urlPatterns = {"/login", "/register", "/otpRegister", "/forget", "/reset", "/otpverify", "/logout"})
 public class AutherServlet extends HttpServlet {
 
     private IUserService userService;
@@ -45,8 +48,30 @@ public class AutherServlet extends HttpServlet {
             getLogin(request, response);
         } else if (uri.contains("forget")) {
             getForget(request, response);
+        } else if (uri.contains("/logout")) {
+            getLogout(request, response);
         }
 
+    }
+
+    protected void getLogout(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        HttpSession session = request.getSession(false);
+
+        if (session != null) {
+            session.removeAttribute("USER");    
+            session.invalidate();              
+        }
+
+         
+        Cookie cookie = new Cookie("INPUT_COOKIE", "");
+        cookie.setMaxAge(0);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+
+       
+        response.sendRedirect(request.getContextPath() + "/login");
     }
 
     @Override
@@ -63,7 +88,9 @@ public class AutherServlet extends HttpServlet {
             postForget(request, response);
         } else if (uri.contains("reset")) {
             postReset(request, response);
-        }else if (uri.contains("otpverify")) {
+        } else if (uri.contains("otpverify")) {
+            postForgetVerifyOtp(request, response);
+        } else if (uri.contains("/logout")) {
             postForgetVerifyOtp(request, response);
         }
 
@@ -176,7 +203,7 @@ public class AutherServlet extends HttpServlet {
 
         if (!userService.UserVerifyRegister(email, otp)) {
             request.setAttribute("otpError", "Invalid or expired OTP");
-             request.getRequestDispatcher("/views/auth/login.jsp?mode=otp").forward(request, response);
+            request.getRequestDispatcher("/views/auth/login.jsp?mode=otp").forward(request, response);
             return;
         }
         session.setAttribute("ALLOW_RESET_PASSWORD", true);
@@ -215,6 +242,7 @@ public class AutherServlet extends HttpServlet {
         new Thread(() -> {
             userService.UserSendEmail(email);
         }).start();
+
     }
 
     protected void postRegisterVerifyOtp(HttpServletRequest request, HttpServletResponse response)
@@ -350,8 +378,32 @@ public class AutherServlet extends HttpServlet {
         }
 
         // 8. Redirect
-        
-        response.sendRedirect(request.getContextPath() + "/shop");
+        postCheck(request, response, user);
+
+    }
+
+    protected void postCheck(HttpServletRequest request, HttpServletResponse response, Users user)
+            throws ServletException, IOException {
+        List<Role> roleList = userService.findRolesByUserId(user.getUserId());
+        boolean isStudent = false;
+        boolean isAdmin = false;
+
+        for (Role r : roleList) {
+            if ("STUDENT".equalsIgnoreCase(r.getRoleName())) {
+                isStudent = true;
+            }
+            if ("ADMIN".equalsIgnoreCase(r.getRoleName())) {
+                isAdmin = true;
+            }
+        }
+
+        if (isAdmin) {
+            response.sendRedirect(request.getContextPath() + "/courseAdmin");
+        } else if (isStudent) {
+            response.sendRedirect(request.getContextPath() + "/home");
+        } else {
+            response.sendRedirect(request.getContextPath() + "/shop");
+        }
     }
 
 }

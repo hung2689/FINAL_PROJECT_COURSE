@@ -16,14 +16,14 @@ import java.util.List;
 
 public class CourseServiceImp implements ICourseService {
 
-private static final int PAGE_SIZE = 10;
+    private static final int PAGE_SIZE = 10;
     private final GenericDAO<Course> courseDAO
             = new GenericDAO<>(Course.class);
     private final GenericDAO<CourseCategory> courseCategoryDAO
             = new GenericDAO<>(CourseCategory.class);
     private final GenericDAO<CourseTeacher> courseTeacherDAO
             = new GenericDAO<>(CourseTeacher.class);
- 
+
     @Override
     public Teacher getTeacherByCourseId(int courseId) {
         EntityManager em = JPAUtil.getEntityManager();
@@ -188,7 +188,6 @@ private static final int PAGE_SIZE = 10;
         try {
             em.getTransaction().begin();
 
-            // 1️⃣ Xóa bảng trung gian trước
             em.createQuery("DELETE FROM CourseTeacher ct WHERE ct.courseId.courseId = :courseId")
                     .setParameter("courseId", id)
                     .executeUpdate();
@@ -209,53 +208,49 @@ private static final int PAGE_SIZE = 10;
         }
     }
 
-  
     @Override
-public List<Course> findAllPaging(int page) {
+    public List<Course> findAllPaging(int page) {
 
-    EntityManager em = JPAUtil.getEntityManager();
+        EntityManager em = JPAUtil.getEntityManager();
 
-    try {
+        try {
 
-        return em.createQuery(
-                "SELECT DISTINCT c FROM Course c "
-                + "WHERE c.status = 'ACTIVE' "
-                + "ORDER BY c.courseId DESC",
-                Course.class
-        )
-        .setFirstResult((page - 1) * PAGE_SIZE)
-        .setMaxResults(PAGE_SIZE)
-        .getResultList();
+            return em.createQuery(
+                    "SELECT DISTINCT c FROM Course c "
+                    + "WHERE c.status = 'ACTIVE' "
+                    + "ORDER BY c.courseId DESC",
+                    Course.class
+            )
+                    .setFirstResult((page - 1) * PAGE_SIZE)
+                    .setMaxResults(PAGE_SIZE)
+                    .getResultList();
 
-    } finally {
-        em.close();
+        } finally {
+            em.close();
+        }
     }
+
+    public List<Course> getCoursePaging(int page, int size) {
+
+        EntityManager em = JPAUtil.getEntityManager();
+
+        try {
+
+            return em.createQuery(
+                    "SELECT DISTINCT c FROM Course c "
+                    + "LEFT JOIN FETCH c.categoryId "
+                    + "WHERE c.status='active' "
+                    + "ORDER BY c.courseId DESC",
+                    Course.class
+            )
+                    .setFirstResult((page - 1) * size)
+                    .setMaxResults(size)
+                    .getResultList();
+
+        } finally {
+            em.close();
+        }
     }
-public List<Course> getCoursePaging(int page, int size) {
-
-EntityManager em = JPAUtil.getEntityManager();
-
-try {
-
-return em.createQuery(
-
-"SELECT DISTINCT c FROM Course c "
-+ "LEFT JOIN FETCH c.categoryId "
-+ "WHERE c.status='active' "
-+ "ORDER BY c.courseId DESC",
-
-Course.class
-
-)
-
-.setFirstResult((page - 1) * size)
-.setMaxResults(size)
-.getResultList();
-
-} finally {
-em.close();
-}
-}
 
     @Override
     public String findTeacherNameByCourse(Course course) {
@@ -278,8 +273,6 @@ em.close();
             em.close();
         }
     }
-
-  
 
     @Override
     public long countStudentsByCourse(int courseId) {
@@ -306,310 +299,272 @@ em.close();
             em.close();
         }
     }
-@Override
-public long countActiveCourses() {
 
-    EntityManager em = JPAUtil.getEntityManager();
+    @Override
+    public long countActiveCourses() {
 
-    try {
+        EntityManager em = JPAUtil.getEntityManager();
 
-        return em.createQuery(
-            "SELECT COUNT(c) FROM Course c WHERE LOWER(c.status)='active'",
-            Long.class
-        ).getSingleResult();
+        try {
 
-    } finally {
-        em.close();
+            return em.createQuery(
+                    "SELECT COUNT(c) FROM Course c WHERE LOWER(c.status)='active'",
+                    Long.class
+            ).getSingleResult();
+
+        } finally {
+            em.close();
+        }
     }
-}
-public List<Course> searchCourse(String keyword,int page,int size){
 
-EntityManager em = JPAUtil.getEntityManager();
+    public List<Course> searchCourse(String keyword, int page, int size) {
 
-try{
+        EntityManager em = JPAUtil.getEntityManager();
 
-return em.createQuery(
+        try {
 
-"SELECT DISTINCT c FROM Course c " +
-"LEFT JOIN FETCH c.categoryId " +
-"WHERE LOWER(c.status)='active' " +
-"AND LOWER(c.title) LIKE :kw " +
-"ORDER BY c.courseId DESC",
+            return em.createQuery(
+                    "SELECT DISTINCT c FROM Course c "
+                    + "LEFT JOIN FETCH c.categoryId "
+                    + "WHERE LOWER(c.status)='active' "
+                    + "AND LOWER(c.title) LIKE :kw "
+                    + "ORDER BY c.courseId DESC",
+                    Course.class)
+                    .setParameter("kw", "%" + keyword.toLowerCase() + "%")
+                    .setFirstResult((page - 1) * size)
+                    .setMaxResults(size)
+                    .getResultList();
 
-Course.class)
+        } finally {
 
-.setParameter("kw","%"+keyword.toLowerCase()+"%")
+            em.close();
 
-.setFirstResult((page-1)*size)
+        }
 
-.setMaxResults(size)
+    }
 
-.getResultList();
+    public long countSearchCourse(String keyword) {
 
-}finally{
+        EntityManager em = JPAUtil.getEntityManager();
 
-em.close();
+        try {
 
-}
+            return em.createQuery(
+                    "SELECT COUNT(c) FROM Course c "
+                    + "WHERE LOWER(c.status)='active' "
+                    + "AND LOWER(c.title) LIKE :kw",
+                    Long.class)
+                    .setParameter("kw",
+                            "%" + keyword.toLowerCase() + "%")
+                    .getSingleResult();
 
-}
-public long countSearchCourse(String keyword){
+        } finally {
 
-EntityManager em = JPAUtil.getEntityManager();
+            em.close();
 
-try{
+        }
 
-return em.createQuery(
+    }
 
-"SELECT COUNT(c) FROM Course c " +
-"WHERE LOWER(c.status)='active' " +
-"AND LOWER(c.title) LIKE :kw",
+    public List<Course> searchSuggest(String keyword) {
 
-Long.class)
+        EntityManager em
+                = JPAUtil.getEntityManager();
 
-.setParameter("kw",
-"%"+keyword.toLowerCase()+"%")
+        try {
 
-.getSingleResult();
+            return em.createQuery(
+                    "SELECT c FROM Course c "
+                    + "WHERE LOWER(c.title) LIKE :k "
+                    + "AND LOWER(c.status)='active' "
+                    + "ORDER BY c.title",
+                    Course.class)
+                    .setParameter(
+                            "k",
+                            keyword.toLowerCase().trim() + "%")
+                    .setMaxResults(6)
+                    .getResultList();
 
-}finally{
+        } finally {
 
-em.close();
+            em.close();
 
-}
+        }
 
-}   
-public List<Course> searchSuggest(String keyword){
+    }
 
-EntityManager em =
-JPAUtil.getEntityManager();
+    public List<Course> getCourseByCategories(
+            String[] ids,
+            int page,
+            int size) {
 
-try{
+        EntityManager em
+                = JPAUtil.getEntityManager();
 
-return em.createQuery(
+        String jpql
+                = "SELECT c FROM Course c "
+                + "WHERE c.status='ACTIVE' "
+                + "AND c.categoryId.categoryId IN :ids";
 
-"SELECT c FROM Course c " +
-"WHERE LOWER(c.title) LIKE :k " +
-"AND LOWER(c.status)='active' " +
-"ORDER BY c.title",
+        return em.createQuery(jpql, Course.class)
+                .setParameter("ids",
+                        Arrays.stream(ids)
+                                .map(Integer::parseInt)
+                                .toList())
+                .setFirstResult((page - 1) * size)
+                .setMaxResults(size)
+                .getResultList();
 
-Course.class)
+    }
 
-.setParameter(
+    public long countCourseByCategories(
+            String[] ids) {
 
-"k",
+        EntityManager em
+                = JPAUtil.getEntityManager();
 
-keyword.toLowerCase().trim()+"%")
+        String jpql
+                = "SELECT COUNT(c) FROM Course c "
+                + "WHERE c.status='ACTIVE' "
+                + "AND c.categoryId.categoryId IN :ids";
 
-.setMaxResults(6)
+        return em.createQuery(jpql, Long.class)
+                .setParameter("ids",
+                        Arrays.stream(ids)
+                                .map(Integer::parseInt)
+                                .toList())
+                .getSingleResult();
 
-.getResultList();
+    }
 
-}
-finally{
+    public List<Course> filterPrice(
+            BigDecimal maxPrice,
+            boolean free,
+            boolean paid,
+            int page,
+            int size
+    ) {
 
-em.close();
+        EntityManager em
+                = JPAUtil.getEntityManager();
 
-}
+        try {
 
-}
-public List<Course> getCourseByCategories(
-String[] ids,
-int page,
-int size){
-
-EntityManager em =
-JPAUtil.getEntityManager();
-
-String jpql =
-"SELECT c FROM Course c " +
-"WHERE c.status='ACTIVE' " +
-"AND c.categoryId.categoryId IN :ids";
-
-return em.createQuery(jpql,Course.class)
-.setParameter("ids",
-Arrays.stream(ids)
-.map(Integer::parseInt)
-.toList())
-.setFirstResult((page-1)*size)
-.setMaxResults(size)
-.getResultList();
-
-}
-public long countCourseByCategories(
-String[] ids){
-
-EntityManager em =
-JPAUtil.getEntityManager();
-
-String jpql =
-"SELECT COUNT(c) FROM Course c " +
-"WHERE c.status='ACTIVE' " +
-"AND c.categoryId.categoryId IN :ids";
-
-return em.createQuery(jpql,Long.class)
-
-.setParameter("ids",
-Arrays.stream(ids)
-.map(Integer::parseInt)
-.toList())
-
-.getSingleResult();
-
-}
-public List<Course> filterPrice(
-
-BigDecimal maxPrice,
-boolean free,
-boolean paid,
-int page,
-int size
-
-){
-
-EntityManager em =
-JPAUtil.getEntityManager();
-
-try{
-
-String jpql =
-
-"SELECT c FROM Course c " +
-"WHERE LOWER(c.status)='active'";
-
+            String jpql
+                    = "SELECT c FROM Course c "
+                    + "WHERE LOWER(c.status)='active'";
 
 // FREE
-if(free){
+            if (free) {
 
-jpql += " AND c.price = 0";
+                jpql += " AND c.price = 0";
 
-}
-
+            }
 
 // PAID
-if(paid){
+            if (paid) {
 
-jpql += " AND c.price > 0";
+                jpql += " AND c.price > 0";
 
-}
-
+            }
 
 // MAX PRICE
-if(maxPrice != null){
+            if (maxPrice != null) {
 
-jpql +=
-" AND c.price <= :maxPrice";
+                jpql
+                        += " AND c.price <= :maxPrice";
 
-}
+            }
 
+            TypedQuery<Course> query
+                    = em.createQuery(
+                            jpql,
+                            Course.class
+                    );
 
-TypedQuery<Course> query =
+            if (maxPrice != null) {
 
-em.createQuery(
-jpql,
-Course.class
-);
+                query.setParameter(
+                        "maxPrice",
+                        maxPrice);
 
+            }
 
-if(maxPrice != null){
+            query.setFirstResult(
+                    (page - 1) * size);
 
-query.setParameter(
-"maxPrice",
-maxPrice);
+            query.setMaxResults(size);
 
-}
+            return query.getResultList();
 
+        } finally {
 
-query.setFirstResult(
+            em.close();
 
-(page-1)*size);
+        }
 
-query.setMaxResults(size);
+    }
 
-return query.getResultList();
+    public long countFilterPrice(
+            BigDecimal maxPrice,
+            boolean free,
+            boolean paid
+    ) {
 
-}
-finally{
+        EntityManager em
+                = JPAUtil.getEntityManager();
 
-em.close();
+        try {
 
-}
-
-}
-
-public long countFilterPrice(
-
-BigDecimal maxPrice,
-boolean free,
-boolean paid
-
-){
-
-EntityManager em =
-JPAUtil.getEntityManager();
-
-try{
-
-String jpql =
-
-"SELECT COUNT(c) FROM Course c " +
-"WHERE LOWER(c.status)='active'";
-
+            String jpql
+                    = "SELECT COUNT(c) FROM Course c "
+                    + "WHERE LOWER(c.status)='active'";
 
 // FREE
-if(free){
+            if (free) {
 
-jpql += " AND c.price = 0";
+                jpql += " AND c.price = 0";
 
-}
-
+            }
 
 // PAID
-if(paid){
+            if (paid) {
 
-jpql += " AND c.price > 0";
+                jpql += " AND c.price > 0";
 
-}
-
+            }
 
 // MAX PRICE
-if(maxPrice != null){
+            if (maxPrice != null) {
 
-jpql +=
-" AND c.price <= :maxPrice";
+                jpql
+                        += " AND c.price <= :maxPrice";
 
-}
+            }
 
+            TypedQuery<Long> query
+                    = em.createQuery(
+                            jpql,
+                            Long.class
+                    );
 
-TypedQuery<Long> query =
+            if (maxPrice != null) {
 
-em.createQuery(
-jpql,
-Long.class
-);
+                query.setParameter(
+                        "maxPrice",
+                        maxPrice);
 
+            }
 
-if(maxPrice != null){
+            return query.getSingleResult();
 
-query.setParameter(
-"maxPrice",
-maxPrice);
+        } finally {
 
-}
+            em.close();
 
+        }
 
-return query.getSingleResult();
-
-}
-finally{
-
-em.close();
-
-}
-
-}
-
-
+    }
 
     @Override
     public Course getCourseById(int id) {
@@ -623,341 +578,349 @@ em.close();
         }
     }
 
-@Override
-public List<Course> filterAll(
-        String keyword,
-        List<Integer> categoryIds,
-        boolean free,
-        boolean paid,
-        BigDecimal maxPrice,
-        String sort, // <--- THÊM BIẾN NÀY VÀO ĐÂY
-        int page,
-        int pageSize) {
-    EntityManager em = JPAUtil.getEntityManager();
-    try {
-        StringBuilder jpql = new StringBuilder(
-            "SELECT DISTINCT c FROM Course c " +
-            "LEFT JOIN FETCH c.categoryId " +
-            "WHERE LOWER(c.status)='active' ");
+    @Override
+    public List<Course> filterAll(
+            String keyword,
+            List<Integer> categoryIds,
+            boolean free,
+            boolean paid,
+            BigDecimal maxPrice,
+            String sort, // <--- THÊM BIẾN NÀY VÀO ĐÂY
+            int page,
+            int pageSize) {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            StringBuilder jpql = new StringBuilder(
+                    "SELECT DISTINCT c FROM Course c "
+                    + "LEFT JOIN FETCH c.categoryId "
+                    + "WHERE LOWER(c.status)='active' ");
 
-        // keyword
-        if(keyword != null && !keyword.isBlank()){
-            jpql.append(" AND LOWER(c.title) LIKE :keyword ");
+            // keyword
+            if (keyword != null && !keyword.isBlank()) {
+                jpql.append(" AND LOWER(c.title) LIKE :keyword ");
+            }
+
+            // category
+            if (categoryIds != null && !categoryIds.isEmpty()) {
+                jpql.append(" AND c.categoryId.categoryId IN :categoryIds ");
+            }
+
+            // free paid
+            if (free && !paid) {
+                jpql.append(" AND c.price = 0 ");
+            } else if (!free && paid) {
+                jpql.append(" AND c.price > 0 ");
+            }
+
+            // price
+            if (maxPrice != null) {
+                jpql.append(" AND c.price <= :maxPrice ");
+            }
+
+            // ===== XỬ LÝ SẮP XẾP (SORT) =====
+            if ("price_asc".equals(sort)) {
+                jpql.append(" ORDER BY c.price ASC ");
+            } else if ("price_desc".equals(sort)) {
+                jpql.append(" ORDER BY c.price DESC ");
+            } else if ("popular".equals(sort)) {
+                // Sắp xếp phổ biến (Nếu DB bạn có trường view/enrollment thì dùng trường đó. 
+                // Tạm thời mình lấy theo courseId hoặc bạn có thể chỉnh lại)
+                jpql.append(" ORDER BY c.courseId ASC ");
+            } else {
+                // Mặc định (newest hoặc null)
+                jpql.append(" ORDER BY c.createdAt DESC ");
+            }
+
+            TypedQuery<Course> query = em.createQuery(jpql.toString(), Course.class);
+
+            // param keyword
+            if (keyword != null && !keyword.isBlank()) {
+                query.setParameter("keyword", "%" + keyword.toLowerCase() + "%");
+            }
+            // param category
+            if (categoryIds != null && !categoryIds.isEmpty()) {
+                query.setParameter("categoryIds", categoryIds);
+            }
+            // param price
+            if (maxPrice != null) {
+                query.setParameter("maxPrice", maxPrice);
+            }
+
+            query.setFirstResult((page - 1) * pageSize);
+            query.setMaxResults(pageSize);
+            return query.getResultList();
+
+        } finally {
+            em.close();
         }
-
-        // category
-        if(categoryIds != null && !categoryIds.isEmpty()){
-            jpql.append(" AND c.categoryId.categoryId IN :categoryIds ");
-        }
-
-        // free paid
-        if(free && !paid){
-            jpql.append(" AND c.price = 0 ");
-        } else if(!free && paid){
-            jpql.append(" AND c.price > 0 ");
-        }
-
-        // price
-        if(maxPrice != null){
-            jpql.append(" AND c.price <= :maxPrice ");
-        }
-
-        // ===== XỬ LÝ SẮP XẾP (SORT) =====
-        if ("price_asc".equals(sort)) {
-            jpql.append(" ORDER BY c.price ASC ");
-        } else if ("price_desc".equals(sort)) {
-            jpql.append(" ORDER BY c.price DESC ");
-        } else if ("popular".equals(sort)) {
-            // Sắp xếp phổ biến (Nếu DB bạn có trường view/enrollment thì dùng trường đó. 
-            // Tạm thời mình lấy theo courseId hoặc bạn có thể chỉnh lại)
-            jpql.append(" ORDER BY c.courseId ASC "); 
-        } else {
-            // Mặc định (newest hoặc null)
-            jpql.append(" ORDER BY c.createdAt DESC ");
-        }
-
-        TypedQuery<Course> query = em.createQuery(jpql.toString(), Course.class);
-
-        // param keyword
-        if(keyword != null && !keyword.isBlank()){
-            query.setParameter("keyword", "%"+keyword.toLowerCase()+"%");
-        }
-        // param category
-        if(categoryIds != null && !categoryIds.isEmpty()){
-            query.setParameter("categoryIds", categoryIds);
-        }
-        // param price
-        if(maxPrice != null){
-            query.setParameter("maxPrice", maxPrice);
-        }
-
-        query.setFirstResult((page - 1) * pageSize);
-        query.setMaxResults(pageSize);
-        return query.getResultList();
-
-    } finally {
-        em.close();
-    }
-}
-@Override
-public long countFilterAll(
-        String keyword,
-        List<Integer> categoryIds,
-        boolean free,
-        boolean paid,
-        BigDecimal maxPrice) {
-
-    EntityManager em =
-            JPAUtil.getEntityManager();
-
-    try{
-
-        String jpql =
-                "SELECT COUNT(c) FROM Course c WHERE " +
-                "LOWER(c.status)='active' ";
-
-
-        if(keyword != null &&
-           !keyword.isBlank()){
-
-            jpql +=
-              " AND LOWER(c.title) LIKE :keyword ";
-
-        }
-
-
-        if(categoryIds != null &&
-           !categoryIds.isEmpty()){
-
-            jpql +=
-              " AND c.categoryId.id IN :categoryIds ";
-
-        }
-
-
-        if(free && !paid){
-
-            jpql += " AND c.price=0 ";
-
-        }
-        else if(!free && paid){
-
-            jpql += " AND c.price>0 ";
-
-        }
-
-
-        if(maxPrice != null){
-
-            jpql +=
-             " AND c.price <= :maxPrice ";
-
-        }
-
-
-        var query =
-                em.createQuery(jpql,
-                        Long.class);
-
-
-        if(keyword != null &&
-           !keyword.isBlank()){
-
-            query.setParameter(
-                    "keyword",
-                    "%"+keyword.toLowerCase()+"%"
-            );
-
-        }
-
-
-        if(categoryIds != null &&
-           !categoryIds.isEmpty()){
-
-            query.setParameter(
-                    "categoryIds",
-                    categoryIds);
-
-        }
-
-
-        if(maxPrice != null){
-
-            query.setParameter(
-                    "maxPrice",
-                    maxPrice);
-
-        }
-
-
-        return query.getSingleResult();
-
-    }
-    finally{
-
-        em.close();
-
     }
 
-}
-@Override
-public BigDecimal getMaxCoursePrice() {
+    @Override
+    public long countFilterAll(
+            String keyword,
+            List<Integer> categoryIds,
+            boolean free,
+            boolean paid,
+            BigDecimal maxPrice) {
 
-    EntityManager em = JPAUtil.getEntityManager();
+        EntityManager em
+                = JPAUtil.getEntityManager();
 
-    try {
+        try {
 
-        BigDecimal maxPrice = em.createQuery(
-                "SELECT MAX(c.price) FROM Course c",
-                BigDecimal.class
-        ).getSingleResult();
+            String jpql
+                    = "SELECT COUNT(c) FROM Course c WHERE "
+                    + "LOWER(c.status)='active' ";
 
-        return maxPrice != null ? maxPrice : BigDecimal.ZERO;
+            if (keyword != null
+                    && !keyword.isBlank()) {
 
-    } finally {
-        em.close();
-    }
-}
-@Override
-public List<Course> getAllCourses(int page) {
+                jpql
+                        += " AND LOWER(c.title) LIKE :keyword ";
 
-    EntityManager em =
-            JPAUtil.getEntityManager();
+            }
 
-    try {
+            if (categoryIds != null
+                    && !categoryIds.isEmpty()) {
 
-        return em.createQuery(
-                "SELECT c FROM Course c " +
-                "LEFT JOIN FETCH c.categoryId " +
-                "WHERE LOWER(c.status)='active' " +
-                "ORDER BY c.createdAt DESC",
-                Course.class
-        )
-        .setFirstResult((page - 1) * PAGE_SIZE)
-        .setMaxResults(PAGE_SIZE)
-        .getResultList();
+                jpql
+                        += " AND c.categoryId.id IN :categoryIds ";
 
-    } finally {
-        em.close();
-    }
-}
-@Override
-public List<Course> filterCourses(
-        Integer categoryId,
-        BigDecimal minPrice,
-        BigDecimal maxPrice,
-        int page) {
+            }
 
-    EntityManager em =
-            JPAUtil.getEntityManager();
+            if (free && !paid) {
 
-    try {
+                jpql += " AND c.price=0 ";
 
-        StringBuilder jpql =
-                new StringBuilder(
-                        "SELECT c FROM Course c " +
-                        "LEFT JOIN FETCH c.categoryId " +
-                        "WHERE LOWER(c.status)='active' "
+            } else if (!free && paid) {
+
+                jpql += " AND c.price>0 ";
+
+            }
+
+            if (maxPrice != null) {
+
+                jpql
+                        += " AND c.price <= :maxPrice ";
+
+            }
+
+            var query
+                    = em.createQuery(jpql,
+                            Long.class);
+
+            if (keyword != null
+                    && !keyword.isBlank()) {
+
+                query.setParameter(
+                        "keyword",
+                        "%" + keyword.toLowerCase() + "%"
                 );
 
-        if(categoryId != null){
+            }
 
-            jpql.append(
-                    " AND c.categoryId.categoryId = :cid ");
+            if (categoryIds != null
+                    && !categoryIds.isEmpty()) {
+
+                query.setParameter(
+                        "categoryIds",
+                        categoryIds);
+
+            }
+
+            if (maxPrice != null) {
+
+                query.setParameter(
+                        "maxPrice",
+                        maxPrice);
+
+            }
+
+            return query.getSingleResult();
+
+        } finally {
+
+            em.close();
+
         }
 
-        if(minPrice != null){
-
-            jpql.append(
-                    " AND c.price >= :minPrice ");
-        }
-
-        if(maxPrice != null){
-
-            jpql.append(
-                    " AND c.price <= :maxPrice ");
-        }
-
-        jpql.append(
-                " ORDER BY c.createdAt DESC");
-
-        TypedQuery<Course> query =
-                em.createQuery(
-                        jpql.toString(),
-                        Course.class);
-
-        if(categoryId != null){
-
-            query.setParameter(
-                    "cid",
-                    categoryId);
-        }
-
-        if(minPrice != null){
-
-            query.setParameter(
-                    "minPrice",
-                    minPrice);
-        }
-
-        if(maxPrice != null){
-
-            query.setParameter(
-                    "maxPrice",
-                    maxPrice);
-        }
-
-        query.setFirstResult(
-                (page - 1) * PAGE_SIZE);
-
-        query.setMaxResults(
-                PAGE_SIZE);
-
-        return query.getResultList();
-
-    } finally {
-
-        em.close();
     }
-}
-@Override
-public List<Course> searchCourses(
-        String keyword,
-        int page) {
 
-    EntityManager em =
-            JPAUtil.getEntityManager();
+    @Override
+    public BigDecimal getMaxCoursePrice() {
 
-    try {
+        EntityManager em = JPAUtil.getEntityManager();
 
-        return em.createQuery(
-                "SELECT c FROM Course c " +
-                "LEFT JOIN FETCH c.categoryId " +
-                "WHERE LOWER(c.status)='active' " +
-                "AND LOWER(c.title) LIKE :kw " +
-                "ORDER BY c.createdAt DESC",
-                Course.class
-        )
-        .setParameter(
-                "kw",
-                "%" + keyword.toLowerCase() + "%"
-        )
-        .setFirstResult((page - 1) * PAGE_SIZE)
-        .setMaxResults(PAGE_SIZE)
-        .getResultList();
+        try {
 
-    } finally {
-        em.close();
+            BigDecimal maxPrice = em.createQuery(
+                    "SELECT MAX(c.price) FROM Course c",
+                    BigDecimal.class
+            ).getSingleResult();
+
+            return maxPrice != null ? maxPrice : BigDecimal.ZERO;
+
+        } finally {
+            em.close();
+        }
     }
-}
+
+    @Override
+    public List<Course> getAllCourses(int page) {
+
+        EntityManager em
+                = JPAUtil.getEntityManager();
+
+        try {
+
+            return em.createQuery(
+                    "SELECT c FROM Course c "
+                    + "LEFT JOIN FETCH c.categoryId "
+                    + "WHERE LOWER(c.status)='active' "
+                    + "ORDER BY c.createdAt DESC",
+                    Course.class
+            )
+                    .setFirstResult((page - 1) * PAGE_SIZE)
+                    .setMaxResults(PAGE_SIZE)
+                    .getResultList();
+
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
+    public List<Course> filterCourses(
+            Integer categoryId,
+            BigDecimal minPrice,
+            BigDecimal maxPrice,
+            int page) {
+
+        EntityManager em
+                = JPAUtil.getEntityManager();
+
+        try {
+
+            StringBuilder jpql
+                    = new StringBuilder(
+                            "SELECT c FROM Course c "
+                            + "LEFT JOIN FETCH c.categoryId "
+                            + "WHERE LOWER(c.status)='active' "
+                    );
+
+            if (categoryId != null) {
+
+                jpql.append(
+                        " AND c.categoryId.categoryId = :cid ");
+            }
+
+            if (minPrice != null) {
+
+                jpql.append(
+                        " AND c.price >= :minPrice ");
+            }
+
+            if (maxPrice != null) {
+
+                jpql.append(
+                        " AND c.price <= :maxPrice ");
+            }
+
+            jpql.append(
+                    " ORDER BY c.createdAt DESC");
+
+            TypedQuery<Course> query
+                    = em.createQuery(
+                            jpql.toString(),
+                            Course.class);
+
+            if (categoryId != null) {
+
+                query.setParameter(
+                        "cid",
+                        categoryId);
+            }
+
+            if (minPrice != null) {
+
+                query.setParameter(
+                        "minPrice",
+                        minPrice);
+            }
+
+            if (maxPrice != null) {
+
+                query.setParameter(
+                        "maxPrice",
+                        maxPrice);
+            }
+
+            query.setFirstResult(
+                    (page - 1) * PAGE_SIZE);
+
+            query.setMaxResults(
+                    PAGE_SIZE);
+
+            return query.getResultList();
+
+        } finally {
+
+            em.close();
+        }
+    }
+
+    @Override
+    public List<Course> searchCourses(
+            String keyword,
+            int page) {
+
+        EntityManager em
+                = JPAUtil.getEntityManager();
+
+        try {
+
+            return em.createQuery(
+                    "SELECT c FROM Course c "
+                    + "LEFT JOIN FETCH c.categoryId "
+                    + "WHERE LOWER(c.status)='active' "
+                    + "AND LOWER(c.title) LIKE :kw "
+                    + "ORDER BY c.createdAt DESC",
+                    Course.class
+            )
+                    .setParameter(
+                            "kw",
+                            "%" + keyword.toLowerCase() + "%"
+                    )
+                    .setFirstResult((page - 1) * PAGE_SIZE)
+                    .setMaxResults(PAGE_SIZE)
+                    .getResultList();
+
+        } finally {
+            em.close();
+        }
+    }
+
     public static void main(String[] args) {
         CourseServiceImp d = new CourseServiceImp();
-        d.findAllPaging(1).forEach(System.out::print);
     }
 
-   
- 
+    @Override
+    public List<Course> findTopByCategoryId(int categoryId) {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            return em.createQuery(
+                    "SELECT c FROM Course c "
+                    + "WHERE c.categoryId.categoryId = :categoryId "
+                    + "AND c.status = 'ACTIVE' "
+                    + "ORDER BY c.courseId ASC",
+                    Course.class
+            )
+                    .setParameter("categoryId", categoryId)
+                    .getResultList();
 
- 
+        } finally {
+            em.close();
+        }
+    }
 
 }

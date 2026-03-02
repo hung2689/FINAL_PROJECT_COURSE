@@ -38,7 +38,7 @@ public interface ICourseService {
 
     Teacher getTeacherByCourseId(int courseId);
 
-    void hardDeleteCourse(int id);
+     void hardDeleteCourse(int id);
 
     List<Course> filterAll(
             String keyword,
@@ -73,4 +73,6 @@ public interface ICourseService {
     Course getCourseById(int id);
 
     BigDecimal getMaxCoursePrice();
+     public List<Course> findTopByCategoryId(int categoryId) ;
 }
+ 

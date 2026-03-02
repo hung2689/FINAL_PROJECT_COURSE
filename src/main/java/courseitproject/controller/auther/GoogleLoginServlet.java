@@ -5,6 +5,7 @@
 package courseitproject.controller.auther;
 
 import courseitproject.model.GoogleUser;
+import courseitproject.model.Role;
 import courseitproject.model.Users;
 import courseitproject.service.GoogleAuthService;
 import courseitproject.service.IUserService;
@@ -19,6 +20,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  *
@@ -67,16 +69,39 @@ public class GoogleLoginServlet extends HttpServlet {
             req.getSession().setAttribute("USER", user);
 
             if (!user.getEmailVerified()) {
-                resp.sendRedirect(req.getContextPath() +"/complete-profile") ;
+                resp.sendRedirect(req.getContextPath() + "/complete-profile");
             } else {
-                resp.sendRedirect(req.getContextPath() + "/shop");
+                postCheck(req, resp, user);
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-           
+
         }
     }
 
-    
+    protected void postCheck(HttpServletRequest request, HttpServletResponse response, Users user)
+            throws ServletException, IOException {
+        List<Role> roleList = userService.findRolesByUserId(user.getUserId());
+        boolean isStudent = false;
+        boolean isAdmin = false;
+
+        for (Role r : roleList) {
+            if ("STUDENT".equalsIgnoreCase(r.getRoleName())) {
+                isStudent = true;
+            }
+            if ("ADMIN".equalsIgnoreCase(r.getRoleName())) {
+                isAdmin = true;
+            }
+        }
+
+        if (isAdmin) {
+            response.sendRedirect(request.getContextPath() + "/courseAdmin");
+        } else if (isStudent) {
+            response.sendRedirect(request.getContextPath() + "/home");
+        } else {
+            response.sendRedirect(request.getContextPath() + "/shop");
+        }
+    }
+
 }
