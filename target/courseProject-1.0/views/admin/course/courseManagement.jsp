@@ -80,7 +80,7 @@
                     <span class="text-white font-bold text-xl tracking-tight">DevLearn</span>
                 </div>
                 <nav class="flex-1 px-4 space-y-1 mt-4">
-                    <a class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-800 transition-colors" href="#">
+                    <a class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-800 transition-colors" href="home">
                         <span class="material-icons text-xl">dashboard</span>
                         <span class="font-medium">Dashboard</span>
                     </a>

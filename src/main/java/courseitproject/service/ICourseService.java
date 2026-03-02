@@ -38,4 +38,5 @@ public interface ICourseService {
     public Teacher getTeacherByCourseId(int courseId);
 
     public void hardDeleteCourse(int id);
+     public List<Course> findTopByCategoryId(int categoryId);
 }

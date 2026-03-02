@@ -185,7 +185,6 @@ public class CourseServiceImp implements ICourseService {
         try {
             em.getTransaction().begin();
 
-            // 1️⃣ Xóa bảng trung gian trước
             em.createQuery("DELETE FROM CourseTeacher ct WHERE ct.courseId.courseId = :courseId")
                     .setParameter("courseId", id)
                     .executeUpdate();
@@ -287,7 +286,27 @@ public class CourseServiceImp implements ICourseService {
 
     public static void main(String[] args) {
         CourseServiceImp d = new CourseServiceImp();
-        d.findAllPaging(1).forEach(System.out::print);
+     }
+
+    @Override
+    public List<Course> findTopByCategoryId(int categoryId) {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            return em.createQuery(
+                    "SELECT c FROM Course c "
+                    + "WHERE c.categoryId.categoryId = :categoryId "
+                    + "AND c.status = 'ACTIVE' "
+                    + "ORDER BY c.courseId ASC",
+                    Course.class
+            )
+                    .setParameter("categoryId", categoryId)
+                    
+                    .getResultList();
+
+        } finally {
+            em.close();
+        }
     }
+    
 
 }

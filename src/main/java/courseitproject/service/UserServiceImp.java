@@ -5,6 +5,8 @@ import courseitproject.model.*;
 import courseitproject.utils.EmailUtil;
 import courseitproject.utils.JPAUtil;
 import courseitproject.utils.OtpUtil;
+
+import courseitproject.utils.OtpUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 
@@ -12,17 +14,13 @@ import java.util.List;
 
 public class UserServiceImp implements IUserService {
 
-    private final GenericDAO<Users> userDAO
-            = new GenericDAO<>(Users.class);
+    private final GenericDAO<Users> userDAO = new GenericDAO<>(Users.class);
 
-    private final GenericDAO<UserRole> userRoleDAO
-            = new GenericDAO<>(UserRole.class);
+    private final GenericDAO<UserRole> userRoleDAO = new GenericDAO<>(UserRole.class);
 
-    private final GenericDAO<Student> studentDAO
-            = new GenericDAO<>(Student.class);
+    private final GenericDAO<Student> studentDAO = new GenericDAO<>(Student.class);
 
-    private final GenericDAO<Teacher> teacherDAO
-            = new GenericDAO<>(Teacher.class);
+    private final GenericDAO<Teacher> teacherDAO = new GenericDAO<>(Teacher.class);
     private final EmailUtil emailutil = new EmailUtil();
     private final OtpUtil otputil = new OtpUtil();
 
@@ -40,8 +38,7 @@ public class UserServiceImp implements IUserService {
 
             Role role = em.createQuery(
                     "SELECT r FROM Role r WHERE r.roleName = :name",
-                    Role.class
-            ).setParameter("name", roleName)
+                    Role.class).setParameter("name", roleName)
                     .getSingleResult();
 
             UserRole ur = new UserRole();
@@ -141,8 +138,7 @@ public class UserServiceImp implements IUserService {
                 + "\n"
                 + "Best regards,\n"
                 + "DevLearn Team\n"
-                + "Empowering your programming journey"
-        );
+                + "Empowering your programming journey");
     }
 
     @Override
@@ -168,8 +164,7 @@ public class UserServiceImp implements IUserService {
 
             Role userRole = em.createQuery(
                     "SELECT r FROM Role r WHERE r.roleName = 'USER'",
-                    Role.class
-            ).getSingleResult();
+                    Role.class).getSingleResult();
 
             UserRole ur = new UserRole();
             ur.setUserId(user);
@@ -194,8 +189,7 @@ public class UserServiceImp implements IUserService {
             int userId,
             String username,
             String fullName,
-            String roleName
-    ) {
+            String roleName) {
         EntityManager em = JPAUtil.getEntityManager();
         EntityTransaction tx = em.getTransaction();
 
@@ -210,13 +204,12 @@ public class UserServiceImp implements IUserService {
 
             // xóa role USER
             em.createQuery(
-                    "DELETE FROM UserRole ur WHERE ur.userId.userId = :uid"
-            ).setParameter("uid", userId).executeUpdate();
+                    "DELETE FROM UserRole ur WHERE ur.userId.userId = :uid").setParameter("uid", userId)
+                    .executeUpdate();
 
             Role role = em.createQuery(
                     "SELECT r FROM Role r WHERE r.roleName = :name",
-                    Role.class
-            ).setParameter("name", roleName)
+                    Role.class).setParameter("name", roleName)
                     .getSingleResult();
 
             UserRole ur = new UserRole();
@@ -253,6 +246,20 @@ public class UserServiceImp implements IUserService {
     }
 
     @Override
+    public List<Role> findRolesByUserId(int userId) {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            return em.createQuery(
+                    "SELECT ur.roleId FROM UserRole ur WHERE ur.userId.userId = :uid",
+                    Role.class).setParameter("uid", userId)
+                    .getResultList();
+
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
     public boolean updatePasswordByEmail(String email, String hashedPassword) {
 
         EntityManager em = JPAUtil.getEntityManager();
@@ -267,7 +274,6 @@ public class UserServiceImp implements IUserService {
             }
 
             user.setPassword(hashedPassword);
-            
 
             userDAO.update(em, user);
 
@@ -281,6 +287,60 @@ public class UserServiceImp implements IUserService {
             e.printStackTrace();
             return false;
 
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
+    public boolean updateFullName(int id, String fullName) {
+        EntityManager em = JPAUtil.getEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        try {
+            tx.begin();
+            int updated = em.createQuery(
+                    "UPDATE Users u SET u.fullName = :fn WHERE u.userId = :id")
+                    .setParameter("fn", fullName)
+                    .setParameter("id", id)
+                    .executeUpdate();
+            tx.commit();
+            return updated > 0;
+        } catch (Exception e) {
+            if (tx.isActive())
+                tx.rollback();
+            e.printStackTrace();
+            return false;
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
+    public boolean checkPassword(int id, String plainPassword) {
+        Users user = findUserById(id);
+        if (user == null || user.getPassword() == null)
+            return false;
+        return org.mindrot.jbcrypt.BCrypt.checkpw(plainPassword, user.getPassword());
+    }
+
+    @Override
+    public boolean updatePassword(int id, String newHashedPassword) {
+        EntityManager em = JPAUtil.getEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        try {
+            tx.begin();
+            int updated = em.createQuery(
+                    "UPDATE Users u SET u.password = :pw WHERE u.userId = :id")
+                    .setParameter("pw", newHashedPassword)
+                    .setParameter("id", id)
+                    .executeUpdate();
+            tx.commit();
+            return updated > 0;
+        } catch (Exception e) {
+            if (tx.isActive())
+                tx.rollback();
+            e.printStackTrace();
+            return false;
         } finally {
             em.close();
         }

@@ -1,357 +1,693 @@
-<%-- 
-    Document   : home
-    Created on : Feb 11, 2026, 2:11:15 PM
-    Author     : ASUS
---%>
+<%-- Document : home Created on : Feb 11, 2026, 2:11:15 PM Author : ASUS --%>
+    <%@page contentType="text/html" pageEncoding="UTF-8" %>
+        <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+            <!DOCTYPE html>
+            <html lang="en">
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html class="light" lang="vi"><head>
-        <meta charset="utf-8"/>
-        <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-        <title>DevLearn | Nền tảng học tập trực tuyến</title>
-        <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
-        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-        <script id="tailwind-config">
-            tailwind.config = {
-                darkMode: "class",
-                theme: {
-                    extend: {
-                        colors: {
-                            "primary": "#37ec13",
-                            "background-light": "#f8faf8",
-                            "background-dark": "#0d140b",
+            <head>
+                <meta charset="utf-8" />
+                <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+                <title>DevLearn | Online Learning Platform</title>
+                <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries,line-clamp"></script>
+                <link
+                    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap"
+                    rel="stylesheet" />
+                <link
+                    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+                    rel="stylesheet" />
+                <script id="tailwind-config">
+                    tailwind.config = {
+                        darkMode: "class",
+                        theme: {
+                            extend: {
+                                colors: {
+                                    "primary": "#10B981", /* Emerald */
+                                    "background-light": "#0F172A",
+                                    "background-dark": "#0F172A",
+                                },
+                                fontFamily: {
+                                    "display": ["Inter", "sans-serif"]
+                                },
+                                maxWidth: {
+                                    "canvas": "1200px",
+                                }
+                            },
                         },
-                        fontFamily: {
-                            "display": ["Inter", "sans-serif"]
-                        },
-                        maxWidth: {
-                            "canvas": "1440px",
-                        }
-                    },
-                },
+                    }
+                </script>
+                <style type="text/tailwindcss">
+
+
+                    .slider-wrapper {
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .slider-wrapper::-webkit-scrollbar {
+            display: none;
+        }
+
+        .slider-track {
+            display: flex;
+            gap: 24px;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        @layer base {
+            body {
+                @apply antialiased;
             }
-        </script>
-        <style type="text/tailwindcss">
-            .material-symbols-outlined {
-                font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-            }
-            @layer base {
-                body {
-                    @apply antialiased;
-                }
-            }
-        </style>  
-ì    </head>
-    <body class="bg-background-light dark:bg-background-dark font-display text-[#1a2e16] dark:text-gray-100 transition-colors duration-300">
-        <div class="relative flex min-h-screen w-full flex-col">
-            <header class="sticky top-0 z-50 w-full bg-white/80 dark:bg-background-dark/80 backdrop-blur-xl border-b border-gray-100 dark:border-white/10">
-                <div class="max-w-canvas mx-auto px-8 lg:px-12 py-5 flex items-center justify-between">
-                    <div class="flex items-center gap-12">
-                        <div class="flex items-center gap-2 group cursor-pointer">
-                            <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-[#101b0d] shadow-lg shadow-primary/20">
-                                <span class="material-symbols-outlined text-2xl font-bold">terminal</span>
+        }
+    </style>
+            </head>
+
+            <body class="font-display transition-colors duration-300"
+                style="background: linear-gradient(135deg, #f8fffc, #e6f7f1); color: #0f172a;">
+                <div class="relative flex min-h-screen w-full flex-col">
+                    <jsp:include page="../common/header.jsp" />
+                    <main class="flex-1">
+                        <!-- Hero Section -->
+                        <section class="relative min-h-screen flex items-center justify-center overflow-hidden">
+                            <!-- Background layer -->
+                            <div class="absolute inset-0 -z-10"
+                                style="background: radial-gradient(circle at 50% 65%, rgba(16,185,129,0.2) 0%, rgba(16,185,129,0.1) 20%, transparent 60%), linear-gradient(135deg, #0f172a 0%, #064e3b 40%, #000000 100%);">
                             </div>
-                            <h2 class="text-2xl font-black tracking-tight">DevLearn</h2>
-                        </div>
-                        <nav class="hidden lg:flex items-center gap-8">
-                            <a class="text-[15px] font-medium text-gray-600 dark:text-gray-300 hover:text-primary transition-colors" href="#">Trang chủ</a>
-                            <a class="text-[15px] font-medium text-gray-600 dark:text-gray-300 hover:text-primary transition-colors" href="#">Khóa học</a>
-                            <a class="text-[15px] font-medium text-gray-600 dark:text-gray-300 hover:text-primary transition-colors" href="#">Lộ trình</a>
-                            <a class="text-[15px] font-medium text-gray-600 dark:text-gray-300 hover:text-primary transition-colors" href="#">Cộng đồng</a>
-                            <a class="text-[15px] font-medium text-gray-600 dark:text-gray-300 hover:text-primary transition-colors" href="#">Về chúng tôi</a>
-                        </nav>
-                    </div>
-                    <div class="flex items-center gap-4">
-                        <button class="text-[15px] font-semibold px-6 py-2.5 rounded-xl hover:bg-gray-100 dark:hover:bg-white/5 transition-all">
-                            Đăng nhập
-                        </button>
-                        <button class="bg-primary text-[#101b0d] text-[15px] font-bold px-8 py-2.5 rounded-xl shadow-lg shadow-primary/10 hover:opacity-90 hover:-translate-y-0.5 transition-all">
-                            Bắt đầu ngay
-                        </button>
-                    </div>
-                </div>
-            </header>
-            <main class="flex-1">
-                <section class="relative overflow-hidden pt-12 lg:pt-20 pb-20 lg:pb-32">
-                    <div class="max-w-canvas mx-auto px-8 lg:px-12">
-                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                            <div class="max-w-2xl">
-                                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider mb-8">
+
+                            <!-- Glowing grid overlay -->
+                            <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
+                                <div
+                                    class="absolute inset-0 bg-[linear-gradient(rgba(16,185,129,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(16,185,129,0.03)_1px,transparent_1px)] bg-[size:3rem_3rem] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_65%,#000_70%,transparent_100%)] opacity-50">
+                                </div>
+                            </div>
+
+                            <div
+                                class="max-w-canvas mx-auto px-6 lg:px-12 relative z-10 text-center flex flex-col items-center pt-20">
+                                <!-- Status Pill -->
+                                <div
+                                    class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-white/5 border border-white/10 text-emerald-400 text-sm font-semibold tracking-wide mb-8 backdrop-blur-md shadow-[0_0_20px_rgba(16,185,129,0.15)]">
                                     <span class="relative flex h-2 w-2">
-                                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                                        <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                                        <span
+                                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                        <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                                     </span>
-                                    Mới: Khóa học AI cho người mới
+                                    Learn Programming Smarter with AI
                                 </div>
-                                <h1 class="text-5xl lg:text-7xl font-black leading-[1.1] mb-8 tracking-tight">
-                                    Chinh phục thế giới <span class="text-primary italic">Lập trình</span> một cách bài bản.
-                                </h1>
-                                <p class="text-lg lg:text-xl text-gray-500 dark:text-gray-400 mb-10 leading-relaxed">
-                                    Nền tảng học tập trực tuyến chuẩn quốc tế dành riêng cho sinh viên IT. Học từ chuyên gia, thực hành thực tế và nhận chứng chỉ uy tín để bắt đầu sự nghiệp.
-                                </p>
-                                <div class="flex flex-wrap gap-4 mb-12">
-                                    <button class="h-16 px-10 bg-primary text-[#101b0d] text-lg font-bold rounded-2xl shadow-xl shadow-primary/20 hover:scale-105 transition-all flex items-center gap-3">
-                                        Khám phá khóa học
-                                        <span class="material-symbols-outlined">arrow_forward</span>
-                                    </button>
-                                    <button class="h-16 px-10 border-2 border-gray-200 dark:border-white/10 text-lg font-bold rounded-2xl hover:bg-gray-50 dark:hover:bg-white/5 transition-all">
-                                        Xem lộ trình học tập
-                                    </button>
-                                </div>
-                                <div class="flex items-center gap-6">
-                                    <div class="flex -space-x-4">
-                                        <div class="w-12 h-12 rounded-full border-4 border-white dark:border-background-dark bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuACBh-IBngIxMyAwu71Ae1YhcjmMoVn0nVXnDZwL4dxAvI3gUCGJiFXXltAZaSVw5pMftBU8nMiQCDdoesMrDYs37yJVlUL9e5hWSoyec9AfaSbxXkCW0VJ0M_L81DBJ2g8aD8Kq0Y1ox8tjOLy31dElDOAFbXWjtid2ZnPunZpF2Xn5iK-rBi5I2Qgoglqtu29VQt95g-az1eZzduTJaq5YB7rgzPPczCgZyI6SLJ1zzq8AZM23jRQ84v0TFfeCeOQxaK9Ivy84wc')"></div>
-                                        <div class="w-12 h-12 rounded-full border-4 border-white dark:border-background-dark bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC0dTCRRoa1DJxK8VJw4ZY6iY8b2pnKVefT9G4dd0MdbNqiHhrKHi4lGW_x4ZCyA5HVIZ8HmeY_7HEDUgi4lpNcAE0WU1xuXYgjxTWQvWb6iN0DYdlCWzws1vAZjt5qE8p61CBcaZoS9tV7AZlF_XG4-wneutR0N469EZiy6aNdGVWCp2xIAxcQkLOE-WWbcA2e8n-udbkmfQW5Cl9m4cKllWZRCgvSeDK2qnl_vCC9VYY_FRY3tdxCcgjW7cHyNJzMIOUD5CPUI0g')"></div>
-                                        <div class="w-12 h-12 rounded-full border-4 border-white dark:border-background-dark bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDEnulu-c3qozuR9uL_C-zfGR_cDAfUpRRfDVxAiTqY_AwLfMdslUhX-d5y3UtOZk8pk_nVJHoiZ42VgRRi2f694b6tHrkB5t8Il3yEGoq3VesBaaR30gI53EHIUDiOKzKgYAwaxqmKBs1kXp3wni6ETeNyacAZf6P2hnKsO_asgprZi60eMZBx0JwGCHydu24oLP07ih8-TFF7aEW4f9lBMPpFNMpoi46-Rsb_tSsmBGPOUBAZWNOP4_IsWreW_nc59tlRfYvWsNI')"></div>
-                                        <div class="w-12 h-12 rounded-full border-4 border-white dark:border-background-dark bg-gray-900 flex items-center justify-center text-[10px] font-bold text-white">+5K</div>
-                                    </div>
-                                    <div class="h-8 w-px bg-gray-200 dark:bg-white/10"></div>
-                                    <div class="text-sm font-medium text-gray-500">
-                                        <span class="text-[#101b0d] dark:text-white font-bold block">15,000+ Học viên</span>
-                                        Đang học tập mỗi ngày
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="relative lg:block hidden">
-                                <div class="absolute -top-20 -right-20 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[100px] -z-10"></div>
-                                <div class="relative rounded-[2.5rem] overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.15)] border border-white/20">
-                                    <img alt="Learning Experience" class="w-full aspect-square object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZcsCMLMIk29IPDdH0it_8eCThOwXvEvWkVyO-xfp5rcuMvvcUKqtabD5VcKsSV8UT6MHy7Sg9mB1p_vXzPzbA_XANbTxipd7rf9iZgZ5sxDABLcUermRqq2lIN7SfeB6HboxJVJRDLf75Q8bgSSHCrLLxB6ZUzFB71bVvetAeL-MzWrjjfO9kGG4sZXOTc7V3LVfY3VvH-m8igYtqzS_HpkP233vXP2lUCSUhi9AaGgDuz7P_7AfzKXyeD0r9YlH6dGIgCoAeHQw"/>
-                                    <div class="absolute bottom-8 left-8 right-8 bg-white/90 dark:bg-background-dark/90 backdrop-blur-md p-6 rounded-2xl shadow-2xl border border-white/20">
-                                        <div class="flex items-center gap-4">
-                                            <div class="w-12 h-12 bg-primary rounded-xl flex items-center justify-center text-[#101b0d]">
-                                                <span class="material-symbols-outlined text-2xl font-bold">verified_user</span>
-                                            </div>
-                                            <div>
-                                                <p class="font-bold text-lg leading-tight">Chứng chỉ uy tín</p>
-                                                <p class="text-sm text-gray-500">Được 200+ đối tác công nghệ chấp nhận</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-                <section class="py-12 bg-white dark:bg-[#111c0f] border-y border-gray-100 dark:border-white/5">
-                    <div class="max-w-canvas mx-auto px-8 lg:px-12">
-                        <div class="grid grid-cols-2 lg:grid-cols-4 gap-8">
-                            <div class="flex flex-col items-center text-center lg:items-start lg:text-left gap-2">
-                                <span class="text-3xl font-black text-primary">120+</span>
-                                <span class="text-sm font-semibold uppercase tracking-widest text-gray-400">Khóa học chuyên sâu</span>
-                            </div>
-                            <div class="flex flex-col items-center text-center lg:items-start lg:text-left gap-2">
-                                <span class="text-3xl font-black text-primary">50+</span>
-                                <span class="text-sm font-semibold uppercase tracking-widest text-gray-400">Mentor kinh nghiệm</span>
-                            </div>
-                            <div class="flex flex-col items-center text-center lg:items-start lg:text-left gap-2">
-                                <span class="text-3xl font-black text-primary">24/7</span>
-                                <span class="text-sm font-semibold uppercase tracking-widest text-gray-400">Hỗ trợ kỹ thuật</span>
-                            </div>
-                            <div class="flex flex-col items-center text-center lg:items-start lg:text-left gap-2">
-                                <span class="text-3xl font-black text-primary">100%</span>
-                                <span class="text-sm font-semibold uppercase tracking-widest text-gray-400">Thực hành thực tế</span>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-                <section class="py-24 lg:py-32">
-                    <div class="max-w-canvas mx-auto px-8 lg:px-12">
-                        <div class="flex flex-col lg:flex-row lg:items-end justify-between mb-16 gap-8">
-                            <div class="max-w-xl">
-                                <h2 class="text-4xl font-black mb-4 tracking-tight">Khóa học tiêu biểu</h2>
-                                <p class="text-gray-500 dark:text-gray-400 text-lg">Được thiết kế để giúp bạn bắt đầu từ con số 0 đến khi có thể đi làm tại các tập đoàn lớn.</p>
-                            </div>
-                            <a class="inline-flex items-center gap-2 text-primary font-bold group" href="#">
-                                Xem tất cả khóa học
-                                <span class="material-symbols-outlined transition-transform group-hover:translate-x-1">arrow_forward</span>
-                            </a>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8">
-                            <div class="group bg-white dark:bg-[#162514] rounded-[2rem] overflow-hidden border border-gray-100 dark:border-white/5 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] transition-all duration-300">
-                                <div class="aspect-[16/10] overflow-hidden relative">
-                                    <img alt="Frontend" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBEjm4VjPhoCQ6tOGL2KtgOlyXPhr_oZbJ6jnm19qhcDmg8jv9N1i6sPt0ry60SkKF6Y3RF9xN7CJC4c-d1gG7eRXkt8DVKvAUsfQFiaTkS-LvvGtOZr0cU8zRh7tu_72EmNtJ73LhE-AB26mBLD1BTOhpWnhAb_v3PCPMe0H1GQZIrEYtplvu_vHDsYM6PnmtoXirCXmNFza9oMxi-rX5cYt0xsdu0tKYFjPpxaC381LHzrjiOjgQ8TIzgqSvwG-CpDUW86UFsH6c"/>
-                                    <div class="absolute top-4 left-4">
-                                        <span class="bg-primary text-[#101b0d] text-[10px] font-black uppercase px-3 py-1.5 rounded-full">Frontend</span>
-                                    </div>
-                                </div>
-                                <div class="p-8">
-                                    <h3 class="text-xl font-bold mb-3 leading-tight group-hover:text-primary transition-colors">HTML, CSS &amp; Tailwind cho người mới</h3>
-                                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-6 line-clamp-2">Nắm vững nền tảng xây dựng giao diện web hiện đại với kỹ thuật thực chiến.</p>
-                                    <div class="flex items-center justify-between pt-6 border-t border-gray-100 dark:border-white/5">
-                                        <div class="flex items-center gap-1.5">
-                                            <span class="material-symbols-outlined text-primary text-xl">schedule</span>
-                                            <span class="text-xs font-bold">42 Giờ</span>
-                                        </div>
-                                        <div class="flex items-center gap-1.5">
-                                            <span class="material-symbols-outlined text-yellow-500 text-xl">star</span>
-                                            <span class="text-xs font-bold">4.9</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="group bg-white dark:bg-[#162514] rounded-[2rem] overflow-hidden border border-gray-100 dark:border-white/5 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] transition-all duration-300">
-                                <div class="aspect-[16/10] overflow-hidden relative">
-                                    <img alt="JavaScript" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDMTC0xBHYjO3A5wwDiTxSayNTasspRX9s3bs42qMl_nYmTmZsg9QxAg4IXaaw6IZwowUroIsZLoQzNTDp4SSNrcA1ASUEabpBYygb9n7CoYHKwMSFtJar7lMeKlZAfZTsDef9FySEBhYUkaazfAEuab2YH_7AhmeHElFauIv5j7T-GIizlBthF84bGxQ1pfPTIl_i_U1OEAR1cevQQmMLBtyM9k9Nrzm6Kt1msicvg5MsU8sfd3Nddh_MIKIGfh_jmn1nwZQ3BJ5w"/>
-                                    <div class="absolute top-4 left-4">
-                                        <span class="bg-primary text-[#101b0d] text-[10px] font-black uppercase px-3 py-1.5 rounded-full">Logic</span>
-                                    </div>
-                                </div>
-                                <div class="p-8">
-                                    <h3 class="text-xl font-bold mb-3 leading-tight group-hover:text-primary transition-colors">JavaScript Nâng Cao &amp; ES6+</h3>
-                                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-6 line-clamp-2">Làm chủ ngôn ngữ quan trọng nhất của Web với các dự án thực tế phức tạp.</p>
-                                    <div class="flex items-center justify-between pt-6 border-t border-gray-100 dark:border-white/5">
-                                        <div class="flex items-center gap-1.5">
-                                            <span class="material-symbols-outlined text-primary text-xl">schedule</span>
-                                            <span class="text-xs font-bold">58 Giờ</span>
-                                        </div>
-                                        <div class="flex items-center gap-1.5">
-                                            <span class="material-symbols-outlined text-yellow-500 text-xl">star</span>
-                                            <span class="text-xs font-bold">4.8</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="group bg-white dark:bg-[#162514] rounded-[2rem] overflow-hidden border border-gray-100 dark:border-white/5 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] transition-all duration-300">
-                                <div class="aspect-[16/10] overflow-hidden relative">
-                                    <img alt="Python" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAjJHyA051Ck1cHgkWnCOUmRGs9Ma9cMQJjdHMqgfYVFTczHfeWNLJ5FLo6X7Fya5zoe9AjokmNucevcAO5rToBSQONQUJcYiT3X77HBTMU9CgmC-_Wg0ldNrSEZ6zGXjemsJ-pPer-vcznZw8bYEIRukjesjcKTqpXwc3XuAvJjvYwCTljQfw2u5gci9jMKkgL3txMgQCO_7BDXiPFP2_ZYSmxsc1f9MVAmxo2TR6b2Z0C2dAqCJhs5c6S7hsst0kqihUu_Dwq4iQ"/>
-                                    <div class="absolute top-4 left-4">
-                                        <span class="bg-primary text-[#101b0d] text-[10px] font-black uppercase px-3 py-1.5 rounded-full">Backend</span>
-                                    </div>
-                                </div>
-                                <div class="p-8">
-                                    <h3 class="text-xl font-bold mb-3 leading-tight group-hover:text-primary transition-colors">Python &amp; Phân tích dữ liệu</h3>
-                                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-6 line-clamp-2">Bắt đầu hành trình Data Science với ngôn ngữ Python mạnh mẽ và trực quan.</p>
-                                    <div class="flex items-center justify-between pt-6 border-t border-gray-100 dark:border-white/5">
-                                        <div class="flex items-center gap-1.5">
-                                            <span class="material-symbols-outlined text-primary text-xl">schedule</span>
-                                            <span class="text-xs font-bold">65 Giờ</span>
-                                        </div>
-                                        <div class="flex items-center gap-1.5">
-                                            <span class="material-symbols-outlined text-yellow-500 text-xl">star</span>
-                                            <span class="text-xs font-bold">5.0</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="group bg-white dark:bg-[#162514] rounded-[2rem] overflow-hidden border border-gray-100 dark:border-white/5 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] transition-all duration-300">
-                                <div class="aspect-[16/10] overflow-hidden relative">
-                                    <div class="w-full h-full bg-gray-200 dark:bg-gray-800 flex items-center justify-center">
-                                        <span class="material-symbols-outlined text-5xl text-gray-400">terminal</span>
-                                    </div>
-                                    <div class="absolute top-4 left-4">
-                                        <span class="bg-primary text-[#101b0d] text-[10px] font-black uppercase px-3 py-1.5 rounded-full">New</span>
-                                    </div>
-                                </div>
-                                <div class="p-8">
-                                    <h3 class="text-xl font-bold mb-3 leading-tight group-hover:text-primary transition-colors">Fullstack React &amp; Node.js</h3>
-                                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-6 line-clamp-2">Lộ trình học tập để trở thành một kĩ sư phần mềm toàn diện trong 6 tháng.</p>
-                                    <div class="flex items-center justify-between pt-6 border-t border-gray-100 dark:border-white/5">
-                                        <div class="flex items-center gap-1.5">
-                                            <span class="material-symbols-outlined text-primary text-xl">schedule</span>
-                                            <span class="text-xs font-bold">120 Giờ</span>
-                                        </div>
-                                        <div class="flex items-center gap-1.5">
-                                            <span class="material-symbols-outlined text-yellow-500 text-xl">star</span>
-                                            <span class="text-xs font-bold">4.9</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-                <section class="pb-24 lg:pb-32 px-8 lg:px-12">
-                    <div class="max-w-canvas mx-auto bg-[#101b0d] rounded-[3rem] p-12 lg:p-24 relative overflow-hidden text-center flex flex-col items-center">
-                        <div class="absolute top-0 right-0 w-[400px] h-[400px] bg-primary/20 rounded-full blur-[120px]"></div>
-                        <div class="absolute bottom-0 left-0 w-[300px] h-[300px] bg-primary/10 rounded-full blur-[100px]"></div>
-                        <h2 class="text-4xl lg:text-6xl font-black text-white mb-8 max-w-4xl leading-tight z-10">
-                            Sẵn sàng bứt phá sự nghiệp lập trình của bạn?
-                        </h2>
-                        <p class="text-lg lg:text-xl text-gray-400 mb-12 max-w-2xl z-10">
-                            Hơn 15.000 học viên đã tin tưởng. Đăng ký ngay hôm nay để nhận ưu đãi 40% cho gói thành viên Premium.
-                        </p>
-                        <div class="flex flex-col sm:flex-row gap-4 z-10">
-                            <button class="h-16 px-12 bg-primary text-[#101b0d] text-lg font-bold rounded-2xl shadow-2xl shadow-primary/20 hover:scale-105 transition-all">
-                                Bắt đầu học miễn phí
-                            </button>
-                            <button class="h-16 px-12 border-2 border-white/20 text-white text-lg font-bold rounded-2xl hover:bg-white/10 transition-all">
-                                Liên hệ tư vấn
-                            </button>
-                        </div>
-                    </div>
-                </section>
-            </main>
-            <footer class="bg-white dark:bg-[#080d07] pt-24 pb-12 border-t border-gray-100 dark:border-white/5">
-                <div class="max-w-canvas mx-auto px-8 lg:px-12">
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-16 mb-24">
-                        <div class="lg:col-span-2">
-                            <div class="flex items-center gap-2 mb-8">
-                                <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-[#101b0d]">
-                                    <span class="material-symbols-outlined text-xl font-bold">terminal</span>
-                                </div>
-                                <h2 class="text-xl font-black tracking-tight">IT-LEARN</h2>
-                            </div>
-                            <p class="text-gray-500 dark:text-gray-400 text-base leading-relaxed mb-8 max-w-sm">
-                                Đồng hành cùng hàng ngàn sinh viên Việt Nam trên con đường trở thành những kĩ sư phần mềm chuyên nghiệp với giáo trình thực chiến.
-                            </p>
-                            <div class="flex gap-4">
-                                <a class="w-10 h-10 rounded-full border border-gray-200 dark:border-white/10 flex items-center justify-center text-gray-400 hover:bg-primary hover:border-primary hover:text-[#101b0d] transition-all" href="#">
-                                    <span class="material-symbols-outlined text-xl">social_leaderboard</span>
-                                </a>
-                                <a class="w-10 h-10 rounded-full border border-gray-200 dark:border-white/10 flex items-center justify-center text-gray-400 hover:bg-primary hover:border-primary hover:text-[#101b0d] transition-all" href="#">
-                                    <span class="material-symbols-outlined text-xl">terminal</span>
-                                </a>
-                                <a class="w-10 h-10 rounded-full border border-gray-200 dark:border-white/10 flex items-center justify-center text-gray-400 hover:bg-primary hover:border-primary hover:text-[#101b0d] transition-all" href="#">
-                                    <span class="material-symbols-outlined text-xl">smart_display</span>
-                                </a>
-                            </div>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-sm uppercase tracking-widest mb-8">Khóa học</h4>
-                            <ul class="space-y-4">
-                                <li><a class="text-gray-500 hover:text-primary transition-colors text-[15px]" href="#">Lập trình Frontend</a></li>
-                                <li><a class="text-gray-500 hover:text-primary transition-colors text-[15px]" href="#">Lập trình Backend</a></li>
-                                <li><a class="text-gray-500 hover:text-primary transition-colors text-[15px]" href="#">Lập trình Di động</a></li>
-                                <li><a class="text-gray-500 hover:text-primary transition-colors text-[15px]" href="#">Data Science &amp; AI</a></li>
-                                <li><a class="text-gray-500 hover:text-primary transition-colors text-[15px]" href="#">DevOps &amp; Cloud</a></li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-sm uppercase tracking-widest mb-8">Nguồn tài nguyên</h4>
-                            <ul class="space-y-4">
-                                <li><a class="text-gray-500 hover:text-primary transition-colors text-[15px]" href="#">Blog công nghệ</a></li>
-                                <li><a class="text-gray-500 hover:text-primary transition-colors text-[15px]" href="#">Cộng đồng học tập</a></li>
-                                <li><a class="text-gray-500 hover:text-primary transition-colors text-[15px]" href="#">Tài liệu miễn phí</a></li>
-                                <li><a class="text-gray-500 hover:text-primary transition-colors text-[15px]" href="#">Kênh Youtube</a></li>
-                                <li><a class="text-gray-500 hover:text-primary transition-colors text-[15px]" href="#">Podcast IT</a></li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-sm uppercase tracking-widest mb-8">Liên kết nhanh</h4>
-                            <ul class="space-y-4">
-                                <li><a class="text-gray-500 hover:text-primary transition-colors text-[15px]" href="#">Về chúng tôi</a></li>
-                                <li><a class="text-gray-500 hover:text-primary transition-colors text-[15px]" href="#">Tuyển dụng</a></li>
-                                <li><a class="text-gray-500 hover:text-primary transition-colors text-[15px]" href="#">Điều khoản</a></li>
-                                <li><a class="text-gray-500 hover:text-primary transition-colors text-[15px]" href="#">Bảo mật</a></li>
-                                <li><a class="text-gray-500 hover:text-primary transition-colors text-[15px]" href="#">Liên hệ</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="pt-12 border-t border-gray-100 dark:border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-                        <p class="text-sm text-gray-500">© 2024 IT-Learn Academy. Được thiết kế cho cộng đồng IT Việt Nam.</p>
-                        <div class="flex items-center gap-8">
-                            <span class="text-sm text-gray-500 flex items-center gap-2">
-                                <span class="material-symbols-outlined text-lg">language</span> Tiếng Việt
-                            </span>
-                            <span class="text-sm text-gray-500 flex items-center gap-2">
-                                <span class="material-symbols-outlined text-lg">support_agent</span> 1900 1234
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </footer>
-        </div>
 
-    </body></html>
+                                <!-- Headline -->
+                                <h1
+                                    class="text-6xl md:text-7xl lg:text-[5.5rem] font-black leading-[1.1] tracking-tighter mb-8 text-white max-w-5xl mx-auto drop-shadow-2xl">
+                                    Build Your Future <br class="hidden md:block" /> with a Modern
+                                    <span
+                                        class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400 drop-shadow-[0_0_40px_rgba(20,184,166,0.3)]">Digital
+                                        Learning Platform</span>
+                                </h1>
+
+                                <!-- Primary CTA -->
+                                <div
+                                    class="flex flex-col sm:flex-row items-center gap-6 justify-center w-full relative z-20">
+                                    <button
+                                        class="relative w-full sm:w-auto h-[4.5rem] px-12 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-xl font-bold rounded-full shadow-[0_0_40px_rgba(16,185,129,0.4)] hover:shadow-[0_0_60px_rgba(16,185,129,0.6)] hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3 group">
+                                        <span class="relative z-10 flex items-center gap-3">
+                                            Explore Learning Paths
+                                            <span
+                                                class="material-symbols-outlined font-bold transform transition-transform group-hover:translate-x-2">arrow_forward</span>
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Stats Section -->
+                        <section class="py-16 relative z-10 border-t border-emerald-100">
+                            <div class="max-w-canvas mx-auto px-8 lg:px-12">
+                                <div class="bg-white rounded-3xl shadow-2xl border border-emerald-100 py-12">
+                                    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                                        <div class="flex flex-col items-center gap-2">
+                                            <span class="text-4xl font-black text-primary">120+</span>
+                                            <span
+                                                class="text-sm font-semibold uppercase tracking-widest text-slate-500">Advanced
+                                                Courses</span>
+                                        </div>
+                                        <div class="flex flex-col items-center gap-2">
+                                            <span class="text-4xl font-black text-primary">50+</span>
+                                            <span
+                                                class="text-sm font-semibold uppercase tracking-widest text-slate-500">Experienced
+                                                Mentors</span>
+                                        </div>
+                                        <div class="flex flex-col items-center gap-2">
+                                            <span class="text-4xl font-black text-primary">24/7</span>
+                                            <span
+                                                class="text-sm font-semibold uppercase tracking-widest text-slate-500">Technical
+                                                Support</span>
+                                        </div>
+                                        <div class="flex flex-col items-center gap-2">
+                                            <span class="text-4xl font-black text-primary">100%</span>
+                                            <span
+                                                class="text-sm font-semibold uppercase tracking-widest text-slate-500">Hands-on
+                                                Practice</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Course Slider: Learn Without Limits -->
+                        <section class="py-12 lg:py-10">
+                            <div class="max-w-canvas mx-auto px-8 lg:px-12">
+                                <div class="flex flex-col lg:flex-row lg:items-end justify-between mb-16 gap-8">
+                                    <div class="max-w-xl">
+                                        <h2
+                                            class="text-4xl font-black tracking-tight bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">
+                                            Learn Without Limits</h2>
+                                    </div>
+                                    <a class="inline-flex items-center gap-2 text-primary font-bold group" href="#">
+                                        View All Courses
+                                        <span
+                                            class="material-symbols-outlined transition-transform group-hover:translate-x-1">arrow_forward</span>
+                                    </a>
+                                </div>
+                                <div class="slider relative">
+                                    <!-- Prev -->
+                                    <button
+                                        class="slider-prev absolute left-0 -translate-x-1/2 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-white border border-emerald-200 text-slate-600 shadow-lg flex items-center justify-center hover:scale-110 hover:bg-emerald-50 transition">
+                                        <span class="material-symbols-outlined">chevron_left</span>
+                                    </button>
+                                    <!-- Next -->
+                                    <button
+                                        class="slider-next absolute right-0 translate-x-1/2 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-white border border-emerald-200 text-slate-600 shadow-lg flex items-center justify-center hover:scale-110 hover:bg-emerald-50 transition">
+                                        <span class="material-symbols-outlined">chevron_right</span>
+                                    </button>
+                                    <div class="slider-wrapper overflow-x-auto snap-x snap-mandatory w-full relative">
+                                        <div
+                                            class="slider-track flex gap-6 transition-transform duration-500 ease-in-out">
+                                            <c:forEach var="c" items="${FREE}">
+                                                <div
+                                                    class="group w-[280px] lg:w-[calc(25%-18px)] flex-shrink-0 snap-start flex flex-col bg-white rounded-[2rem] overflow-hidden border border-emerald-100 hover:border-emerald-400/50 hover:shadow-[0_20px_40px_-15px_rgba(16,185,129,0.2)] transition-all duration-300">
+                                                    <div class="aspect-[16/10] overflow-hidden relative">
+                                                        <img alt="Frontend"
+                                                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                                            src="${c.thumbnailUrl}" />
+                                                    </div>
+                                                    <div class="p-6 flex flex-col flex-grow">
+                                                        <div class="flex items-center gap-2 mb-3">
+                                                            <span
+                                                                class="text-[10px] font-bold text-primary bg-primary/10 px-2 py-1 rounded">${c.categoryId
+                                                                != null ? c.categoryId.name : 'No Category'}</span>
+                                                            <span class="text-xs text-gray-400">• 12 Hours</span>
+                                                        </div>
+                                                        <h3
+                                                            class="text-xl font-bold mb-3 leading-tight group-hover:text-primary transition-colors line-clamp-2">
+                                                            ${c.title}</h3>
+                                                        <div class="flex items-center gap-2 mb-6">
+                                                            <div class="flex text-yellow-400">
+                                                                <span
+                                                                    class="material-symbols-outlined text-sm">star</span>
+                                                                <span
+                                                                    class="material-symbols-outlined text-sm">star</span>
+                                                                <span
+                                                                    class="material-symbols-outlined text-sm">star</span>
+                                                                <span
+                                                                    class="material-symbols-outlined text-sm">star</span>
+                                                                <span
+                                                                    class="material-symbols-outlined text-sm">star_half</span>
+                                                            </div>
+                                                            <span class="text-xs font-bold text-gray-500">4.8
+                                                                (1.2k)</span>
+                                                        </div>
+                                                        <div
+                                                            class="flex mt-auto items-center justify-between pt-2 border-t border-slate-100">
+                                                            <span
+                                                                class="text-xl font-black text-emerald-400">$${c.price}</span>
+                                                            <button
+                                                                class="group/cart p-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 transition-all duration-300 hover:bg-emerald-500/20 hover:border-emerald-400 active:scale-90">
+                                                                <span
+                                                                    class="material-symbols-outlined text-primary text-xl transition-all duration-300">shopping_cart</span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </c:forEach>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Course Slider: Master Software Development -->
+                        <section class="py-12 lg:py-10">
+                            <div class="max-w-canvas mx-auto px-8 lg:px-12">
+                                <div class="flex flex-col lg:flex-row lg:items-end justify-between mb-16 gap-8">
+                                    <div class="max-w-xl">
+                                        <h2
+                                            class="text-4xl font-black tracking-tight bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">
+                                            Master Software Development</h2>
+                                    </div>
+                                    <a class="inline-flex items-center gap-2 text-primary font-bold group" href="#">
+                                        View All Courses
+                                        <span
+                                            class="material-symbols-outlined transition-transform group-hover:translate-x-1">arrow_forward</span>
+                                    </a>
+                                </div>
+                                <div class="slider relative">
+                                    <!-- Prev -->
+                                    <button
+                                        class="slider-prev absolute left-0 -translate-x-1/2 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-white border border-emerald-200 text-slate-600 shadow-lg flex items-center justify-center hover:scale-110 hover:bg-emerald-50 transition">
+                                        <span class="material-symbols-outlined">chevron_left</span>
+                                    </button>
+                                    <!-- Next -->
+                                    <button
+                                        class="slider-next absolute right-0 translate-x-1/2 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-white border border-emerald-200 text-slate-600 shadow-lg flex items-center justify-center hover:scale-110 hover:bg-emerald-50 transition">
+                                        <span class="material-symbols-outlined">chevron_right</span>
+                                    </button>
+                                    <div class="slider-wrapper overflow-x-auto snap-x snap-mandatory w-full relative">
+                                        <div
+                                            class="slider-track flex gap-6 transition-transform duration-500 ease-in-out">
+                                            <c:forEach var="c" items="${SOFT}">
+                                                <div
+                                                    class="group w-[280px] lg:w-[calc(25%-18px)] flex-shrink-0 snap-start flex flex-col bg-white rounded-[2rem] overflow-hidden border border-emerald-100 hover:border-emerald-400/50 hover:shadow-[0_20px_40px_-15px_rgba(16,185,129,0.2)] transition-all duration-300">
+                                                    <div class="aspect-[16/10] overflow-hidden relative">
+                                                        <img alt="Frontend"
+                                                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                                            src="${c.thumbnailUrl}" />
+                                                    </div>
+                                                    <div class="p-6 flex flex-col flex-grow">
+                                                        <div class="flex items-center gap-2 mb-3">
+                                                            <span
+                                                                class="text-[10px] font-bold text-primary bg-primary/10 px-2 py-1 rounded">${c.categoryId
+                                                                != null ? c.categoryId.name : 'No Category'}</span>
+                                                            <span class="text-xs text-gray-400">• 12 Hours</span>
+                                                        </div>
+                                                        <h3
+                                                            class="text-xl font-bold mb-3 leading-tight group-hover:text-primary transition-colors line-clamp-2">
+                                                            ${c.title}</h3>
+                                                        <div class="flex items-center gap-2 mb-6">
+                                                            <div class="flex text-yellow-400">
+                                                                <span
+                                                                    class="material-symbols-outlined text-sm">star</span>
+                                                                <span
+                                                                    class="material-symbols-outlined text-sm">star</span>
+                                                                <span
+                                                                    class="material-symbols-outlined text-sm">star</span>
+                                                                <span
+                                                                    class="material-symbols-outlined text-sm">star</span>
+                                                                <span
+                                                                    class="material-symbols-outlined text-sm">star_half</span>
+                                                            </div>
+                                                            <span class="text-xs font-bold text-gray-500">4.8
+                                                                (1.2k)</span>
+                                                        </div>
+                                                        <div
+                                                            class="flex mt-auto items-center justify-between pt-2 border-t border-slate-100">
+                                                            <span
+                                                                class="text-xl font-black text-emerald-400">$${c.price}</span>
+                                                            <button
+                                                                class="group/cart p-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 transition-all duration-300 hover:bg-emerald-500/20 hover:border-emerald-400 active:scale-90">
+                                                                <span
+                                                                    class="material-symbols-outlined text-primary text-xl transition-all duration-300">shopping_cart</span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </c:forEach>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Course Slider: Unlock the Logic -->
+                        <section class="py-12 lg:py-10">
+                            <div class="max-w-canvas mx-auto px-8 lg:px-12">
+                                <div class="flex flex-col lg:flex-row lg:items-end justify-between mb-16 gap-8">
+                                    <div class="max-w-xl">
+                                        <h2
+                                            class="text-4xl font-black tracking-tight bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">
+                                            Unlock the Logic</h2>
+                                    </div>
+                                    <a class="inline-flex items-center gap-2 text-primary font-bold group" href="#">
+                                        View All Courses
+                                        <span
+                                            class="material-symbols-outlined transition-transform group-hover:translate-x-1">arrow_forward</span>
+                                    </a>
+                                </div>
+                                <div class="slider relative">
+                                    <!-- Prev -->
+                                    <button
+                                        class="slider-prev absolute left-0 -translate-x-1/2 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-white border border-emerald-200 text-slate-600 shadow-lg flex items-center justify-center hover:scale-110 hover:bg-emerald-50 transition">
+                                        <span class="material-symbols-outlined">chevron_left</span>
+                                    </button>
+                                    <!-- Next -->
+                                    <button
+                                        class="slider-next absolute right-0 translate-x-1/2 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-white border border-emerald-200 text-slate-600 shadow-lg flex items-center justify-center hover:scale-110 hover:bg-emerald-50 transition">
+                                        <span class="material-symbols-outlined">chevron_right</span>
+                                    </button>
+                                    <div class="slider-wrapper overflow-x-auto snap-x snap-mandatory w-full relative">
+                                        <div
+                                            class="slider-track flex gap-6 transition-transform duration-500 ease-in-out">
+                                            <c:forEach var="c" items="${MATH}">
+                                                <div
+                                                    class="group w-[280px] lg:w-[calc(25%-18px)] flex-shrink-0 snap-start flex flex-col bg-white rounded-[2rem] overflow-hidden border border-emerald-100 hover:border-emerald-400/50 hover:shadow-[0_20px_40px_-15px_rgba(16,185,129,0.2)] transition-all duration-300">
+                                                    <div class="aspect-[16/10] overflow-hidden relative">
+                                                        <img alt="Frontend"
+                                                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                                            src="${c.thumbnailUrl}" />
+                                                    </div>
+                                                    <div class="p-6 flex flex-col flex-grow">
+                                                        <div class="flex items-center gap-2 mb-3">
+                                                            <span
+                                                                class="text-[10px] font-bold text-primary bg-primary/10 px-2 py-1 rounded">${c.categoryId
+                                                                != null ? c.categoryId.name : 'No Category'}</span>
+                                                            <span class="text-xs text-gray-400">• 12 Hours</span>
+                                                        </div>
+                                                        <h3
+                                                            class="text-xl font-bold mb-3 leading-tight group-hover:text-primary transition-colors line-clamp-2">
+                                                            ${c.title}</h3>
+                                                        <div class="flex items-center gap-2 mb-6">
+                                                            <div class="flex text-yellow-400">
+                                                                <span
+                                                                    class="material-symbols-outlined text-sm">star</span>
+                                                                <span
+                                                                    class="material-symbols-outlined text-sm">star</span>
+                                                                <span
+                                                                    class="material-symbols-outlined text-sm">star</span>
+                                                                <span
+                                                                    class="material-symbols-outlined text-sm">star</span>
+                                                                <span
+                                                                    class="material-symbols-outlined text-sm">star_half</span>
+                                                            </div>
+                                                            <span class="text-xs font-bold text-gray-500">4.8
+                                                                (1.2k)</span>
+                                                        </div>
+                                                        <div
+                                                            class="flex mt-auto items-center justify-between pt-2 border-t border-slate-100">
+                                                            <span
+                                                                class="text-xl font-black text-emerald-400">$${c.price}</span>
+                                                            <button
+                                                                class="group/cart p-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 transition-all duration-300 hover:bg-emerald-500/20 hover:border-emerald-400 active:scale-90">
+                                                                <span
+                                                                    class="material-symbols-outlined text-primary text-xl transition-all duration-300">shopping_cart</span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </c:forEach>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Course Slider: Break Language Barriers -->
+                        <section class="py-12 lg:py-10">
+                            <div class="max-w-canvas mx-auto px-8 lg:px-12">
+                                <div class="flex flex-col lg:flex-row lg:items-end justify-between mb-16 gap-8">
+                                    <div class="max-w-xl">
+                                        <h2
+                                            class="text-4xl font-black tracking-tight bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">
+                                            Break Language Barriers</h2>
+                                    </div>
+                                    <a class="inline-flex items-center gap-2 text-primary font-bold group" href="#">
+                                        View All Courses
+                                        <span
+                                            class="material-symbols-outlined transition-transform group-hover:translate-x-1">arrow_forward</span>
+                                    </a>
+                                </div>
+                                <div class="slider relative">
+                                    <!-- Prev -->
+                                    <button
+                                        class="slider-prev absolute left-0 -translate-x-1/2 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-white border border-emerald-200 text-slate-600 shadow-lg flex items-center justify-center hover:scale-110 hover:bg-emerald-50 transition">
+                                        <span class="material-symbols-outlined">chevron_left</span>
+                                    </button>
+                                    <!-- Next -->
+                                    <button
+                                        class="slider-next absolute right-0 translate-x-1/2 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-white border border-emerald-200 text-slate-600 shadow-lg flex items-center justify-center hover:scale-110 hover:bg-emerald-50 transition">
+                                        <span class="material-symbols-outlined">chevron_right</span>
+                                    </button>
+                                    <div class="slider-wrapper overflow-x-auto snap-x snap-mandatory w-full relative">
+                                        <div
+                                            class="slider-track flex gap-6 transition-transform duration-500 ease-in-out">
+                                            <c:forEach var="c" items="${FOREIGN}">
+                                                <div
+                                                    class="group w-[280px] lg:w-[calc(25%-18px)] flex-shrink-0 snap-start flex flex-col bg-white rounded-[2rem] overflow-hidden border border-emerald-100 hover:border-emerald-400/50 hover:shadow-[0_20px_40px_-15px_rgba(16,185,129,0.2)] transition-all duration-300">
+                                                    <div class="aspect-[16/10] overflow-hidden relative">
+                                                        <img alt="Frontend"
+                                                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                                            src="${c.thumbnailUrl}" />
+                                                    </div>
+                                                    <div class="p-6 flex flex-col flex-grow">
+                                                        <div class="flex items-center gap-2 mb-3">
+                                                            <span
+                                                                class="text-[10px] font-bold text-primary bg-primary/10 px-2 py-1 rounded">${c.categoryId
+                                                                != null ? c.categoryId.name : 'No Category'}</span>
+                                                            <span class="text-xs text-gray-400">• 12 Hours</span>
+                                                        </div>
+                                                        <h3
+                                                            class="text-xl font-bold mb-3 leading-tight group-hover:text-primary transition-colors line-clamp-2">
+                                                            ${c.title}</h3>
+                                                        <div class="flex items-center gap-2 mb-6">
+                                                            <div class="flex text-yellow-400">
+                                                                <span
+                                                                    class="material-symbols-outlined text-sm">star</span>
+                                                                <span
+                                                                    class="material-symbols-outlined text-sm">star</span>
+                                                                <span
+                                                                    class="material-symbols-outlined text-sm">star</span>
+                                                                <span
+                                                                    class="material-symbols-outlined text-sm">star</span>
+                                                                <span
+                                                                    class="material-symbols-outlined text-sm">star_half</span>
+                                                            </div>
+                                                            <span class="text-xs font-bold text-gray-500">4.8
+                                                                (1.2k)</span>
+                                                        </div>
+                                                        <div
+                                                            class="flex mt-auto items-center justify-between pt-2 border-t border-slate-100">
+                                                            <span
+                                                                class="text-xl font-black text-emerald-400">$${c.price}</span>
+                                                            <button
+                                                                class="group/cart p-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 transition-all duration-300 hover:bg-emerald-500/20 hover:border-emerald-400 active:scale-90">
+                                                                <span
+                                                                    class="material-symbols-outlined text-primary text-xl transition-all duration-300">shopping_cart</span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </c:forEach>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- CTA Banner -->
+                        <section class="pb-24 lg:pb-32 px-8 lg:px-12">
+                            <div class="max-w-canvas mx-auto rounded-[3rem] p-12 lg:p-24 relative overflow-hidden text-center flex flex-col items-center"
+                                style="background: linear-gradient(135deg, #ecfdf5, #d1fae5);">
+                                <div
+                                    class="absolute top-0 right-0 w-[400px] h-[400px] bg-primary/20 rounded-full blur-[120px]">
+                                </div>
+                                <div
+                                    class="absolute bottom-0 left-0 w-[300px] h-[300px] bg-primary/10 rounded-full blur-[100px]">
+                                </div>
+                                <h2
+                                    class="text-4xl lg:text-6xl font-black text-[#0f172a] mb-8 max-w-4xl leading-tight z-10">
+                                    Ready to accelerate your programming career?
+                                </h2>
+                                <p class="text-lg lg:text-xl text-[#475569] mb-12 max-w-2xl z-10">
+                                    Over 15,000 students trust us. Sign up today to get 40% off Premium memberships.
+                                </p>
+                                <div class="flex flex-col sm:flex-row gap-4 z-10">
+                                    <button
+                                        class="h-16 px-12 bg-gradient-to-r from-emerald-400 to-emerald-600 text-white text-lg font-bold rounded-2xl shadow-xl shadow-emerald-500/20 hover:shadow-emerald-500/40 hover:scale-105 transition-all">
+                                        Start Learning for Free
+                                    </button>
+                                    <button
+                                        class="h-16 px-12 border-2 border-emerald-300 text-[#0f172a] text-lg font-bold rounded-2xl hover:bg-emerald-100 transition-all">
+                                        Contact Us
+                                    </button>
+                                </div>
+                            </div>
+                        </section>
+                    </main>
+
+                    <!-- Footer -->
+                    <footer class="bg-white border-t border-emerald-100 pt-24 pb-12">
+                        <div class="max-w-canvas mx-auto px-8 lg:px-12">
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-16 mb-24">
+                                <div class="lg:col-span-2">
+                                    <div class="flex items-center gap-2 mb-8">
+                                        <div
+                                            class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-[#101b0d]">
+                                            <span class="material-symbols-outlined text-xl font-bold">terminal</span>
+                                        </div>
+                                        <h2 class="text-xl font-black tracking-tight">IT-LEARN</h2>
+                                    </div>
+                                    <p class="text-gray-500 dark:text-gray-400 text-base leading-relaxed mb-8 max-w-sm">
+                                        Accompanying thousands of students on their journey to becoming professional
+                                        software engineers with practical curriculum.
+                                    </p>
+                                    <div class="flex gap-4">
+                                        <a class="w-10 h-10 rounded-full border border-gray-200 dark:border-white/10 flex items-center justify-center text-gray-400 hover:bg-primary hover:border-primary hover:text-[#101b0d] transition-all"
+                                            href="#">
+                                            <span class="material-symbols-outlined text-xl">social_leaderboard</span>
+                                        </a>
+                                        <a class="w-10 h-10 rounded-full border border-gray-200 dark:border-white/10 flex items-center justify-center text-gray-400 hover:bg-primary hover:border-primary hover:text-[#101b0d] transition-all"
+                                            href="#">
+                                            <span class="material-symbols-outlined text-xl">terminal</span>
+                                        </a>
+                                        <a class="w-10 h-10 rounded-full border border-gray-200 dark:border-white/10 flex items-center justify-center text-gray-400 hover:bg-primary hover:border-primary hover:text-[#101b0d] transition-all"
+                                            href="#">
+                                            <span class="material-symbols-outlined text-xl">smart_display</span>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-sm uppercase tracking-widest mb-8">Courses</h4>
+                                    <ul class="space-y-4">
+                                        <li><a class="text-gray-500 hover:text-primary transition-colors text-[15px]"
+                                                href="#">Frontend Development</a></li>
+                                        <li><a class="text-gray-500 hover:text-primary transition-colors text-[15px]"
+                                                href="#">Backend Development</a></li>
+                                        <li><a class="text-gray-500 hover:text-primary transition-colors text-[15px]"
+                                                href="#">Mobile Development</a></li>
+                                        <li><a class="text-gray-500 hover:text-primary transition-colors text-[15px]"
+                                                href="#">Data Science &amp; AI</a></li>
+                                        <li><a class="text-gray-500 hover:text-primary transition-colors text-[15px]"
+                                                href="#">DevOps &amp; Cloud</a></li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-sm uppercase tracking-widest mb-8">Resources</h4>
+                                    <ul class="space-y-4">
+                                        <li><a class="text-gray-500 hover:text-primary transition-colors text-[15px]"
+                                                href="#">Tech Blog</a></li>
+                                        <li><a class="text-gray-500 hover:text-primary transition-colors text-[15px]"
+                                                href="#">Learning Community</a></li>
+                                        <li><a class="text-gray-500 hover:text-primary transition-colors text-[15px]"
+                                                href="#">Free Materials</a></li>
+                                        <li><a class="text-gray-500 hover:text-primary transition-colors text-[15px]"
+                                                href="#">YouTube Channel</a></li>
+                                        <li><a class="text-gray-500 hover:text-primary transition-colors text-[15px]"
+                                                href="#">IT Podcast</a></li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-sm uppercase tracking-widest mb-8">Quick Links</h4>
+                                    <ul class="space-y-4">
+                                        <li><a class="text-gray-500 hover:text-primary transition-colors text-[15px]"
+                                                href="#">About Us</a></li>
+                                        <li><a class="text-gray-500 hover:text-primary transition-colors text-[15px]"
+                                                href="#">Careers</a></li>
+                                        <li><a class="text-gray-500 hover:text-primary transition-colors text-[15px]"
+                                                href="#">Terms of Service</a></li>
+                                        <li><a class="text-gray-500 hover:text-primary transition-colors text-[15px]"
+                                                href="#">Privacy Policy</a></li>
+                                        <li><a class="text-gray-500 hover:text-primary transition-colors text-[15px]"
+                                                href="#">Contact</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div
+                                class="pt-12 border-t border-gray-100 dark:border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
+                                <p class="text-sm text-gray-500">© 2024 DevLearn Academy. Built for the tech community.
+                                </p>
+                                <div class="flex items-center gap-8">
+                                    <span class="text-sm text-gray-500 flex items-center gap-2">
+                                        <span class="material-symbols-outlined text-lg">language</span> English
+                                    </span>
+                                    <span class="text-sm text-gray-500 flex items-center gap-2">
+                                        <span class="material-symbols-outlined text-lg">support_agent</span> 1900 1234
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </footer>
+                </div>
+
+                <jsp:include page="../common/userbuttom.jsp" />
+
+                <script>
+                    const navLinks = document.querySelectorAll('.nav-link');
+                    window.addEventListener('scroll', () => {
+                        const isScrolled = window.scrollY > 50;
+                        navLinks.forEach(link => {
+                            if (isScrolled) {
+                                link.classList.remove('text-white/80');
+                                link.classList.add('text-slate-700');
+                            } else {
+                                link.classList.remove('text-slate-700');
+                                link.classList.add('text-white/80');
+                            }
+                        });
+                    });
+
+                    window.addEventListener("load", function () {
+                        const sliders = document.querySelectorAll(".slider");
+
+                        sliders.forEach(function (slider) {
+                            const track = slider.querySelector(".slider-track");
+                            const prevBtn = slider.querySelector(".slider-prev");
+                            const nextBtn = slider.querySelector(".slider-next");
+                            const wrapper = slider.querySelector(".slider-wrapper");
+                            let currentIndex = 0;
+
+                            function getCards() {
+                                return track.querySelectorAll(":scope > div");
+                            }
+
+                            function getCardWidth() {
+                                const cards = getCards();
+                                if (!cards.length) return 0;
+                                const style = window.getComputedStyle(track);
+                                const gap = parseFloat(style.columnGap);
+                                return cards[0].getBoundingClientRect().width + gap;
+                            }
+
+                            function getVisibleCards() {
+                                return Math.floor(wrapper.clientWidth / getCardWidth());
+                            }
+
+                            function getMaxIndex() {
+                                const cardWidth = getCardWidth();
+                                if (cardWidth === 0) return 0;
+                                const maxScroll = track.scrollWidth - wrapper.clientWidth;
+                                return Math.ceil(maxScroll / cardWidth);
+                            }
+
+                            function updateSlider() {
+                                wrapper.scrollTo({
+                                    left: currentIndex * getCardWidth(),
+                                    behavior: "smooth"
+                                });
+                            }
+
+                            nextBtn.addEventListener("click", function () {
+                                const maxIndex = getMaxIndex();
+                                if (currentIndex < maxIndex) {
+                                    currentIndex++;
+                                } else {
+                                    currentIndex = 0;
+                                }
+                                updateSlider();
+                            });
+
+                            prevBtn.addEventListener("click", function () {
+                                const maxIndex = getMaxIndex();
+                                if (currentIndex > 0) {
+                                    currentIndex--;
+                                } else {
+                                    currentIndex = maxIndex;
+                                }
+                                updateSlider();
+                            });
+                        });
+                    });
+                </script>
+            </body>
+
+            </html>

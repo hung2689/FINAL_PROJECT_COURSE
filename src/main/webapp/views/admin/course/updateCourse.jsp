@@ -38,10 +38,10 @@
 
                     <!-- INPUT ẨN -->
                     <input   type="file"
-                           name="url"
-                           id="updateThumbnailInput"
-                           accept="image/png, image/jpeg, image/webp"
-                           class="hidden" />
+                             name="url"
+                             id="updateThumbnailInput"
+                             accept="image/png, image/jpeg, image/webp"
+                             class="hidden" />
 
                     <!-- Upload box -->
                     <div id="updateUploadBox"
@@ -112,8 +112,8 @@
 
                                 <option value="1">Software Engineering</option>
                                 <option value="2">Mathematics</option>
-                                <option value="3">Free Course</option>
-                                <option value="4">Foreign Language</option>
+                                <option value="4">Free Course</option>
+                                <option value="3">Foreign Language</option>
 
                             </select>
 
@@ -132,7 +132,6 @@
                         <input type="number"
                                name="teacher_id"
                                id="updateTeacher"
-                               required
                                class="w-full px-4 py-3 bg-slate-50 dark:bg-[#11200e] border border-slate-200 dark:border-primary/20 rounded-lg focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all dark:text-white placeholder:text-slate-400 dark:placeholder:text-primary/30"
                                placeholder="Enter teacher ID" />
                     </div>
@@ -180,7 +179,16 @@
                         <label class="block text-sm font-semibold text-slate-700 dark:text-slate-200">Price (USD)</label>
                         <div class="relative">
                             <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-primary/40 font-semibold">$</span>
-                            <input id="updatePrice" required="" name="price" class="w-full pl-8 pr-4 py-3 bg-slate-50 dark:bg-[#11200e] border border-slate-200 dark:border-primary/20 rounded-lg focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all dark:text-white placeholder:text-slate-400 dark:placeholder:text-primary/30" placeholder="0.00" type="number"/>
+                            <input 
+                                id="updatePrice"
+                                required
+                                name="price"
+                                type="number"
+                                step="0.01"
+                                min="0"
+                                class="w-full pl-8 pr-4 py-3 bg-slate-50 dark:bg-[#11200e] border border-slate-200 dark:border-primary/20 rounded-lg focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all dark:text-white placeholder:text-slate-400 dark:placeholder:text-primary/30"
+                                placeholder="0.00"
+                                />
                         </div>
                     </div>
                 </div>
