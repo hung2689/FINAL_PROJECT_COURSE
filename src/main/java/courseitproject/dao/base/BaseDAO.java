@@ -6,10 +6,9 @@ import jakarta.persistence.Persistence;
 
 public class BaseDAO {
 
-    protected static final EntityManagerFactory emf =
-            Persistence.createEntityManagerFactory("courseManager");
+    protected static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("courseManager");
 
- public EntityManager getEntityManager() {
+    public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
 }

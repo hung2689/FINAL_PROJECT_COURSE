@@ -5,8 +5,6 @@ import courseitproject.model.*;
 import courseitproject.utils.EmailUtil;
 import courseitproject.utils.JPAUtil;
 import courseitproject.utils.OtpUtil;
-
-import courseitproject.utils.OtpUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 

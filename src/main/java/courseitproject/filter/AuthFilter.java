@@ -32,17 +32,7 @@ public class AuthFilter implements Filter {
         String uri = req.getRequestURI();
         String mode = req.getParameter("mode");
 
-        /* =====================
-           1️⃣ CHẶN TRANG SHOP
-        ====================== */
-        if (uri.contains("/shop")) {
-            if (session == null || session.getAttribute("USER") == null) {
-                req.setAttribute("error", "Vui lòng đăng nhập trước!");
-                req.getRequestDispatcher("/views/auth/login.jsp")
-                        .forward(req, res);
-                return;
-            }
-        }
+       
 
         /* =====================
            2️⃣ CHẶN OTP (forget + register)

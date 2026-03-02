@@ -12,67 +12,64 @@ import java.util.List;
 
 public interface ICourseService {
 
- List<Course> findAll();
+        List<Course> findAll();
 
-    Course findById(int id);
+        Course findById(int id);
 
-    void createCourse(Course c);
+        void createCourse(Course c);
 
-    void updateCourse(Course c);
+        void updateCourse(Course c);
 
-    void deleteCourse(int id);
+        void deleteCourse(int id);
 
-    long countActiveCourses();
+        long countActiveCourses();
 
-    List<Course> findAllPaging(int page);
+        List<Course> findAllPaging(int page);
 
-    long countStudentsByCourse(int courseId);
+        long countStudentsByCourse(int courseId);
 
-    String findTeacherNameByCourse(Course course);
+        String findTeacherNameByCourse(Course course);
 
-    CourseCategory findCourseCategoryById(int id);
+        CourseCategory findCourseCategoryById(int id);
 
-    Course findCourseByName(String name);
+        Course findCourseByName(String name);
 
-    void assignTeacherToCourse(int courseId, int teacherId);
+        void assignTeacherToCourse(int courseId, int teacherId);
 
-    Teacher getTeacherByCourseId(int courseId);
+        Teacher getTeacherByCourseId(int courseId);
 
-     void hardDeleteCourse(int id);
+        void hardDeleteCourse(int id);
 
-    List<Course> filterAll(
-            String keyword,
-            List<Integer> categoryIds,
-            boolean free,
-            boolean paid,
-            BigDecimal maxPrice,
-            String sort,
-            int page,
-            int pageSize
-    );
+        List<Course> filterAll(
+                        String keyword,
+                        Integer categoryId,
+                        boolean free,
+                        boolean paid,
+                        BigDecimal maxPrice,
+                        String sort,
+                        int page,
+                        int pageSize);
 
-    long countFilterAll(
-            String keyword,
-            List<Integer> categoryIds,
-            boolean free,
-            boolean paid,
-            BigDecimal maxPrice
-    );
+        long countFilterAll(
+                        String keyword,
+                        Integer categoryId,
+                        boolean free,
+                        boolean paid,
+                        BigDecimal maxPrice);
 
-    List<Course> getAllCourses(int page);
+        List<Course> getAllCourses(int page);
 
-    List<Course> searchCourses(String keyword, int page);
+        List<Course> searchCourses(String keyword, int page);
 
-    List<Course> filterCourses(
-            Integer categoryId,
-            BigDecimal minPrice,
-            BigDecimal maxPrice,
-            int page
-    );
+        List<Course> filterCourses(
+                        Integer categoryId,
+                        BigDecimal minPrice,
+                        BigDecimal maxPrice,
+                        int page);
 
-    Course getCourseById(int id);
+        Course getCourseById(int id);
 
-    BigDecimal getMaxCoursePrice();
-     public List<Course> findTopByCategoryId(int categoryId) ;
+        BigDecimal getMaxCoursePrice();
+
+        public List<Course> findTopByCategoryId(int categoryId);
 }
- 

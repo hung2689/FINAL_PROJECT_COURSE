@@ -17,12 +17,9 @@ import java.util.List;
 public class CourseServiceImp implements ICourseService {
 
     private static final int PAGE_SIZE = 10;
-    private final GenericDAO<Course> courseDAO
-            = new GenericDAO<>(Course.class);
-    private final GenericDAO<CourseCategory> courseCategoryDAO
-            = new GenericDAO<>(CourseCategory.class);
-    private final GenericDAO<CourseTeacher> courseTeacherDAO
-            = new GenericDAO<>(CourseTeacher.class);
+    private final GenericDAO<Course> courseDAO = new GenericDAO<>(Course.class);
+    private final GenericDAO<CourseCategory> courseCategoryDAO = new GenericDAO<>(CourseCategory.class);
+    private final GenericDAO<CourseTeacher> courseTeacherDAO = new GenericDAO<>(CourseTeacher.class);
 
     @Override
     public Teacher getTeacherByCourseId(int courseId) {
@@ -85,13 +82,12 @@ public class CourseServiceImp implements ICourseService {
         try {
             return em.createQuery(
                     "SELECT DISTINCT c FROM Course c "
-                    + "LEFT JOIN FETCH c.courseTeacherList ct "
-                    + "LEFT JOIN FETCH ct.teacherId t "
-                    + "LEFT JOIN FETCH t.users "
-                    + "WHERE c.status = 'ACTIVE' "
-                    + "ORDER BY c.courseId DESC",
-                    Course.class
-            ).getResultList();
+                            + "LEFT JOIN FETCH c.courseTeacherList ct "
+                            + "LEFT JOIN FETCH ct.teacherId t "
+                            + "LEFT JOIN FETCH t.users "
+                            + "WHERE c.status = 'ACTIVE' "
+                            + "ORDER BY c.courseId DESC",
+                    Course.class).getResultList();
         } finally {
             em.close();
         }
@@ -217,10 +213,9 @@ public class CourseServiceImp implements ICourseService {
 
             return em.createQuery(
                     "SELECT DISTINCT c FROM Course c "
-                    + "WHERE c.status = 'ACTIVE' "
-                    + "ORDER BY c.courseId DESC",
-                    Course.class
-            )
+                            + "WHERE c.status = 'ACTIVE' "
+                            + "ORDER BY c.courseId DESC",
+                    Course.class)
                     .setFirstResult((page - 1) * PAGE_SIZE)
                     .setMaxResults(PAGE_SIZE)
                     .getResultList();
@@ -238,11 +233,10 @@ public class CourseServiceImp implements ICourseService {
 
             return em.createQuery(
                     "SELECT DISTINCT c FROM Course c "
-                    + "LEFT JOIN FETCH c.categoryId "
-                    + "WHERE c.status='active' "
-                    + "ORDER BY c.courseId DESC",
-                    Course.class
-            )
+                            + "LEFT JOIN FETCH c.categoryId "
+                            + "WHERE c.status='active' "
+                            + "ORDER BY c.courseId DESC",
+                    Course.class)
                     .setFirstResult((page - 1) * size)
                     .setMaxResults(size)
                     .getResultList();
@@ -258,11 +252,10 @@ public class CourseServiceImp implements ICourseService {
         try {
             return em.createQuery(
                     "SELECT u.fullName FROM CourseTeacher ct "
-                    + "JOIN ct.teacherId t "
-                    + "JOIN t.users u "
-                    + "WHERE ct.courseId = :course",
-                    String.class
-            )
+                            + "JOIN ct.teacherId t "
+                            + "JOIN t.users u "
+                            + "WHERE ct.courseId = :course",
+                    String.class)
                     .setParameter("course", course)
                     .setMaxResults(1)
                     .getSingleResult();
@@ -280,9 +273,8 @@ public class CourseServiceImp implements ICourseService {
         try {
             return em.createQuery(
                     "SELECT COUNT(e) FROM Enrollment e "
-                    + "WHERE e.courseId.courseId = :courseId",
-                    Long.class
-            )
+                            + "WHERE e.courseId.courseId = :courseId",
+                    Long.class)
                     .setParameter("courseId", courseId)
                     .getSingleResult();
         } finally {
@@ -309,8 +301,7 @@ public class CourseServiceImp implements ICourseService {
 
             return em.createQuery(
                     "SELECT COUNT(c) FROM Course c WHERE LOWER(c.status)='active'",
-                    Long.class
-            ).getSingleResult();
+                    Long.class).getSingleResult();
 
         } finally {
             em.close();
@@ -325,10 +316,10 @@ public class CourseServiceImp implements ICourseService {
 
             return em.createQuery(
                     "SELECT DISTINCT c FROM Course c "
-                    + "LEFT JOIN FETCH c.categoryId "
-                    + "WHERE LOWER(c.status)='active' "
-                    + "AND LOWER(c.title) LIKE :kw "
-                    + "ORDER BY c.courseId DESC",
+                            + "LEFT JOIN FETCH c.categoryId "
+                            + "WHERE LOWER(c.status)='active' "
+                            + "AND LOWER(c.title) LIKE :kw "
+                            + "ORDER BY c.courseId DESC",
                     Course.class)
                     .setParameter("kw", "%" + keyword.toLowerCase() + "%")
                     .setFirstResult((page - 1) * size)
@@ -351,8 +342,8 @@ public class CourseServiceImp implements ICourseService {
 
             return em.createQuery(
                     "SELECT COUNT(c) FROM Course c "
-                    + "WHERE LOWER(c.status)='active' "
-                    + "AND LOWER(c.title) LIKE :kw",
+                            + "WHERE LOWER(c.status)='active' "
+                            + "AND LOWER(c.title) LIKE :kw",
                     Long.class)
                     .setParameter("kw",
                             "%" + keyword.toLowerCase() + "%")
@@ -368,16 +359,15 @@ public class CourseServiceImp implements ICourseService {
 
     public List<Course> searchSuggest(String keyword) {
 
-        EntityManager em
-                = JPAUtil.getEntityManager();
+        EntityManager em = JPAUtil.getEntityManager();
 
         try {
 
             return em.createQuery(
                     "SELECT c FROM Course c "
-                    + "WHERE LOWER(c.title) LIKE :k "
-                    + "AND LOWER(c.status)='active' "
-                    + "ORDER BY c.title",
+                            + "WHERE LOWER(c.title) LIKE :k "
+                            + "AND LOWER(c.status)='active' "
+                            + "ORDER BY c.title",
                     Course.class)
                     .setParameter(
                             "k",
@@ -398,11 +388,9 @@ public class CourseServiceImp implements ICourseService {
             int page,
             int size) {
 
-        EntityManager em
-                = JPAUtil.getEntityManager();
+        EntityManager em = JPAUtil.getEntityManager();
 
-        String jpql
-                = "SELECT c FROM Course c "
+        String jpql = "SELECT c FROM Course c "
                 + "WHERE c.status='ACTIVE' "
                 + "AND c.categoryId.categoryId IN :ids";
 
@@ -420,11 +408,9 @@ public class CourseServiceImp implements ICourseService {
     public long countCourseByCategories(
             String[] ids) {
 
-        EntityManager em
-                = JPAUtil.getEntityManager();
+        EntityManager em = JPAUtil.getEntityManager();
 
-        String jpql
-                = "SELECT COUNT(c) FROM Course c "
+        String jpql = "SELECT COUNT(c) FROM Course c "
                 + "WHERE c.status='ACTIVE' "
                 + "AND c.categoryId.categoryId IN :ids";
 
@@ -442,45 +428,39 @@ public class CourseServiceImp implements ICourseService {
             boolean free,
             boolean paid,
             int page,
-            int size
-    ) {
+            int size) {
 
-        EntityManager em
-                = JPAUtil.getEntityManager();
+        EntityManager em = JPAUtil.getEntityManager();
 
         try {
 
-            String jpql
-                    = "SELECT c FROM Course c "
+            String jpql = "SELECT c FROM Course c "
                     + "WHERE LOWER(c.status)='active'";
 
-// FREE
+            // FREE
             if (free) {
 
                 jpql += " AND c.price = 0";
 
             }
 
-// PAID
+            // PAID
             if (paid) {
 
                 jpql += " AND c.price > 0";
 
             }
 
-// MAX PRICE
+            // MAX PRICE
             if (maxPrice != null) {
 
-                jpql
-                        += " AND c.price <= :maxPrice";
+                jpql += " AND c.price <= :maxPrice";
 
             }
 
-            TypedQuery<Course> query
-                    = em.createQuery(
-                            jpql,
-                            Course.class
-                    );
+            TypedQuery<Course> query = em.createQuery(
+                    jpql,
+                    Course.class);
 
             if (maxPrice != null) {
 
@@ -508,45 +488,39 @@ public class CourseServiceImp implements ICourseService {
     public long countFilterPrice(
             BigDecimal maxPrice,
             boolean free,
-            boolean paid
-    ) {
+            boolean paid) {
 
-        EntityManager em
-                = JPAUtil.getEntityManager();
+        EntityManager em = JPAUtil.getEntityManager();
 
         try {
 
-            String jpql
-                    = "SELECT COUNT(c) FROM Course c "
+            String jpql = "SELECT COUNT(c) FROM Course c "
                     + "WHERE LOWER(c.status)='active'";
 
-// FREE
+            // FREE
             if (free) {
 
                 jpql += " AND c.price = 0";
 
             }
 
-// PAID
+            // PAID
             if (paid) {
 
                 jpql += " AND c.price > 0";
 
             }
 
-// MAX PRICE
+            // MAX PRICE
             if (maxPrice != null) {
 
-                jpql
-                        += " AND c.price <= :maxPrice";
+                jpql += " AND c.price <= :maxPrice";
 
             }
 
-            TypedQuery<Long> query
-                    = em.createQuery(
-                            jpql,
-                            Long.class
-                    );
+            TypedQuery<Long> query = em.createQuery(
+                    jpql,
+                    Long.class);
 
             if (maxPrice != null) {
 
@@ -581,74 +555,94 @@ public class CourseServiceImp implements ICourseService {
     @Override
     public List<Course> filterAll(
             String keyword,
-            List<Integer> categoryIds,
+            Integer categoryId,
             boolean free,
             boolean paid,
             BigDecimal maxPrice,
-            String sort, // <--- THÊM BIẾN NÀY VÀO ĐÂY
+            String sort,
             int page,
             int pageSize) {
         EntityManager em = JPAUtil.getEntityManager();
         try {
-            StringBuilder jpql = new StringBuilder(
-                    "SELECT DISTINCT c FROM Course c "
-                    + "LEFT JOIN FETCH c.categoryId "
-                    + "WHERE LOWER(c.status)='active' ");
+            // ===== STEP 1: Get IDs with pagination (no JOIN FETCH) =====
+            StringBuilder idJpql = new StringBuilder(
+                    "SELECT c.courseId FROM Course c "
+                            + "WHERE LOWER(c.status)='active' ");
 
             // keyword
             if (keyword != null && !keyword.isBlank()) {
-                jpql.append(" AND LOWER(c.title) LIKE :keyword ");
+                idJpql.append(" AND LOWER(c.title) LIKE :keyword ");
             }
 
             // category
-            if (categoryIds != null && !categoryIds.isEmpty()) {
-                jpql.append(" AND c.categoryId.categoryId IN :categoryIds ");
+            if (categoryId != null) {
+                idJpql.append(" AND c.categoryId.categoryId = :categoryId ");
             }
 
             // free paid
             if (free && !paid) {
-                jpql.append(" AND c.price = 0 ");
+                idJpql.append(" AND c.price = 0 ");
             } else if (!free && paid) {
-                jpql.append(" AND c.price > 0 ");
+                idJpql.append(" AND c.price > 0 ");
             }
 
             // price
             if (maxPrice != null) {
-                jpql.append(" AND c.price <= :maxPrice ");
+                idJpql.append(" AND c.price <= :maxPrice ");
             }
 
-            // ===== XỬ LÝ SẮP XẾP (SORT) =====
+            // sort
             if ("price_asc".equals(sort)) {
-                jpql.append(" ORDER BY c.price ASC ");
+                idJpql.append(" ORDER BY c.price ASC ");
             } else if ("price_desc".equals(sort)) {
-                jpql.append(" ORDER BY c.price DESC ");
+                idJpql.append(" ORDER BY c.price DESC ");
             } else if ("popular".equals(sort)) {
-                // Sắp xếp phổ biến (Nếu DB bạn có trường view/enrollment thì dùng trường đó. 
-                // Tạm thời mình lấy theo courseId hoặc bạn có thể chỉnh lại)
-                jpql.append(" ORDER BY c.courseId ASC ");
+                idJpql.append(" ORDER BY c.courseId ASC ");
             } else {
-                // Mặc định (newest hoặc null)
-                jpql.append(" ORDER BY c.createdAt DESC ");
+                idJpql.append(" ORDER BY c.createdAt DESC ");
             }
 
-            TypedQuery<Course> query = em.createQuery(jpql.toString(), Course.class);
+            TypedQuery<Integer> idQuery = em.createQuery(idJpql.toString(), Integer.class);
 
-            // param keyword
             if (keyword != null && !keyword.isBlank()) {
-                query.setParameter("keyword", "%" + keyword.toLowerCase() + "%");
+                idQuery.setParameter("keyword", "%" + keyword.toLowerCase() + "%");
             }
-            // param category
-            if (categoryIds != null && !categoryIds.isEmpty()) {
-                query.setParameter("categoryIds", categoryIds);
+            if (categoryId != null) {
+                idQuery.setParameter("categoryId", categoryId);
             }
-            // param price
             if (maxPrice != null) {
-                query.setParameter("maxPrice", maxPrice);
+                idQuery.setParameter("maxPrice", maxPrice);
             }
 
-            query.setFirstResult((page - 1) * pageSize);
-            query.setMaxResults(pageSize);
-            return query.getResultList();
+            idQuery.setFirstResult((page - 1) * pageSize);
+            idQuery.setMaxResults(pageSize);
+
+            List<Integer> ids = idQuery.getResultList();
+
+            if (ids.isEmpty()) {
+                return new java.util.ArrayList<>();
+            }
+
+            // ===== STEP 2: Fetch full entities by IDs (with JOIN FETCH) =====
+            StringBuilder fetchJpql = new StringBuilder(
+                    "SELECT c FROM Course c "
+                            + "LEFT JOIN FETCH c.categoryId "
+                            + "WHERE c.courseId IN :ids ");
+
+            // preserve sort order
+            if ("price_asc".equals(sort)) {
+                fetchJpql.append(" ORDER BY c.price ASC ");
+            } else if ("price_desc".equals(sort)) {
+                fetchJpql.append(" ORDER BY c.price DESC ");
+            } else if ("popular".equals(sort)) {
+                fetchJpql.append(" ORDER BY c.courseId ASC ");
+            } else {
+                fetchJpql.append(" ORDER BY c.createdAt DESC ");
+            }
+
+            return em.createQuery(fetchJpql.toString(), Course.class)
+                    .setParameter("ids", ids)
+                    .getResultList();
 
         } finally {
             em.close();
@@ -658,33 +652,28 @@ public class CourseServiceImp implements ICourseService {
     @Override
     public long countFilterAll(
             String keyword,
-            List<Integer> categoryIds,
+            Integer categoryId,
             boolean free,
             boolean paid,
             BigDecimal maxPrice) {
 
-        EntityManager em
-                = JPAUtil.getEntityManager();
+        EntityManager em = JPAUtil.getEntityManager();
 
         try {
 
-            String jpql
-                    = "SELECT COUNT(c) FROM Course c WHERE "
+            String jpql = "SELECT COUNT(c) FROM Course c WHERE "
                     + "LOWER(c.status)='active' ";
 
             if (keyword != null
                     && !keyword.isBlank()) {
 
-                jpql
-                        += " AND LOWER(c.title) LIKE :keyword ";
+                jpql += " AND LOWER(c.title) LIKE :keyword ";
 
             }
 
-            if (categoryIds != null
-                    && !categoryIds.isEmpty()) {
+            if (categoryId != null) {
 
-                jpql
-                        += " AND c.categoryId.id IN :categoryIds ";
+                jpql += " AND c.categoryId.id = :categoryId ";
 
             }
 
@@ -700,31 +689,27 @@ public class CourseServiceImp implements ICourseService {
 
             if (maxPrice != null) {
 
-                jpql
-                        += " AND c.price <= :maxPrice ";
+                jpql += " AND c.price <= :maxPrice ";
 
             }
 
-            var query
-                    = em.createQuery(jpql,
-                            Long.class);
+            var query = em.createQuery(jpql,
+                    Long.class);
 
             if (keyword != null
                     && !keyword.isBlank()) {
 
                 query.setParameter(
                         "keyword",
-                        "%" + keyword.toLowerCase() + "%"
-                );
+                        "%" + keyword.toLowerCase() + "%");
 
             }
 
-            if (categoryIds != null
-                    && !categoryIds.isEmpty()) {
+            if (categoryId != null) {
 
                 query.setParameter(
-                        "categoryIds",
-                        categoryIds);
+                        "categoryId",
+                        categoryId);
 
             }
 
@@ -755,8 +740,7 @@ public class CourseServiceImp implements ICourseService {
 
             BigDecimal maxPrice = em.createQuery(
                     "SELECT MAX(c.price) FROM Course c",
-                    BigDecimal.class
-            ).getSingleResult();
+                    BigDecimal.class).getSingleResult();
 
             return maxPrice != null ? maxPrice : BigDecimal.ZERO;
 
@@ -768,18 +752,16 @@ public class CourseServiceImp implements ICourseService {
     @Override
     public List<Course> getAllCourses(int page) {
 
-        EntityManager em
-                = JPAUtil.getEntityManager();
+        EntityManager em = JPAUtil.getEntityManager();
 
         try {
 
             return em.createQuery(
                     "SELECT c FROM Course c "
-                    + "LEFT JOIN FETCH c.categoryId "
-                    + "WHERE LOWER(c.status)='active' "
-                    + "ORDER BY c.createdAt DESC",
-                    Course.class
-            )
+                            + "LEFT JOIN FETCH c.categoryId "
+                            + "WHERE LOWER(c.status)='active' "
+                            + "ORDER BY c.createdAt DESC",
+                    Course.class)
                     .setFirstResult((page - 1) * PAGE_SIZE)
                     .setMaxResults(PAGE_SIZE)
                     .getResultList();
@@ -796,17 +778,14 @@ public class CourseServiceImp implements ICourseService {
             BigDecimal maxPrice,
             int page) {
 
-        EntityManager em
-                = JPAUtil.getEntityManager();
+        EntityManager em = JPAUtil.getEntityManager();
 
         try {
 
-            StringBuilder jpql
-                    = new StringBuilder(
-                            "SELECT c FROM Course c "
+            StringBuilder jpql = new StringBuilder(
+                    "SELECT c FROM Course c "
                             + "LEFT JOIN FETCH c.categoryId "
-                            + "WHERE LOWER(c.status)='active' "
-                    );
+                            + "WHERE LOWER(c.status)='active' ");
 
             if (categoryId != null) {
 
@@ -829,10 +808,9 @@ public class CourseServiceImp implements ICourseService {
             jpql.append(
                     " ORDER BY c.createdAt DESC");
 
-            TypedQuery<Course> query
-                    = em.createQuery(
-                            jpql.toString(),
-                            Course.class);
+            TypedQuery<Course> query = em.createQuery(
+                    jpql.toString(),
+                    Course.class);
 
             if (categoryId != null) {
 
@@ -874,23 +852,20 @@ public class CourseServiceImp implements ICourseService {
             String keyword,
             int page) {
 
-        EntityManager em
-                = JPAUtil.getEntityManager();
+        EntityManager em = JPAUtil.getEntityManager();
 
         try {
 
             return em.createQuery(
                     "SELECT c FROM Course c "
-                    + "LEFT JOIN FETCH c.categoryId "
-                    + "WHERE LOWER(c.status)='active' "
-                    + "AND LOWER(c.title) LIKE :kw "
-                    + "ORDER BY c.createdAt DESC",
-                    Course.class
-            )
+                            + "LEFT JOIN FETCH c.categoryId "
+                            + "WHERE LOWER(c.status)='active' "
+                            + "AND LOWER(c.title) LIKE :kw "
+                            + "ORDER BY c.createdAt DESC",
+                    Course.class)
                     .setParameter(
                             "kw",
-                            "%" + keyword.toLowerCase() + "%"
-                    )
+                            "%" + keyword.toLowerCase() + "%")
                     .setFirstResult((page - 1) * PAGE_SIZE)
                     .setMaxResults(PAGE_SIZE)
                     .getResultList();
@@ -910,11 +885,10 @@ public class CourseServiceImp implements ICourseService {
         try {
             return em.createQuery(
                     "SELECT c FROM Course c "
-                    + "WHERE c.categoryId.categoryId = :categoryId "
-                    + "AND c.status = 'ACTIVE' "
-                    + "ORDER BY c.courseId ASC",
-                    Course.class
-            )
+                            + "WHERE c.categoryId.categoryId = :categoryId "
+                            + "AND c.status = 'ACTIVE' "
+                            + "ORDER BY c.courseId ASC",
+                    Course.class)
                     .setParameter("categoryId", categoryId)
                     .getResultList();
 

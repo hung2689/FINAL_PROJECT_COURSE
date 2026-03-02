@@ -16,138 +16,89 @@ import java.util.List;
 @WebServlet("/shop")
 public class CourseServlet extends HttpServlet {
 
-    private final ICourseService courseService =
-            new CourseServiceImp();
+    private final ICourseService courseService = new CourseServiceImp();
 
-     private final ICourseCategoryService categoryService =
-            new CourseCategoryServiceImp();
+    private final ICourseCategoryService categoryService = new CourseCategoryServiceImp();
 
-    private static final int PAGE_SIZE = 8;
-      
-    
- 
+    private static final int PAGE_SIZE = 6;
+
     @Override
     protected void doGet(HttpServletRequest request,
-                         HttpServletResponse response)
+            HttpServletResponse response)
             throws ServletException, IOException {
 
         try {
 
             // ===== PAGE =====
-
             int page = 1;
 
-            String pageParam =
-                    request.getParameter("page");
+            String pageParam = request.getParameter("page");
 
-            if(pageParam != null){
-
-                page =
-                Integer.parseInt(pageParam);
-            }
-
-            // ===== KEYWORD =====
-
-            String keyword =
-                    request.getParameter("keyword");
-
-
-            // ===== CATEGORY =====
-
-            String[] categoryIds =
-                    request.getParameterValues("categoryId");
-
-            List<Integer> categoryList =
-                    new ArrayList<>();
-
-            if(categoryIds != null){
-
-                for(String id : categoryIds){
-
-                    categoryList.add(
-                            Integer.parseInt(id));
+            if (pageParam != null && !pageParam.isBlank()) {
+                try {
+                    page = Integer.parseInt(pageParam);
+                } catch (NumberFormatException e) {
+                    page = 1;
                 }
             }
 
+            // ===== KEYWORD =====
+            String keyword = request.getParameter("keyword");
 
-            // ===== FREE / PAID =====
+            // ===== CATEGORY =====
+            String categoryParam = request.getParameter("categoryId");
 
-            boolean free =
-                    request.getParameter("free") != null;
+            Integer categoryId = null;
 
-            boolean paid =
-                    request.getParameter("paid") != null;
+            if (categoryParam != null && !categoryParam.isBlank()) {
 
-
-            // ===== PRICE =====
-
-            BigDecimal maxPrice = null;
-
-            String maxPriceParam =
-                    request.getParameter("maxPrice");
-
-            if(maxPriceParam != null &&
-               !maxPriceParam.isBlank()){
-
-                maxPrice =
-                        new BigDecimal(maxPriceParam);
+                categoryId = Integer.parseInt(categoryParam);
             }
 
+            // ===== FREE / PAID =====
+            boolean free = request.getParameter("free") != null;
+
+            boolean paid = request.getParameter("paid") != null;
+
+            // ===== PRICE =====
+            BigDecimal maxPrice = null;
+
+            String maxPriceParam = request.getParameter("maxPrice");
+
+            if (maxPriceParam != null
+                    && !maxPriceParam.isBlank()) {
+
+                maxPrice = new BigDecimal(maxPriceParam);
+            }
 
             // ===== CALL SERVICE =====
-String sort = request.getParameter("sort");
-            List<Course> courses =
-                    courseService.filterAll(
+            String sort = request.getParameter("sort");
+            List<Course> courses = courseService.filterAll(
+                    keyword,
+                    categoryId,
+                    free,
+                    paid,
+                    maxPrice,
+                    sort,
+                    page,
+                    PAGE_SIZE);
 
-                            keyword,
+            long totalCourses = courseService.countFilterAll(
+                    keyword,
+                    categoryId,
+                    free,
+                    paid,
+                    maxPrice);
 
-                            categoryList,
+            int totalPages = (int) Math.ceil(
+                    (double) totalCourses / PAGE_SIZE);
 
-                            free,
-
-                            paid,
-
-                            maxPrice,
- sort,  
-                            page,
-
-                            PAGE_SIZE
-                    );
-
-
-            long totalCourses =
-                    courseService.countFilterAll(
-
-                            keyword,
-
-                            categoryList,
-
-                            free,
-
-                            paid,
-
-                            maxPrice
-                    );
-
-
-            int totalPages =
-                    (int)Math.ceil(
-                     (double) totalCourses / PAGE_SIZE
-                    );
-
-
-            BigDecimal maxCoursePrice =
-                    courseService.getMaxCoursePrice();
-
+            BigDecimal maxCoursePrice = courseService.getMaxCoursePrice();
 
             // ===== CATEGORY LIST =====
-
-            List<CourseCategory> categories =
-                    categoryService.getAll();
-
+            List<CourseCategory> categories = categoryService.getAll();
 
             // ===== SEND JSP =====
-
             request.setAttribute(
                     "courses", courses);
 
@@ -157,24 +108,18 @@ String sort = request.getParameter("sort");
             request.setAttribute(
                     "currentPage", page);
 
-      
             request.setAttribute("totalPage", totalPages);
 
             request.setAttribute("totalCourse", totalCourses);
 
             request.setAttribute(
                     "maxCoursePrice",
-                    maxCoursePrice
-            );
-
+                    maxCoursePrice);
 
             request.getRequestDispatcher(
-                    "/views/details/course-list.jsp"
-            ).forward(request,response);
+                    "/views/details/course-list.jsp").forward(request, response);
 
-        }
-
-        catch (Exception e){
+        } catch (Exception e) {
 
             throw new ServletException(e);
         }

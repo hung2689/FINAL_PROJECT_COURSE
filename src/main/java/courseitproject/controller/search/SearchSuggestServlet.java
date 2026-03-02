@@ -1,4 +1,3 @@
-
 package courseitproject.controller.search;
 
 import courseitproject.model.Course;
@@ -16,43 +15,42 @@ import java.util.stream.Collectors;
 @WebServlet("/searchSuggest")
 public class SearchSuggestServlet extends HttpServlet {
 
-@Override
-protected void doGet(
-HttpServletRequest request,
-HttpServletResponse response)
-throws IOException {
+    @Override
+    protected void doGet(
+            HttpServletRequest request,
+            HttpServletResponse response)
+            throws IOException {
 
-String keyword =
-request.getParameter("keyword");
+        String keyword
+                = request.getParameter("keyword");
 
-CourseServiceImp service =
-new CourseServiceImp();
+        CourseServiceImp service
+                = new CourseServiceImp();
 
-List<Course> list =
-service.searchSuggest(keyword);
+        List<Course> list
+                = service.searchSuggest(keyword);
 
-response.setContentType("application/json;charset=UTF-8");
+        response.setContentType("application/json;charset=UTF-8");
 
-PrintWriter out =
-response.getWriter();
+        PrintWriter out
+                = response.getWriter();
 
-out.print("[");
+        out.print("[");
 
-for(int i=0;i<list.size();i++){
+        for (int i = 0; i < list.size(); i++) {
 
-out.print("\""+list.get(i).getTitle()+"\"");
+            out.print("\"" + list.get(i).getTitle() + "\"");
 
-if(i < list.size()-1){
+            if (i < list.size() - 1) {
 
-out.print(",");
+                out.print(",");
+
+            }
+
+        }
+
+        out.print("]");
+
+    }
 
 }
-
-}
-
-out.print("]");
-
-}
-
-}
-

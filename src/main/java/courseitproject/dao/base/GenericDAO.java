@@ -15,8 +15,7 @@ public class GenericDAO<T> extends BaseDAO {
     public List<T> findAll(EntityManager em) {
         return em.createQuery(
                 "SELECT e FROM " + entityClass.getName() + " e",
-                entityClass
-        ).getResultList();
+                entityClass).getResultList();
     }
 
     // ===== FIND BY ID =====
@@ -43,12 +42,11 @@ public class GenericDAO<T> extends BaseDAO {
     public T findOneByField(EntityManager em, String field, Object value) {
         return em.createQuery(
                 "SELECT e FROM " + entityClass.getName()
-                + " e WHERE e." + field + " = :value",
-                entityClass
-        )
-        .setParameter("value", value)
-        .getResultStream()
-        .findFirst()
-        .orElse(null);
+                        + " e WHERE e." + field + " = :value",
+                entityClass)
+                .setParameter("value", value)
+                .getResultStream()
+                .findFirst()
+                .orElse(null);
     }
 }
