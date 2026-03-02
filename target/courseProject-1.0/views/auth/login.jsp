@@ -230,7 +230,7 @@
                             <div class="h-px bg-white/10 flex-1"></div>
                         </div>
                         <div class="flex flex-col gap-3 w-full">
-                            <a href="https://accounts.google.com/o/oauth2/v2/auth?client_id=392403100271-apt84m1lcgr7l581fhpkfbginiak48jv.apps.googleusercontent.com&redirect_uri=http://localhost:8080/CourseITProject/login-google&response_type=code&scope=openid%20email%20profile&prompt=select_account"
+                            <a href="https://accounts.google.com/o/oauth2/v2/auth?client_id=392403100271-apt84m1lcgr7l581fhpkfbginiak48jv.apps.googleusercontent.com&redirect_uri=http://localhost:9999/CourseITProject/login-google&response_type=code&scope=openid%20email%20profile&prompt=select_account"
                                class="w-full h-14 flex items-center justify-center gap-4 rounded-full glass-button transition-all group active:scale-[0.99]">
 
 

@@ -7,11 +7,12 @@ package courseitproject.service;
 import courseitproject.model.Course;
 import courseitproject.model.CourseCategory;
 import courseitproject.model.Teacher;
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface ICourseService {
 
-    List<Course> findAll();
+ List<Course> findAll();
 
     Course findById(int id);
 
@@ -21,21 +22,55 @@ public interface ICourseService {
 
     void deleteCourse(int id);
 
-    public long countActiveCourses();
+    long countActiveCourses();
 
-    public List<Course> findAllPaging(int page);
+    List<Course> findAllPaging(int page);
 
-    public long countStudentsByCourse(int courseId);
+    long countStudentsByCourse(int courseId);
 
-    public String findTeacherNameByCourse(Course course);
+    String findTeacherNameByCourse(Course course);
 
-    public CourseCategory findCourseCategoryById(int id);
+    CourseCategory findCourseCategoryById(int id);
 
-    public Course findCourseByName(String name);
+    Course findCourseByName(String name);
 
-    public void assignTeacherToCourse(int courseId, int teacherId);
+    void assignTeacherToCourse(int courseId, int teacherId);
 
-    public Teacher getTeacherByCourseId(int courseId);
+    Teacher getTeacherByCourseId(int courseId);
 
-    public void hardDeleteCourse(int id);
+    void hardDeleteCourse(int id);
+
+    List<Course> filterAll(
+            String keyword,
+            List<Integer> categoryIds,
+            boolean free,
+            boolean paid,
+            BigDecimal maxPrice,
+            String sort,
+            int page,
+            int pageSize
+    );
+
+    long countFilterAll(
+            String keyword,
+            List<Integer> categoryIds,
+            boolean free,
+            boolean paid,
+            BigDecimal maxPrice
+    );
+
+    List<Course> getAllCourses(int page);
+
+    List<Course> searchCourses(String keyword, int page);
+
+    List<Course> filterCourses(
+            Integer categoryId,
+            BigDecimal minPrice,
+            BigDecimal maxPrice,
+            int page
+    );
+
+    Course getCourseById(int id);
+
+    BigDecimal getMaxCoursePrice();
 }
