@@ -291,11 +291,26 @@
                                                                             </c:otherwise>
                                                                         </c:choose>
                                                                     </span>
-                                                                    <a href="addToCart?id=${c.courseId}"
-                                                                        class="group/cart p-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 transition-all duration-300 hover:bg-emerald-500/20 hover:border-emerald-400 active:scale-90 flex items-center justify-center">
-                                                                        <span
-                                                                            class="material-symbols-outlined text-primary text-lg">shopping_cart</span>
-                                                                    </a>
+                                                                    <%-- Add to Cart: logged-in → real action | guest →
+                                                                        redirect to login --%>
+                                                                        <c:choose>
+                                                                            <c:when test="${sessionScope.USER != null}">
+                                                                                <a href="${pageContext.request.contextPath}/addToCart?id=${c.courseId}"
+                                                                                    title="Add to Cart"
+                                                                                    class="group/cart p-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 transition-all duration-300 hover:bg-emerald-500/20 hover:border-emerald-400 active:scale-90 flex items-center justify-center">
+                                                                                    <span
+                                                                                        class="material-symbols-outlined text-primary text-lg">shopping_cart</span>
+                                                                                </a>
+                                                                            </c:when>
+                                                                            <c:otherwise>
+                                                                                <a href="${pageContext.request.contextPath}/login"
+                                                                                    title="Please login to use cart feature"
+                                                                                    class="group/cart p-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 transition-all duration-300 hover:bg-emerald-500/20 hover:border-emerald-400 active:scale-90 flex items-center justify-center">
+                                                                                    <span
+                                                                                        class="material-symbols-outlined text-primary text-lg">shopping_cart</span>
+                                                                                </a>
+                                                                            </c:otherwise>
+                                                                        </c:choose>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -457,98 +472,98 @@
 
                 <jsp:include page="../common/userbuttom.jsp" />
 
-               <script>
-    (function () {
-        const cards = document.querySelectorAll('.course-card');
-        const grid = document.getElementById('courseGrid');
-        const noResults = document.getElementById('noResults');
-        const visibleCount = document.getElementById('visibleCount');
-        const priceSlider = document.getElementById('priceRange');
-        const priceDisplay = document.getElementById('priceDisplay');
-        const rangeFill = document.getElementById('rangeFill');
-        const categoryForm = document.getElementById('categoryForm');
+                <script>
+                        (function () {
+                            const cards = document.querySelectorAll('.course-card');
+                            const grid = document.getElementById('courseGrid');
+                            const noResults = document.getElementById('noResults');
+                            const visibleCount = document.getElementById('visibleCount');
+                            const priceSlider = document.getElementById('priceRange');
+                            const priceDisplay = document.getElementById('priceDisplay');
+                            const rangeFill = document.getElementById('rangeFill');
+                            const categoryForm = document.getElementById('categoryForm');
 
-        /* ── helpers ── */
-        function fmt(v) {
-            return '$' + Number(v).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        }
+                            /* ── helpers ── */
+                            function fmt(v) {
+                                return '$' + Number(v).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                            }
 
-        function updateRangeFill() {
-            if (!priceSlider || !rangeFill) return;
-            const pct = ((priceSlider.value - priceSlider.min) / (priceSlider.max - priceSlider.min)) * 100;
-            rangeFill.style.width = pct + '%';
-            if (priceDisplay) priceDisplay.textContent = fmt(priceSlider.value);
-        }
+                            function updateRangeFill() {
+                                if (!priceSlider || !rangeFill) return;
+                                const pct = ((priceSlider.value - priceSlider.min) / (priceSlider.max - priceSlider.min)) * 100;
+                                rangeFill.style.width = pct + '%';
+                                if (priceDisplay) priceDisplay.textContent = fmt(priceSlider.value);
+                            }
 
-        /* ── Category: auto-submit khi chọn Danh mục ── */
-        if (categoryForm) {
-            const radios = categoryForm.querySelectorAll('input[name="categoryId"]');
-            radios.forEach(function (radio) {
-                radio.addEventListener('change', function () {
-                    // Cập nhật URL trực tiếp để không làm mất các bộ lọc khác
-                    const p = new URLSearchParams(window.location.search);
-                    p.set('categoryId', this.value);
-                    p.set('page', '1');
-                    window.location.search = p.toString();
-                });
-            });
-        }
+                            /* ── Category: auto-submit khi chọn Danh mục ── */
+                            if (categoryForm) {
+                                const radios = categoryForm.querySelectorAll('input[name="categoryId"]');
+                                radios.forEach(function (radio) {
+                                    radio.addEventListener('change', function () {
+                                        // Cập nhật URL trực tiếp để không làm mất các bộ lọc khác
+                                        const p = new URLSearchParams(window.location.search);
+                                        p.set('categoryId', this.value);
+                                        p.set('page', '1');
+                                        window.location.search = p.toString();
+                                    });
+                                });
+                            }
 
-        /* ── Price slider: Auto-lọc khi kéo giá ── */
-        if (priceSlider) {
-            // Sự kiện 1: Đổi số liệu và màu lúc đang kéo
-            priceSlider.addEventListener('input', function () {
-                updateRangeFill();
-            });
-            
-            // Sự kiện 2: Auto reload trang (lọc) khi nhả chuột
-            priceSlider.addEventListener('change', function () {
-                const p = new URLSearchParams(window.location.search);
-                p.set('maxPrice', this.value);
-                p.set('page', '1');
-                window.location.search = p.toString();
-            });
+                            /* ── Price slider: Auto-lọc khi kéo giá ── */
+                            if (priceSlider) {
+                                // Sự kiện 1: Đổi số liệu và màu lúc đang kéo
+                                priceSlider.addEventListener('input', function () {
+                                    updateRangeFill();
+                                });
 
-            updateRangeFill();
-        }
+                                // Sự kiện 2: Auto reload trang (lọc) khi nhả chuột
+                                priceSlider.addEventListener('change', function () {
+                                    const p = new URLSearchParams(window.location.search);
+                                    p.set('maxPrice', this.value);
+                                    p.set('page', '1');
+                                    window.location.search = p.toString();
+                                });
 
-        /* ── Search suggest ── */
-        const input = document.getElementById('searchInput');
-        const suggestBox = document.getElementById('suggestBox');
-        if (input && suggestBox) {
-            input.addEventListener('keyup', function () {
-                const kw = this.value.trim();
-                if (!kw.length) { suggestBox.classList.add('hidden'); return; }
-                fetch('${pageContext.request.contextPath}/searchSuggest?keyword=' + encodeURIComponent(kw))
-                    .then(r => r.json())
-                    .then(data => {
-                        suggestBox.innerHTML = '';
-                        if (!data.length) { suggestBox.classList.add('hidden'); return; }
-                        data.forEach(t => {
-                            const d = document.createElement('div');
-                            d.className = 'px-5 py-3 hover:bg-emerald-50 cursor-pointer text-sm font-medium text-slate-700 border-b border-emerald-50 last:border-0 transition-colors';
-                            d.textContent = t;
-                            d.onclick = () => { input.value = t; input.form.submit(); };
-                            suggestBox.appendChild(d);
-                        });
-                        suggestBox.classList.remove('hidden');
-                    })
-                    .catch(e => console.error('Search error:', e));
-            });
-            document.addEventListener('click', e => {
-                if (!suggestBox.contains(e.target) && e.target !== input) suggestBox.classList.add('hidden');
-            });
-        }
+                                updateRangeFill();
+                            }
 
-        /* ── Sort ── */
-        window.updateSort = function (v) {
-            const p = new URLSearchParams(window.location.search);
-            p.set('sort', v);
-            p.set('page', '1');
-            window.location.search = p.toString();
-        };
-    })();
-</script>
+                            /* ── Search suggest ── */
+                            const input = document.getElementById('searchInput');
+                            const suggestBox = document.getElementById('suggestBox');
+                            if (input && suggestBox) {
+                                input.addEventListener('keyup', function () {
+                                    const kw = this.value.trim();
+                                    if (!kw.length) { suggestBox.classList.add('hidden'); return; }
+                                    fetch('${pageContext.request.contextPath}/searchSuggest?keyword=' + encodeURIComponent(kw))
+                                        .then(r => r.json())
+                                        .then(data => {
+                                            suggestBox.innerHTML = '';
+                                            if (!data.length) { suggestBox.classList.add('hidden'); return; }
+                                            data.forEach(t => {
+                                                const d = document.createElement('div');
+                                                d.className = 'px-5 py-3 hover:bg-emerald-50 cursor-pointer text-sm font-medium text-slate-700 border-b border-emerald-50 last:border-0 transition-colors';
+                                                d.textContent = t;
+                                                d.onclick = () => { input.value = t; input.form.submit(); };
+                                                suggestBox.appendChild(d);
+                                            });
+                                            suggestBox.classList.remove('hidden');
+                                        })
+                                        .catch(e => console.error('Search error:', e));
+                                });
+                                document.addEventListener('click', e => {
+                                    if (!suggestBox.contains(e.target) && e.target !== input) suggestBox.classList.add('hidden');
+                                });
+                            }
+
+                            /* ── Sort ── */
+                            window.updateSort = function (v) {
+                                const p = new URLSearchParams(window.location.search);
+                                p.set('sort', v);
+                                p.set('page', '1');
+                                window.location.search = p.toString();
+                            };
+                        })();
+                </script>
             </body>
 
             </html>
