@@ -291,7 +291,7 @@ public class AutherServlet extends HttpServlet {
             if ("TEACHER".equalsIgnoreCase(role)) {
 
                 // lưu user vào session để dùng ở bước tiếp
-                session.setAttribute("PENDING_TEACHER_USER", user);
+                session.setAttribute("USER", user);
 
                 response.sendRedirect(request.getContextPath() + "/teacherRegister");
                 return;

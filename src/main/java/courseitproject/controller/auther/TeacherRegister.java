@@ -37,7 +37,7 @@ public class TeacherRegister extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession();
-        Users user = (Users) session.getAttribute("PENDING_TEACHER_USER");
+        Users user = (Users) session.getAttribute("USER");
 
         if (user == null) {
             response.sendRedirect(request.getContextPath() + "/login");
@@ -54,7 +54,7 @@ public class TeacherRegister extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession();
-        Users user = (Users) session.getAttribute("PENDING_TEACHER_USER");
+        Users user = (Users) session.getAttribute("USER");
 
         if (user == null) {
             response.sendRedirect(request.getContextPath() + "/login");
