@@ -382,46 +382,39 @@ public class CourseServiceImp implements ICourseService {
         }
 
     }
-
-    public List<Course> getCourseByCategories(
-            String[] ids,
-            int page,
-            int size) {
-
+ public List<Course> getCourseByCategories(String[] ids, int page, int size) {
         EntityManager em = JPAUtil.getEntityManager();
-
-        String jpql = "SELECT c FROM Course c "
-                + "WHERE c.status='ACTIVE' "
-                + "AND c.categoryId.categoryId IN :ids";
-
-        return em.createQuery(jpql, Course.class)
-                .setParameter("ids",
-                        Arrays.stream(ids)
-                                .map(Integer::parseInt)
-                                .toList())
-                .setFirstResult((page - 1) * size)
-                .setMaxResults(size)
-                .getResultList();
-
+        try {
+            String jpql = "SELECT c FROM Course c "
+                    + "WHERE c.status='ACTIVE' "
+                    + "AND c.categoryId.categoryId IN :ids";
+            return em.createQuery(jpql, Course.class)
+                    .setParameter("ids", Arrays.stream(ids).map(Integer::parseInt).toList())
+                    .setFirstResult((page - 1) * size)
+                    .setMaxResults(size)
+                    .getResultList();
+        } finally {
+            em.close(); // Đã bổ sung đóng kết nối
+        }
     }
 
-    public long countCourseByCategories(
-            String[] ids) {
-
+    // ============================================
+    // ĐÃ FIX LỖI GÂY LAG: countCourseByCategories
+    // ============================================
+    public long countCourseByCategories(String[] ids) {
         EntityManager em = JPAUtil.getEntityManager();
-
-        String jpql = "SELECT COUNT(c) FROM Course c "
-                + "WHERE c.status='ACTIVE' "
-                + "AND c.categoryId.categoryId IN :ids";
-
-        return em.createQuery(jpql, Long.class)
-                .setParameter("ids",
-                        Arrays.stream(ids)
-                                .map(Integer::parseInt)
-                                .toList())
-                .getSingleResult();
-
+        try {
+            String jpql = "SELECT COUNT(c) FROM Course c "
+                    + "WHERE c.status='ACTIVE' "
+                    + "AND c.categoryId.categoryId IN :ids";
+            return em.createQuery(jpql, Long.class)
+                    .setParameter("ids", Arrays.stream(ids).map(Integer::parseInt).toList())
+                    .getSingleResult();
+        } finally {
+            em.close(); // Đã bổ sung đóng kết nối
+        }
     }
+    
 
     public List<Course> filterPrice(
             BigDecimal maxPrice,

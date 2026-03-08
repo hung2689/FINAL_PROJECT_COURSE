@@ -41,19 +41,38 @@ public class EmailUtil {
     }
     public void send(String to , String subject , String content){
         try {
-            Message message = new MimeMessage(session);
+         // ✅ Sửa thành (Đổi chữ Message ở đầu thành MimeMessage):
+MimeMessage message = new MimeMessage(session);
              message.setFrom(new InternetAddress(
                     EmailInformationConfig.MAIL_USERNAME,
                     "Dev Learn"
             ));
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(to));
-            message.setSubject(subject);
+            message.setSubject(subject,"UTF-8");
             message.setText(content);
             Transport.send(message);
         } catch (Exception e) {
             throw  new RuntimeException(e);
         }
     }
+     public void sendHtml(String to, String subject, String htmlContent) {
+        try {
+         // ✅ Sửa thành (Đổi chữ Message ở đầu thành MimeMessage):
+MimeMessage message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(EmailInformationConfig.MAIL_USERNAME, "DevLearn System"));
+            message.setRecipient(Message.RecipientType.TO, new InternetAddress(to));
+            message.setSubject(subject,"UTF-8");
+            
+            // Lệnh này giúp Email hiểu nội dung là giao diện HTML
+            message.setContent(htmlContent, "text/html; charset=UTF-8"); 
+            
+            Transport.send(message);
+            System.out.println("Đã gửi email Bill thành công tới: " + to);
+        } catch (Exception e) {
+            System.out.println("Lỗi khi gửi email: " + e.getMessage());
+            e.printStackTrace();
+        }
+     }
     public static void main(String[] args) {
        EmailUtil em = new EmailUtil();
        em.send("phamduyhung0809@gmail.com", "Chó Đoàn Nhât", "CHó lê nhật");

@@ -45,56 +45,124 @@ public class StudentProfileController extends HttpServlet {
                         .forward(request, response);
                 break;
 
-            case "courses": {
+          case "courses": {
+
                 final int PAGE_SIZE = 5;
+
                 int currentPage = 1;
 
                 try {
+
                     String pageParam = request.getParameter("page");
+
                     if (pageParam != null)
+
                         currentPage = Integer.parseInt(pageParam);
+
                     if (currentPage < 1)
+
                         currentPage = 1;
+
                 } catch (NumberFormatException ignored) {
+
                 }
 
-                // 🔥 LẤY studentId TỪ BẢNG STUDENT
-                Student student = studentService.getStudentById(sessionUser.getUserId());
 
-                if (student == null) {
-                    request.setAttribute("enrollments", List.of());
-                    request.setAttribute("currentPage", 1);
-                    request.setAttribute("totalPages", 1);
-                    request.setAttribute("totalRecords", 0);
+
+                // Thêm try-catch để bắt lỗi ngầm thay vì hiển thị màn hình trắng
+
+                try {
+
+                    // 🔥 LẤY studentId TỪ BẢNG STUDENT
+
+                    Student student = studentService.getStudentById(sessionUser.getUserId());
+
+                    if (student == null) {
+
+                        
+
+                        request.setAttribute("enrollments", List.of());
+
+                        request.setAttribute("currentPage", 1);
+
+                        request.setAttribute("totalPages", 1);
+
+                        request.setAttribute("totalRecords", 0);
+
+                        
+
+                        // LƯU Ý: Đảm bảo file trong thư mục /views/student/ tên chính xác là student-course.jsp
+
+                        request.getRequestDispatcher("/views/student/student-course.jsp")
+
+                                .forward(request, response);
+
+                        break; // Quan trọng: break để thoát khỏi case
+
+                    }
+
+                    
+
+                    int studentId = student.getStudentId();
+
+                    // 🔥 DÙNG studentId THAY VÌ userId
+
+                    int total = enrollmentService.countEnrollmentsByStudent(studentId);
+
+                    int totalPages = (int) Math.ceil((double) total / PAGE_SIZE);
+
+                    if (totalPages < 1)
+
+                        totalPages = 1;
+
+                    if (currentPage > totalPages)
+
+                        currentPage = totalPages;
+
+                    int offset = (currentPage - 1) * PAGE_SIZE;
+
+     
+
+                    List<Enrollment> enrollments = enrollmentService.getEnrollmentsByStudent(studentId, offset, PAGE_SIZE);
+
+                    
+
+   
+
+                    request.setAttribute("enrollments", enrollments);
+
+                    request.setAttribute("currentPage", currentPage);
+
+                    request.setAttribute("totalPages", totalPages);
+
+                    request.setAttribute("totalRecords", total);
+
+                    
+
                     request.getRequestDispatcher("/views/student/student-course.jsp")
+
                             .forward(request, response);
-                    break;
+
+                            
+
+                } catch (Exception e) {
+
+                    // In lỗi ra console của server
+
+                    e.printStackTrace();
+
+                    // Hiển thị lỗi ra màn hình để bạn biết nguyên nhân thay vì màn hình trắng
+
+                    response.setContentType("text/html; charset=UTF-8");
+
+                    response.getWriter().println("<h3>Đã xảy ra lỗi Server:</h3>");
+
+                    response.getWriter().println("<p>" + e.toString() + "</p>");
+
                 }
 
-                int studentId = student.getStudentId();
-
-                // 🔥 DÙNG studentId THAY VÌ userId
-                int total = enrollmentService.countEnrollmentsByStudent(studentId);
-
-                int totalPages = (int) Math.ceil((double) total / PAGE_SIZE);
-                if (totalPages < 1)
-                    totalPages = 1;
-                if (currentPage > totalPages)
-                    currentPage = totalPages;
-
-                int offset = (currentPage - 1) * PAGE_SIZE;
- 
-
-                List<Enrollment> enrollments = enrollmentService.getEnrollmentsByStudent(studentId, offset, PAGE_SIZE);
-
-                request.setAttribute("enrollments", enrollments);
-                request.setAttribute("currentPage", currentPage);
-                request.setAttribute("totalPages", totalPages);
-                request.setAttribute("totalRecords", total);
-
-                request.getRequestDispatcher("/views/student/student-course.jsp")
-                        .forward(request, response);
                 break;
+
             }
 
             case "profile":
