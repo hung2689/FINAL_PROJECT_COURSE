@@ -1,0 +1,123 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package courseitproject.model;
+
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
+import java.math.BigDecimal;
+
+/**
+ *
+ * @author ASUS
+ */
+@Entity
+@Table(name = "CourseOrderItem")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "CourseOrderItem.findAll", query = "SELECT c FROM CourseOrderItem c"),
+    @NamedQuery(name = "CourseOrderItem.findByOrderItemId", query = "SELECT c FROM CourseOrderItem c WHERE c.orderItemId = :orderItemId"),
+    @NamedQuery(name = "CourseOrderItem.findByPrice", query = "SELECT c FROM CourseOrderItem c WHERE c.price = :price")})
+public class CourseOrderItem implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "order_item_id")
+    private Integer orderItemId;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "price")
+    private BigDecimal price;
+    @JoinColumn(name = "course_id", referencedColumnName = "course_id")
+    @ManyToOne(optional = false)
+    private Course courseId;
+    @JoinColumn(name = "order_id", referencedColumnName = "order_id")
+    @ManyToOne(optional = false)
+    private CourseOrder orderId;
+
+    public CourseOrderItem() {
+    }
+
+    public CourseOrderItem(Integer orderItemId) {
+        this.orderItemId = orderItemId;
+    }
+
+    public CourseOrderItem(Integer orderItemId, BigDecimal price) {
+        this.orderItemId = orderItemId;
+        this.price = price;
+    }
+
+    public Integer getOrderItemId() {
+        return orderItemId;
+    }
+
+    public void setOrderItemId(Integer orderItemId) {
+        this.orderItemId = orderItemId;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public Course getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(Course courseId) {
+        this.courseId = courseId;
+    }
+
+    public CourseOrder getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(CourseOrder orderId) {
+        this.orderId = orderId;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (orderItemId != null ? orderItemId.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof CourseOrderItem)) {
+            return false;
+        }
+        CourseOrderItem other = (CourseOrderItem) object;
+        if ((this.orderItemId == null && other.orderItemId != null) || (this.orderItemId != null && !this.orderItemId.equals(other.orderItemId))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "courseitproject.model.CourseOrderItem[ orderItemId=" + orderItemId + " ]";
+    }
+    
+}

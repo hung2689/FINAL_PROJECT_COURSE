@@ -14,7 +14,7 @@ public class EmailInformationConfig {
     public static final String MAIL_PORT = "587";
 
     public static final String MAIL_USERNAME = "aphamtuan105@gmail.com";
-    public static final String APP_PASSWORD = "pdovimkypkwfpqvs";
+    public static final String APP_PASSWORD = "zhpccxhxvcvavjmq";
 
-    public static final String MAIL_NAME = "GucciShop";
+    public static final String MAIL_NAME = "DEVLEARN";
 }

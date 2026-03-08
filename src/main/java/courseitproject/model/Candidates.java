@@ -46,23 +46,23 @@ public class Candidates implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Size(max = 100)
+    @Size(max = 255)
     @Column(name = "name")
     private String name;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
-    @Size(max = 100)
+    @Size(max = 255)
     @Column(name = "email")
     private String email;
     @Column(name = "score")
     private Integer score;
-    @Size(max = 10)
+    @Size(max = 255)
     @Column(name = "decision")
     private String decision;
     @Column(name = "skills_count")
     private Integer skillsCount;
     @Column(name = "projects_count")
     private Integer projectsCount;
-    @Size(max = 2147483647)
+    @Size(max = 255)
     @Column(name = "cv_text")
     private String cvText;
     @Column(name = "created_at")

@@ -78,12 +78,16 @@ public class Course implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "courseId")
+    private Collection<CartItem> cartItemCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "courseId")
     private Collection<Enrollment> enrollmentCollection;
     @JoinColumn(name = "category_id", referencedColumnName = "category_id")
     @ManyToOne
     private CourseCategory categoryId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "courseId")
     private Collection<CourseTeacher> courseTeacherCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "courseId")
+    private Collection<CourseOrderItem> courseOrderItemCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "courseId")
     private Collection<Lesson> lessonCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "courseId")
@@ -171,6 +175,15 @@ public class Course implements Serializable {
     }
 
     @XmlTransient
+    public Collection<CartItem> getCartItemCollection() {
+        return cartItemCollection;
+    }
+
+    public void setCartItemCollection(Collection<CartItem> cartItemCollection) {
+        this.cartItemCollection = cartItemCollection;
+    }
+
+    @XmlTransient
     public Collection<Enrollment> getEnrollmentCollection() {
         return enrollmentCollection;
     }
@@ -194,6 +207,15 @@ public class Course implements Serializable {
 
     public void setCourseTeacherCollection(Collection<CourseTeacher> courseTeacherCollection) {
         this.courseTeacherCollection = courseTeacherCollection;
+    }
+
+    @XmlTransient
+    public Collection<CourseOrderItem> getCourseOrderItemCollection() {
+        return courseOrderItemCollection;
+    }
+
+    public void setCourseOrderItemCollection(Collection<CourseOrderItem> courseOrderItemCollection) {
+        this.courseOrderItemCollection = courseOrderItemCollection;
     }
 
     @XmlTransient
