@@ -11,6 +11,11 @@
     <class>courseitproject.model.CourseCategory</class>
     <class>courseitproject.model.Course</class>
     <class>courseitproject.model.CourseTeacher</class>
+    <class>courseitproject.model.CourseOrder</class>
+    <class>courseitproject.model.Cart</class>
+    <class>courseitproject.model.CoursePayment</class>
+    <class>courseitproject.model.CartItem</class>
+    <class>courseitproject.model.CourseOrderItem</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <!-- Provider JPA (EclipseLink hoặc Hibernate) -->
     <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>

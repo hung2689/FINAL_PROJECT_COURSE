@@ -66,37 +66,40 @@
                 </div>
 
                 <div id="userDropdown"
-                    class="absolute left-0 bottom-full mb-2 w-56 origin-bottom-left rounded-xl bg-white dark:bg-slate-900 shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none hidden transition-all duration-200 border border-slate-100 dark:border-slate-800 z-50">
-                    <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-800">
-                        <p class="text-sm font-medium">Signed in as</p>
-                        <p class="truncate text-sm font-bold text-primary">${USER.email}</p>
+                    class="absolute left-0 bottom-full mb-3 w-60 origin-bottom-left rounded-2xl bg-[#1E293B] shadow-xl border border-slate-700/50 hidden transition-all duration-200 z-50 overflow-hidden">
+                    
+                    <div class="px-5 py-3.5 border-b border-slate-700/50 bg-[#0F172A]/30">
+                        <p class="text-[13px] text-slate-400 mb-0.5">Signed in as</p>
+                        <p class="text-[14px] font-bold text-white truncate">${USER.email}</p>
                     </div>
-                    <div class="py-1">
-                        <a class="flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-primary/10 hover:text-primary transition-colors"
-                            href="${pageContext.request.contextPath}/student">
-                            <span class="material-symbols-outlined text-lg">person</span>
+
+                    <div class="py-2">
+                        <a href="${pageContext.request.contextPath}/student" 
+                           class="flex items-center gap-3 px-5 py-2.5 text-sm font-medium text-slate-300 hover:bg-slate-700/50 hover:text-white transition-colors" style="text-decoration: none;">
+                            <span class="material-symbols-outlined text-[20px]">person</span>
                             Profile
                         </a>
-                        <a class="flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-primary/10 hover:text-primary transition-colors"
-                            href="#">
-                            <span class="material-symbols-outlined text-lg">menu_book</span>
+                        <a href="${pageContext.request.contextPath}/student?action=courses" 
+                           class="flex items-center gap-3 px-5 py-2.5 text-sm font-medium text-slate-300 hover:bg-slate-700/50 hover:text-white transition-colors" style="text-decoration: none;">
+                            <span class="material-symbols-outlined text-[20px]">menu_book</span>
                             My Courses
                         </a>
-                        <a class="flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-primary/10 hover:text-primary transition-colors"
-                            href="#">
-                            <span class="material-symbols-outlined text-lg">payments</span>
+                        <a href="#" 
+                           class="flex items-center gap-3 px-5 py-2.5 text-sm font-medium text-slate-300 hover:bg-slate-700/50 hover:text-white transition-colors" style="text-decoration: none;">
+                            <span class="material-symbols-outlined text-[20px]">payments</span>
                             Billing
                         </a>
-                        <a class="flex items-center gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-primary/10 hover:text-primary transition-colors"
-                            href="#">
-                            <span class="material-symbols-outlined text-lg">settings</span>
+                        <a href="#" 
+                           class="flex items-center gap-3 px-5 py-2.5 text-sm font-medium text-slate-300 hover:bg-slate-700/50 hover:text-white transition-colors" style="text-decoration: none;">
+                            <span class="material-symbols-outlined text-[20px]">settings</span>
                             Settings
                         </a>
                     </div>
-                    <div class="py-1 border-t border-slate-100 dark:border-slate-800">
-                        <a class="flex items-center gap-3 px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
-                            href="${pageContext.request.contextPath}/logout">
-                            <span class="material-symbols-outlined text-lg">logout</span>
+
+                    <div class="py-2 border-t border-slate-700/50">
+                        <a href="${pageContext.request.contextPath}/logout" 
+                           class="flex items-center gap-3 px-5 py-2 text-sm font-medium text-rose-400 hover:bg-rose-500/10 hover:text-rose-300 transition-colors" style="text-decoration: none;">
+                            <span class="material-symbols-outlined text-[20px]">logout</span>
                             Logout
                         </a>
                     </div>
