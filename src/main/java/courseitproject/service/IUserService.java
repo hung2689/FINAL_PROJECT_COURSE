@@ -3,6 +3,7 @@ package courseitproject.service;
 import courseitproject.model.Role;
 import courseitproject.model.Users;
 import java.util.List;
+import java.util.Map;
 
 public interface IUserService {
 
@@ -29,6 +30,7 @@ public interface IUserService {
             String roleName);
 
     boolean updatePasswordByEmail(String email, String hashedPassword);
+      public Role findOneRoleByUserId(int userId) ;
 
     public List<Role> findRolesByUserId(int userId);
 
@@ -37,4 +39,37 @@ public interface IUserService {
     boolean checkPassword(int id, String plainPassword);
 
     boolean updatePassword(int id, String newHashedPassword);
+
+    // ===== Admin User Management =====
+    long countAll();
+
+    long countByStatus(String status);
+
+    long countByRole(String roleName);
+
+    List<Users> findAllPaging(int page, int pageSize);
+
+    Map<Integer, String> findRoleMapForUsers(List<Users> users);
+
+    boolean updateStatus(int userId, String status);
+
+    boolean deleteUser(int id);
+
+    void save(Users user, String roleName);
+
+    void update(Users user, String roleName);
+
+    // ===== NEW METHODS ADDED FOR CRUD =====
+
+    List<Users> getAllUsers();
+
+    Users getUserById(int id);
+
+    boolean addUser(Users user, String roleName);
+
+    boolean updateUser(Users user, String roleName);
+
+    Users getUserByUsername(String username);
+
+    boolean existsByEmail(String email);
 }

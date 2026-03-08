@@ -45,7 +45,7 @@ public class Enrollment implements Serializable {
     @Column(name = "enrollment_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date enrollmentDate;
-    @Size(max = 30)
+    @Size(max = 255)
     @Column(name = "status")
     private String status;
     @JoinColumn(name = "course_id", referencedColumnName = "course_id")

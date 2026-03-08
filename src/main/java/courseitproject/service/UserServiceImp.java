@@ -13,11 +13,8 @@ import java.util.List;
 public class UserServiceImp implements IUserService {
 
     private final GenericDAO<Users> userDAO = new GenericDAO<>(Users.class);
-
     private final GenericDAO<UserRole> userRoleDAO = new GenericDAO<>(UserRole.class);
-
     private final GenericDAO<Student> studentDAO = new GenericDAO<>(Student.class);
-
     private final GenericDAO<Teacher> teacherDAO = new GenericDAO<>(Teacher.class);
     private final EmailUtil emailutil = new EmailUtil();
     private final OtpUtil otputil = new OtpUtil();
@@ -113,8 +110,8 @@ public class UserServiceImp implements IUserService {
 
     public static void main(String[] args) {
         UserServiceImp dao = new UserServiceImp();
-        System.out.println(dao.findUserById(5));
-
+        System.out.println();
+        dao.findAllPaging(1, 10).forEach(System.out::print);
     }
 
     @Override
@@ -132,11 +129,8 @@ public class UserServiceImp implements IUserService {
                 + "This code is valid for 5 minutes.\n"
                 + "Please do not share this code with anyone.\n"
                 + "\n"
-                + "If you did not create an account on DevLearn, please ignore this email.\n"
-                + "\n"
                 + "Best regards,\n"
-                + "DevLearn Team\n"
-                + "Empowering your programming journey");
+                + "DevLearn Team\n");
     }
 
     @Override
@@ -146,7 +140,6 @@ public class UserServiceImp implements IUserService {
         } else {
             return false;
         }
-
     }
 
     @Override
@@ -200,7 +193,6 @@ public class UserServiceImp implements IUserService {
             user.setStatus("ACTIVE");
             user.setEmailVerified(true);
 
-            // xóa role USER
             em.createQuery(
                     "DELETE FROM UserRole ur WHERE ur.userId.userId = :uid").setParameter("uid", userId)
                     .executeUpdate();
@@ -258,6 +250,20 @@ public class UserServiceImp implements IUserService {
     }
 
     @Override
+    public Role findOneRoleByUserId(int userId) {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            return em.createQuery(
+                    "SELECT ur.roleId FROM UserRole ur WHERE ur.userId.userId = :uid",
+                    Role.class)
+                    .setParameter("uid", userId)
+                    .getSingleResult();
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
     public boolean updatePasswordByEmail(String email, String hashedPassword) {
 
         EntityManager em = JPAUtil.getEntityManager();
@@ -304,8 +310,9 @@ public class UserServiceImp implements IUserService {
             tx.commit();
             return updated > 0;
         } catch (Exception e) {
-            if (tx.isActive())
+            if (tx.isActive()) {
                 tx.rollback();
+            }
             e.printStackTrace();
             return false;
         } finally {
@@ -316,8 +323,9 @@ public class UserServiceImp implements IUserService {
     @Override
     public boolean checkPassword(int id, String plainPassword) {
         Users user = findUserById(id);
-        if (user == null || user.getPassword() == null)
+        if (user == null || user.getPassword() == null) {
             return false;
+        }
         return org.mindrot.jbcrypt.BCrypt.checkpw(plainPassword, user.getPassword());
     }
 
@@ -335,8 +343,412 @@ public class UserServiceImp implements IUserService {
             tx.commit();
             return updated > 0;
         } catch (Exception e) {
-            if (tx.isActive())
+            if (tx.isActive()) {
                 tx.rollback();
+            }
+            e.printStackTrace();
+            return false;
+        } finally {
+            em.close();
+        }
+    }
+
+    // ===== Admin User Management =====
+    @Override
+    public long countAll() {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            return em.createQuery(
+                    "SELECT COUNT(u) FROM Users u", Long.class)
+                    .getSingleResult();
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
+    public long countByStatus(String status) {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            return em.createQuery(
+                    "SELECT COUNT(u) FROM Users u WHERE u.status = :status", Long.class)
+                    .setParameter("status", status)
+                    .getSingleResult();
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
+    public long countByRole(String roleName) {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            return em.createQuery(
+                    "SELECT COUNT(ur) FROM UserRole ur WHERE ur.roleId.roleName = :roleName", Long.class)
+                    .setParameter("roleName", roleName)
+                    .getSingleResult();
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
+    public List<Users> findAllPaging(int page, int pageSize) {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            return em.createQuery(
+                    "SELECT u FROM Users u ORDER BY u.createdAt DESC", Users.class)
+                    .setFirstResult((page - 1) * pageSize)
+                    .setMaxResults(pageSize)
+                    .getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
+    public java.util.Map<Integer, String> findRoleMapForUsers(List<Users> users) {
+        java.util.Map<Integer, String> roleMap = new java.util.HashMap<>();
+        if (users == null || users.isEmpty()) {
+            return roleMap;
+        }
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            List<Integer> userIds = new java.util.ArrayList<>();
+            for (Users u : users) {
+                userIds.add(u.getUserId());
+            }
+            List<Object[]> results = em.createQuery(
+                    "SELECT ur.userId.userId, ur.roleId.roleName FROM UserRole ur "
+                    + "WHERE ur.userId.userId IN :ids",
+                    Object[].class)
+                    .setParameter("ids", userIds)
+                    .getResultList();
+            for (Object[] row : results) {
+                Integer uid = (Integer) row[0];
+                String rName = (String) row[1];
+                if (!roleMap.containsKey(uid) || "ADMIN".equals(rName)) {
+                    roleMap.put(uid, rName);
+                }
+            }
+            return roleMap;
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
+    public boolean updateStatus(int userId, String status) {
+        EntityManager em = JPAUtil.getEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        try {
+            tx.begin();
+            int updated = em.createQuery(
+                    "UPDATE Users u SET u.status = :status WHERE u.userId = :id")
+                    .setParameter("status", status)
+                    .setParameter("id", userId)
+                    .executeUpdate();
+            tx.commit();
+            return updated > 0;
+        } catch (Exception e) {
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+            return false;
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
+    public boolean deleteUser(int id) {
+        EntityManager em = JPAUtil.getEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        try {
+            tx.begin();
+
+            // Clear dependencies first
+            em.createQuery("DELETE FROM Student s WHERE s.users.userId = :uid")
+                    .setParameter("uid", id)
+                    .executeUpdate();
+
+            em.createQuery("DELETE FROM Teacher t WHERE t.users.userId = :uid")
+                    .setParameter("uid", id)
+                    .executeUpdate();
+
+            em.createQuery("DELETE FROM UserRole ur WHERE ur.userId.userId = :uid")
+                    .setParameter("uid", id)
+                    .executeUpdate();
+
+            // Finally, delete the User
+            int deleted = em.createQuery("DELETE FROM Users u WHERE u.userId = :uid")
+                    .setParameter("uid", id)
+                    .executeUpdate();
+
+            tx.commit();
+            return deleted > 0;
+        } catch (Exception e) {
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+            System.err.println("Error deleting user: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
+    public void save(Users user, String roleName) {
+        addUser(user, roleName);
+    }
+
+    @Override
+    public void update(Users user, String roleName) {
+        updateUser(user, roleName);
+    }
+
+    // ==========================================
+    // ===== FULL CRUD IMPLEMENTATION ==========
+    // ==========================================
+    private boolean validateUser(Users user, String roleName) {
+        if (user == null) {
+            System.err.println("Validation Error: User object is null.");
+            return false;
+        }
+        if (user.getUsername() == null || user.getUsername().trim().isEmpty()) {
+            System.err.println("Validation Error: Username cannot be null or empty.");
+            return false;
+        }
+        if (user.getEmail() == null || !user.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+            System.err.println("Validation Error: Invalid email format -> " + user.getEmail());
+            return false;
+        }
+        if (roleName == null || (!roleName.equals("USER") && !roleName.equals("TEACHER") && !roleName.equals("ADMIN")
+                && !roleName.equals("STUDENT"))) {
+            System.err.println("Validation Error: Invalid role -> " + roleName);
+            return false;
+        }
+        if (user.getStatus() == null || (!user.getStatus().equals("ACTIVE") && !user.getStatus().equals("PENDING")
+                && !user.getStatus().equals("INACTIVE"))) {
+            System.err.println("Validation Error: Invalid status -> " + user.getStatus());
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public List<Users> getAllUsers() {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            List<Users> users = em.createQuery("SELECT u FROM Users u ORDER BY u.createdAt DESC", Users.class)
+                    .getResultList();
+            return users != null ? users : java.util.Collections.emptyList();
+        } catch (Exception e) {
+            System.err.println("Error retrieving all users: " + e.getMessage());
+            e.printStackTrace();
+            return java.util.Collections.emptyList();
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
+    public Users getUserById(int id) {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            Users user = em.find(Users.class, id);
+            return user;
+        } catch (Exception e) {
+            System.err.println("Error retrieving user with ID " + id + ": " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
+    public boolean addUser(Users user, String roleName) {
+        if (!validateUser(user, roleName)) {
+            return false;
+        }
+
+        EntityManager em = JPAUtil.getEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        try {
+            tx.begin();
+
+            if (user.getCreatedAt() == null) {
+                user.setCreatedAt(new java.util.Date());
+            }
+            if (user.getStatus() == null) {
+                user.setStatus("ACTIVE");
+            }
+
+            userDAO.save(em, user);
+
+            Role role = em.createQuery("SELECT r FROM Role r WHERE r.roleName = :name", Role.class)
+                    .setParameter("name", roleName)
+                    .getSingleResult();
+
+            UserRole ur = new UserRole();
+            ur.setUserId(user);
+            ur.setRoleId(role);
+            userRoleDAO.save(em, ur);
+
+            if ("STUDENT".equalsIgnoreCase(roleName)) {
+                Student st = new Student();
+                st.setStudentId(user.getUserId());
+                st.setUsers(user);
+                st.setLevel("BEGINNER");
+                studentDAO.save(em, st);
+            } else if ("TEACHER".equalsIgnoreCase(roleName)) {
+                Teacher t = new Teacher();
+                t.setTeacherId(user.getUserId());
+                t.setUsers(user);
+                t.setApprovalStatus("PENDING");
+                teacherDAO.save(em, t);
+            }
+
+            tx.commit();
+            return true;
+        } catch (Exception e) {
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+            System.err.println("Error adding user: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
+    public boolean updateUser(Users user, String roleName) {
+        EntityManager em = JPAUtil.getEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        try {
+            tx.begin();
+
+            Users existingUser = em.find(Users.class, user.getUserId());
+            if (existingUser == null) {
+                System.err.println("User not found for update with ID: " + user.getUserId());
+                return false;
+            }
+
+            // Apply updates
+            if (user.getFullName() != null) {
+                existingUser.setFullName(user.getFullName());
+            }
+            if (user.getEmail() != null) {
+                existingUser.setEmail(user.getEmail());
+            }
+            if (user.getStatus() != null) {
+                existingUser.setStatus(user.getStatus());
+            }
+
+            if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+                existingUser.setPassword(user.getPassword());
+            }
+
+            // Validate state after updates
+            if (!validateUser(existingUser, roleName)) {
+                tx.rollback();
+                return false;
+            }
+
+            Role role = em.createQuery("SELECT r FROM Role r WHERE r.roleName = :name", Role.class)
+                    .setParameter("name", roleName)
+                    .getSingleResult();
+
+            List<UserRole> currentRoles = em.createQuery(
+                    "SELECT ur FROM UserRole ur WHERE ur.userId.userId = :uid", UserRole.class)
+                    .setParameter("uid", existingUser.getUserId())
+                    .getResultList();
+
+            boolean hasRole = false;
+            for (UserRole ur : currentRoles) {
+                if (ur.getRoleId().getRoleId().equals(role.getRoleId())) {
+                    hasRole = true;
+                } else {
+                    em.remove(ur);
+                }
+            }
+
+            if (!hasRole) {
+                UserRole newUr = new UserRole();
+                newUr.setUserId(existingUser);
+                newUr.setRoleId(role);
+                em.persist(newUr);
+
+                if ("STUDENT".equalsIgnoreCase(roleName)) {
+                    Student existingSt = em.find(Student.class, existingUser.getUserId());
+                    if (existingSt == null) {
+                        Student st = new Student();
+                        st.setStudentId(existingUser.getUserId());
+                        st.setUsers(existingUser);
+                        st.setLevel("BEGINNER");
+                        em.persist(st);
+                    }
+                } else if ("TEACHER".equalsIgnoreCase(roleName)) {
+                    Teacher existingTeacher = em.find(Teacher.class, existingUser.getUserId());
+                    if (existingTeacher == null) {
+                        Teacher t = new Teacher();
+                        t.setTeacherId(existingUser.getUserId());
+                        t.setUsers(existingUser);
+                        t.setApprovalStatus("PENDING");
+                        em.persist(t);
+                    }
+                }
+            }
+
+            userDAO.update(em, existingUser);
+            tx.commit();
+            return true;
+        } catch (Exception e) {
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+            System.err.println("Error updating user: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
+    public Users getUserByUsername(String username) {
+        if (username == null || username.trim().isEmpty()) {
+            return null;
+        }
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            return userDAO.findOneByField(em, "username", username);
+        } catch (Exception e) {
+            System.err.println("Error retrieving user by username: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        if (email == null || email.trim().isEmpty()) {
+            return false;
+        }
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            Users u = userDAO.findOneByField(em, "email", email);
+            return u != null;
+        } catch (Exception e) {
+            System.err.println("Error checking if email exists: " + e.getMessage());
             e.printStackTrace();
             return false;
         } finally {

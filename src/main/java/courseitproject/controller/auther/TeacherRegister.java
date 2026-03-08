@@ -14,6 +14,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 @WebServlet(name = "TeacherRegister", urlPatterns = {"/teacherRegister"})
 @MultipartConfig(
@@ -37,7 +40,7 @@ public class TeacherRegister extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession();
-        Users user = (Users) session.getAttribute("PENDING_TEACHER_USER");
+        Users user = (Users) session.getAttribute("USER");
 
         if (user == null) {
             response.sendRedirect(request.getContextPath() + "/login");
@@ -54,7 +57,7 @@ public class TeacherRegister extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession();
-        Users user = (Users) session.getAttribute("PENDING_TEACHER_USER");
+        Users user = (Users) session.getAttribute("USER");
 
         if (user == null) {
             response.sendRedirect(request.getContextPath() + "/login");
@@ -62,14 +65,8 @@ public class TeacherRegister extends HttpServlet {
         }
 
         // ===== Parse dữ liệu an toàn =====
-        String specialization = request.getParameter("specialization");
-
-        int year = 0;
-        try {
-            year = Integer.parseInt(request.getParameter("year"));
-        } catch (NumberFormatException e) {
-            year = 0;
-        }
+ 
+       
 
         Part cvPart = request.getPart("cv");
         String cvUrl = null;
@@ -81,14 +78,53 @@ public class TeacherRegister extends HttpServlet {
          Teacher t = new Teacher();
         t.setTeacherId(user.getUserId());
         t.setApprovalStatus("PENDING");
-        t.setExperienceYear(year);
-        t.setSpecialization(specialization);
-        t.setCvUrl(cvUrl);
+         t.setCvUrl(cvUrl);
 
         teacherService.updateTeacher(t);
-
+        sendWebhook(request, response, user.getFullName(), user.getEmail(), cvUrl);
          session.setAttribute("PENDING_TEACHER", t);
 
          response.sendRedirect(request.getContextPath() + "/teacherRegister");
+    }
+    
+     protected void sendWebhook (HttpServletRequest request, HttpServletResponse response,String name,String email,String cvUrl)
+            throws ServletException, IOException {
+
+       request.setCharacterEncoding("UTF-8");
+
+       
+        try {
+
+            String webhookUrl = "http://localhost:5678/webhook/teacher-apply";
+
+            URL url = new URL(webhookUrl);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setDoOutput(true);
+
+            String jsonInputString =
+                    "{"
+                            + "\"name\":\"" + name + "\","
+                            + "\"email\":\"" + email + "\","
+                            + "\"cv_url\":\"" + cvUrl + "\""
+                            + "}";
+
+            OutputStream os = conn.getOutputStream();
+            byte[] input = jsonInputString.getBytes("utf-8");
+            os.write(input, 0, input.length);
+
+            int responseCode = conn.getResponseCode();
+
+            System.out.println("Send to n8n webhook");
+            System.out.println("Response Code: " + responseCode);
+
+            conn.disconnect();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 }

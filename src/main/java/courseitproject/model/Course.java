@@ -5,9 +5,9 @@
 package courseitproject.model;
 
 import jakarta.persistence.Basic;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -21,10 +21,11 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 
 /**
  *
@@ -67,7 +68,7 @@ public class Course implements Serializable {
     @Size(max = 255)
     @Column(name = "thumbnail_url")
     private String thumbnailUrl;
-    @Size(max = 20)
+    @Size(max = 255)
     @Column(name = "status")
     private String status;
     @Column(name = "created_at")
@@ -76,11 +77,19 @@ public class Course implements Serializable {
     @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "courseId")
+    private Collection<Enrollment> enrollmentCollection;
     @JoinColumn(name = "category_id", referencedColumnName = "category_id")
     @ManyToOne
     private CourseCategory categoryId;
-    @OneToMany(mappedBy = "courseId")
-    private List<CourseTeacher> courseTeacherList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "courseId")
+    private Collection<CourseTeacher> courseTeacherCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "courseId")
+    private Collection<Lesson> lessonCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "courseId")
+    private Collection<Section> sectionCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "courseId")
+    private Collection<Recommendation> recommendationCollection;
 
     public Course() {
     }
@@ -161,12 +170,57 @@ public class Course implements Serializable {
         this.updatedAt = updatedAt;
     }
 
+    @XmlTransient
+    public Collection<Enrollment> getEnrollmentCollection() {
+        return enrollmentCollection;
+    }
+
+    public void setEnrollmentCollection(Collection<Enrollment> enrollmentCollection) {
+        this.enrollmentCollection = enrollmentCollection;
+    }
+
     public CourseCategory getCategoryId() {
         return categoryId;
     }
 
     public void setCategoryId(CourseCategory categoryId) {
         this.categoryId = categoryId;
+    }
+
+    @XmlTransient
+    public Collection<CourseTeacher> getCourseTeacherCollection() {
+        return courseTeacherCollection;
+    }
+
+    public void setCourseTeacherCollection(Collection<CourseTeacher> courseTeacherCollection) {
+        this.courseTeacherCollection = courseTeacherCollection;
+    }
+
+    @XmlTransient
+    public Collection<Lesson> getLessonCollection() {
+        return lessonCollection;
+    }
+
+    public void setLessonCollection(Collection<Lesson> lessonCollection) {
+        this.lessonCollection = lessonCollection;
+    }
+
+    @XmlTransient
+    public Collection<Section> getSectionCollection() {
+        return sectionCollection;
+    }
+
+    public void setSectionCollection(Collection<Section> sectionCollection) {
+        this.sectionCollection = sectionCollection;
+    }
+
+    @XmlTransient
+    public Collection<Recommendation> getRecommendationCollection() {
+        return recommendationCollection;
+    }
+
+    public void setRecommendationCollection(Collection<Recommendation> recommendationCollection) {
+        this.recommendationCollection = recommendationCollection;
     }
 
     @Override
@@ -193,5 +247,5 @@ public class Course implements Serializable {
     public String toString() {
         return "courseitproject.model.Course[ courseId=" + courseId + " ]";
     }
-
+    
 }

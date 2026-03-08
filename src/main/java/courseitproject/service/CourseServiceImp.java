@@ -82,11 +82,11 @@ public class CourseServiceImp implements ICourseService {
         try {
             return em.createQuery(
                     "SELECT DISTINCT c FROM Course c "
-                            + "LEFT JOIN FETCH c.courseTeacherList ct "
-                            + "LEFT JOIN FETCH ct.teacherId t "
-                            + "LEFT JOIN FETCH t.users "
-                            + "WHERE c.status = 'ACTIVE' "
-                            + "ORDER BY c.courseId DESC",
+                    + "LEFT JOIN FETCH c.courseTeacherList ct "
+                    + "LEFT JOIN FETCH ct.teacherId t "
+                    + "LEFT JOIN FETCH t.users "
+                    + "WHERE c.status = 'ACTIVE' "
+                    + "ORDER BY c.courseId DESC",
                     Course.class).getResultList();
         } finally {
             em.close();
@@ -207,14 +207,16 @@ public class CourseServiceImp implements ICourseService {
     @Override
     public List<Course> findAllPaging(int page) {
 
+        if (page < 1) {
+            page = 1;
+        }
+
         EntityManager em = JPAUtil.getEntityManager();
 
         try {
 
             return em.createQuery(
-                    "SELECT DISTINCT c FROM Course c "
-                            + "WHERE c.status = 'ACTIVE' "
-                            + "ORDER BY c.courseId DESC",
+                    "SELECT c FROM Course c ORDER BY c.courseId ASC",
                     Course.class)
                     .setFirstResult((page - 1) * PAGE_SIZE)
                     .setMaxResults(PAGE_SIZE)
@@ -233,9 +235,9 @@ public class CourseServiceImp implements ICourseService {
 
             return em.createQuery(
                     "SELECT DISTINCT c FROM Course c "
-                            + "LEFT JOIN FETCH c.categoryId "
-                            + "WHERE c.status='active' "
-                            + "ORDER BY c.courseId DESC",
+                    + "LEFT JOIN FETCH c.categoryId "
+                    + "WHERE c.status='active' "
+                    + "ORDER BY c.courseId DESC",
                     Course.class)
                     .setFirstResult((page - 1) * size)
                     .setMaxResults(size)
@@ -252,9 +254,9 @@ public class CourseServiceImp implements ICourseService {
         try {
             return em.createQuery(
                     "SELECT u.fullName FROM CourseTeacher ct "
-                            + "JOIN ct.teacherId t "
-                            + "JOIN t.users u "
-                            + "WHERE ct.courseId = :course",
+                    + "JOIN ct.teacherId t "
+                    + "JOIN t.users u "
+                    + "WHERE ct.courseId = :course",
                     String.class)
                     .setParameter("course", course)
                     .setMaxResults(1)
@@ -273,7 +275,7 @@ public class CourseServiceImp implements ICourseService {
         try {
             return em.createQuery(
                     "SELECT COUNT(e) FROM Enrollment e "
-                            + "WHERE e.courseId.courseId = :courseId",
+                    + "WHERE e.courseId.courseId = :courseId",
                     Long.class)
                     .setParameter("courseId", courseId)
                     .getSingleResult();
@@ -300,7 +302,7 @@ public class CourseServiceImp implements ICourseService {
         try {
 
             return em.createQuery(
-                    "SELECT COUNT(c) FROM Course c WHERE LOWER(c.status)='active'",
+                    "SELECT COUNT(c) FROM Course c ",
                     Long.class).getSingleResult();
 
         } finally {
@@ -316,10 +318,10 @@ public class CourseServiceImp implements ICourseService {
 
             return em.createQuery(
                     "SELECT DISTINCT c FROM Course c "
-                            + "LEFT JOIN FETCH c.categoryId "
-                            + "WHERE LOWER(c.status)='active' "
-                            + "AND LOWER(c.title) LIKE :kw "
-                            + "ORDER BY c.courseId DESC",
+                    + "LEFT JOIN FETCH c.categoryId "
+                    + "WHERE LOWER(c.status)='active' "
+                    + "AND LOWER(c.title) LIKE :kw "
+                    + "ORDER BY c.courseId DESC",
                     Course.class)
                     .setParameter("kw", "%" + keyword.toLowerCase() + "%")
                     .setFirstResult((page - 1) * size)
@@ -342,8 +344,8 @@ public class CourseServiceImp implements ICourseService {
 
             return em.createQuery(
                     "SELECT COUNT(c) FROM Course c "
-                            + "WHERE LOWER(c.status)='active' "
-                            + "AND LOWER(c.title) LIKE :kw",
+                    + "WHERE LOWER(c.status)='active' "
+                    + "AND LOWER(c.title) LIKE :kw",
                     Long.class)
                     .setParameter("kw",
                             "%" + keyword.toLowerCase() + "%")
@@ -365,9 +367,9 @@ public class CourseServiceImp implements ICourseService {
 
             return em.createQuery(
                     "SELECT c FROM Course c "
-                            + "WHERE LOWER(c.title) LIKE :k "
-                            + "AND LOWER(c.status)='active' "
-                            + "ORDER BY c.title",
+                    + "WHERE LOWER(c.title) LIKE :k "
+                    + "AND LOWER(c.status)='active' "
+                    + "ORDER BY c.title",
                     Course.class)
                     .setParameter(
                             "k",
@@ -567,7 +569,7 @@ public class CourseServiceImp implements ICourseService {
             // ===== STEP 1: Get IDs with pagination (no JOIN FETCH) =====
             StringBuilder idJpql = new StringBuilder(
                     "SELECT c.courseId FROM Course c "
-                            + "WHERE LOWER(c.status)='active' ");
+                    + "WHERE LOWER(c.status)='active' ");
 
             // keyword
             if (keyword != null && !keyword.isBlank()) {
@@ -626,8 +628,8 @@ public class CourseServiceImp implements ICourseService {
             // ===== STEP 2: Fetch full entities by IDs (with JOIN FETCH) =====
             StringBuilder fetchJpql = new StringBuilder(
                     "SELECT c FROM Course c "
-                            + "LEFT JOIN FETCH c.categoryId "
-                            + "WHERE c.courseId IN :ids ");
+                    + "LEFT JOIN FETCH c.categoryId "
+                    + "WHERE c.courseId IN :ids ");
 
             // preserve sort order
             if ("price_asc".equals(sort)) {
@@ -758,9 +760,9 @@ public class CourseServiceImp implements ICourseService {
 
             return em.createQuery(
                     "SELECT c FROM Course c "
-                            + "LEFT JOIN FETCH c.categoryId "
-                            + "WHERE LOWER(c.status)='active' "
-                            + "ORDER BY c.createdAt DESC",
+                    + "LEFT JOIN FETCH c.categoryId "
+                    + "WHERE LOWER(c.status)='active' "
+                    + "ORDER BY c.createdAt DESC",
                     Course.class)
                     .setFirstResult((page - 1) * PAGE_SIZE)
                     .setMaxResults(PAGE_SIZE)
@@ -784,8 +786,8 @@ public class CourseServiceImp implements ICourseService {
 
             StringBuilder jpql = new StringBuilder(
                     "SELECT c FROM Course c "
-                            + "LEFT JOIN FETCH c.categoryId "
-                            + "WHERE LOWER(c.status)='active' ");
+                    + "LEFT JOIN FETCH c.categoryId "
+                    + "WHERE LOWER(c.status)='active' ");
 
             if (categoryId != null) {
 
@@ -858,10 +860,10 @@ public class CourseServiceImp implements ICourseService {
 
             return em.createQuery(
                     "SELECT c FROM Course c "
-                            + "LEFT JOIN FETCH c.categoryId "
-                            + "WHERE LOWER(c.status)='active' "
-                            + "AND LOWER(c.title) LIKE :kw "
-                            + "ORDER BY c.createdAt DESC",
+                    + "LEFT JOIN FETCH c.categoryId "
+                    + "WHERE LOWER(c.status)='active' "
+                    + "AND LOWER(c.title) LIKE :kw "
+                    + "ORDER BY c.createdAt DESC",
                     Course.class)
                     .setParameter(
                             "kw",
@@ -885,9 +887,9 @@ public class CourseServiceImp implements ICourseService {
         try {
             return em.createQuery(
                     "SELECT c FROM Course c "
-                            + "WHERE c.categoryId.categoryId = :categoryId "
-                            + "AND c.status = 'ACTIVE' "
-                            + "ORDER BY c.courseId ASC",
+                    + "WHERE c.categoryId.categoryId = :categoryId "
+                    + "AND c.status = 'ACTIVE' "
+                    + "ORDER BY c.courseId ASC",
                     Course.class)
                     .setParameter("categoryId", categoryId)
                     .getResultList();

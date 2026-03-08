@@ -38,7 +38,7 @@ public class CourseTeacher implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Size(max = 30)
+    @Size(max = 255)
     @Column(name = "role")
     private String role;
     @JoinColumn(name = "course_id", referencedColumnName = "course_id")

@@ -124,34 +124,10 @@
                                 <div class="p-6 md:p-10 space-y-8">
 
                                     <!-- Teaching Specialization -->
-                                    <div class="space-y-3">
-                                        <label class="block text-sm font-bold text-slate-700">Teaching
-                                            Specialization</label>
-                                        <div class="flex flex-wrap gap-2 p-3 min-h-[50px] bg-slate-50 border border-slate-200 rounded-xl"
-                                            id="skill-container">
-                                            <input id="skill-input"
-                                                class="bg-transparent border-none focus:ring-0 text-sm flex-1 min-w-[150px] text-slate-600 outline-none"
-                                                placeholder="Type a skill and press Enter..." type="text" />
-                                            <input type="hidden" name="specialization" id="specialization-hidden" />
-                                        </div>
-                                        <p class="text-xs text-slate-400">Press Enter to add multiple skills that you
-                                            are qualified to teach.</p>
-                                    </div>
+                                     
 
                                     <!-- Years of Experience (full width after removing Portfolio) -->
-                                    <div class="space-y-3">
-                                        <label class="block text-sm font-bold text-slate-700" for="experience">Years of
-                                            Professional Experience</label>
-                                        <div class="relative max-w-xs">
-                                            <input required name="year"
-                                                class="w-full pl-4 pr-10 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 outline-none transition-all text-slate-800"
-                                                id="experience" min="0" placeholder="e.g. 5" type="number" />
-                                            <div
-                                                class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-slate-400">
-                                                <span class="material-symbols-outlined">timeline</span>
-                                            </div>
-                                        </div>
-                                    </div>
+                                     
 
                                     <!-- CV Upload Zone -->
                                     <div class="space-y-3">

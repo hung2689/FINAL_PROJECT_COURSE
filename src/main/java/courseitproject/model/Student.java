@@ -53,9 +53,21 @@ public class Student implements Serializable {
     private String level;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "studentId")
     private Collection<Enrollment> enrollmentCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "studentId")
+    private Collection<Subscription> subscriptionCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "studentId")
+    private Collection<LearningProgress> learningProgressCollection;
     @JoinColumn(name = "student_id", referencedColumnName = "user_id", insertable = false, updatable = false)
     @OneToOne(optional = false)
     private Users users;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "studentId")
+    private Collection<Recommendation> recommendationCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "studentId")
+    private Collection<StudyLog> studyLogCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "studentId")
+    private Collection<AIPrediction> aIPredictionCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "studentId")
+    private Collection<QuizResult> quizResultCollection;
 
     public Student() {
     }
@@ -97,12 +109,66 @@ public class Student implements Serializable {
         this.enrollmentCollection = enrollmentCollection;
     }
 
+    @XmlTransient
+    public Collection<Subscription> getSubscriptionCollection() {
+        return subscriptionCollection;
+    }
+
+    public void setSubscriptionCollection(Collection<Subscription> subscriptionCollection) {
+        this.subscriptionCollection = subscriptionCollection;
+    }
+
+    @XmlTransient
+    public Collection<LearningProgress> getLearningProgressCollection() {
+        return learningProgressCollection;
+    }
+
+    public void setLearningProgressCollection(Collection<LearningProgress> learningProgressCollection) {
+        this.learningProgressCollection = learningProgressCollection;
+    }
+
     public Users getUsers() {
         return users;
     }
 
     public void setUsers(Users users) {
         this.users = users;
+    }
+
+    @XmlTransient
+    public Collection<Recommendation> getRecommendationCollection() {
+        return recommendationCollection;
+    }
+
+    public void setRecommendationCollection(Collection<Recommendation> recommendationCollection) {
+        this.recommendationCollection = recommendationCollection;
+    }
+
+    @XmlTransient
+    public Collection<StudyLog> getStudyLogCollection() {
+        return studyLogCollection;
+    }
+
+    public void setStudyLogCollection(Collection<StudyLog> studyLogCollection) {
+        this.studyLogCollection = studyLogCollection;
+    }
+
+    @XmlTransient
+    public Collection<AIPrediction> getAIPredictionCollection() {
+        return aIPredictionCollection;
+    }
+
+    public void setAIPredictionCollection(Collection<AIPrediction> aIPredictionCollection) {
+        this.aIPredictionCollection = aIPredictionCollection;
+    }
+
+    @XmlTransient
+    public Collection<QuizResult> getQuizResultCollection() {
+        return quizResultCollection;
+    }
+
+    public void setQuizResultCollection(Collection<QuizResult> quizResultCollection) {
+        this.quizResultCollection = quizResultCollection;
     }
 
     @Override

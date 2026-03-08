@@ -10,7 +10,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.MapsId;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
@@ -41,6 +40,8 @@ public class Teacher implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "teacher_id")
     private Integer teacherId;
     @Size(max = 255)
@@ -56,8 +57,7 @@ public class Teacher implements Serializable {
     private String cvUrl;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "teacherId")
     private Collection<CourseTeacher> courseTeacherCollection;
-    @MapsId
-    @JoinColumn(name = "teacher_id")
+    @JoinColumn(name = "teacher_id", referencedColumnName = "user_id", insertable = false, updatable = false)
     @OneToOne(optional = false)
     private Users users;
 
@@ -149,5 +149,5 @@ public class Teacher implements Serializable {
     public String toString() {
         return "courseitproject.model.Teacher[ teacherId=" + teacherId + " ]";
     }
-
+    
 }

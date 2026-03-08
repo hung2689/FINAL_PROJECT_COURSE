@@ -291,7 +291,7 @@ public class AutherServlet extends HttpServlet {
             if ("TEACHER".equalsIgnoreCase(role)) {
 
                 // lưu user vào session để dùng ở bước tiếp
-                session.setAttribute("PENDING_TEACHER_USER", user);
+                session.setAttribute("USER", user);
 
                 response.sendRedirect(request.getContextPath() + "/teacherRegister");
                 return;
@@ -359,9 +359,10 @@ public class AutherServlet extends HttpServlet {
             request.getRequestDispatcher("views/auth/login.jsp").forward(request, response);
             return;
         }
-
+        
         // 6. Login thành công
         HttpSession session = request.getSession();
+         
         session.setAttribute("USER", user);
 
         // 7. Remember me

@@ -1,0 +1,90 @@
+package courseitproject.controller.CourseEditDetail;
+
+import courseitproject.service.SectionEditService;
+import courseitproject.model.Course;
+import courseitproject.model.Section;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
+@WebServlet(name = "SectionAdminServlet", urlPatterns = {"/sectionAdmin"})
+public class SectionEditServlet extends HttpServlet {
+
+    private SectionEditService sectionDAO;
+    private courseitproject.service.RoleEditService roleDAO;
+
+    @Override
+    public void init() throws ServletException {
+        sectionDAO = new SectionEditService();
+        roleDAO = new courseitproject.service.RoleEditService();
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+        Gson gson = new Gson();
+        JsonObject jsonResponse = new JsonObject();
+
+        // Check if user is admin (assuming session contains user object)
+        courseitproject.model.Users user = (courseitproject.model.Users) request.getSession().getAttribute("USER");
+        if (user == null) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            jsonResponse.addProperty("status", "error");
+            jsonResponse.addProperty("message", "Unauthorized access.");
+            out.print(gson.toJson(jsonResponse));
+            return;
+        }
+
+        String action = request.getParameter("action");
+
+        try {
+            if ("create".equals(action)) {
+                String courseIdStr = request.getParameter("course_id");
+                String title = request.getParameter("title");
+                Course course = new Course(Integer.parseInt(courseIdStr)); // Proxy course object
+                // In a real app we might get the max order index here, we'll dummy it to 999
+                // for now
+                int orderIndex = sectionDAO.getNextOrderIndex(course.getCourseId());
+                Section newSection = sectionDAO.create(course, title, orderIndex);
+
+                if (newSection != null) {
+                    jsonResponse.addProperty("status", "success");
+                    jsonResponse.addProperty("section_id", newSection.getSectionId());
+                    jsonResponse.addProperty("order_index", newSection.getOrderIndex());
+                    jsonResponse.addProperty("title", newSection.getTitle());
+                } else {
+                    jsonResponse.addProperty("status", "error");
+                    jsonResponse.addProperty("message", "Failed to create section.");
+                }
+            } else if ("update".equals(action)) {
+                int sectionId = Integer.parseInt(request.getParameter("section_id"));
+                String title = request.getParameter("title");
+                boolean success = sectionDAO.update(sectionId, title);
+                jsonResponse.addProperty("status", success ? "success" : "error");
+            } else if ("delete".equals(action)) {
+                int sectionId = Integer.parseInt(request.getParameter("section_id"));
+                boolean success = sectionDAO.delete(sectionId);
+                jsonResponse.addProperty("status", success ? "success" : "error");
+            } else {
+                jsonResponse.addProperty("status", "error");
+                jsonResponse.addProperty("message", "Unknown action.");
+            }
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            jsonResponse.addProperty("status", "error");
+            jsonResponse.addProperty("message", e.getMessage());
+        }
+
+        out.print(gson.toJson(jsonResponse));
+        out.flush();
+    }
+}

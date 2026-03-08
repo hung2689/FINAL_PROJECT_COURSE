@@ -63,6 +63,26 @@
                 @apply antialiased;
             }
         }
+
+        /* Hero Section Element Animations */
+        .animate-fade-up {
+            animation: heroFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both !important;
+        }
+
+        .delay-1 { animation-delay: 0.1s !important; }
+        .delay-2 { animation-delay: 0.3s !important; }
+        .delay-3 { animation-delay: 0.5s !important; }
+
+        @keyframes heroFadeUp {
+            0% {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
             </head>
 
@@ -89,7 +109,7 @@
                                 class="max-w-canvas mx-auto px-6 lg:px-12 relative z-10 text-center flex flex-col items-center pt-20">
                                 <!-- Status Pill -->
                                 <div
-                                    class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-white/5 border border-white/10 text-emerald-400 text-sm font-semibold tracking-wide mb-8 backdrop-blur-md shadow-[0_0_20px_rgba(16,185,129,0.15)]">
+                                    class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-white/5 border border-white/10 text-emerald-400 text-sm font-semibold tracking-wide mb-8 backdrop-blur-md shadow-[0_0_20px_rgba(16,185,129,0.15)] animate-fade-up delay-1">
                                     <span class="relative flex h-2 w-2">
                                         <span
                                             class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
@@ -100,7 +120,7 @@
 
                                 <!-- Headline -->
                                 <h1
-                                    class="text-6xl md:text-7xl lg:text-[5.5rem] font-black leading-[1.1] tracking-tighter mb-8 text-white max-w-5xl mx-auto drop-shadow-2xl">
+                                    class="text-6xl md:text-7xl lg:text-[5.5rem] font-black leading-[1.1] tracking-tighter mb-8 text-white max-w-5xl mx-auto drop-shadow-2xl animate-fade-up delay-2">
                                     Build Your Future <br class="hidden md:block" /> with a Modern
                                     <span
                                         class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400 drop-shadow-[0_0_40px_rgba(20,184,166,0.3)]">Digital
@@ -109,7 +129,7 @@
 
                                 <!-- Primary CTA -->
                                 <div
-                                    class="flex flex-col sm:flex-row items-center gap-6 justify-center w-full relative z-20">
+                                    class="flex flex-col sm:flex-row items-center gap-6 justify-center w-full relative z-20 animate-fade-up delay-3">
                                     <button
                                         class="relative w-full sm:w-auto h-[4.5rem] px-12 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-xl font-bold rounded-full shadow-[0_0_40px_rgba(16,185,129,0.4)] hover:shadow-[0_0_60px_rgba(16,185,129,0.6)] hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3 group">
                                         <span class="relative z-10 flex items-center gap-3">

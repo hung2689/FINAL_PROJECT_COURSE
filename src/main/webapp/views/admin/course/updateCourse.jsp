@@ -134,7 +134,9 @@
                                id="updateTeacher"
                                class="w-full px-4 py-3 bg-slate-50 dark:bg-[#11200e] border border-slate-200 dark:border-primary/20 rounded-lg focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all dark:text-white placeholder:text-slate-400 dark:placeholder:text-primary/30"
                                placeholder="Enter teacher ID" />
+                        <p id="teacherError" class="text-red-500 text-sm mt-1"></p>
                     </div>
+
 
                 </div>
                 <!-- Description -->

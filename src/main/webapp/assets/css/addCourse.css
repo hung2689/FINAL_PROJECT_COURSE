@@ -6,9 +6,9 @@ body {
     width: 6px;
 }
 .modal-body::-webkit-scrollbar-track {
-    background: rgba(55, 236, 19, 0.05);
+    background: rgba(16, 185, 129, 0.05);
 }
 .modal-body::-webkit-scrollbar-thumb {
-    background: rgba(55, 236, 19, 0.2);
+    background: rgba(16, 185, 129, 0.2);
     border-radius: 10px;
 }

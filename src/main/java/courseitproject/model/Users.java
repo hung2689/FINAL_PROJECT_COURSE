@@ -83,11 +83,13 @@ public class Users implements Serializable {
     @Column(name = "email_verified")
     private boolean emailVerified;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
-    private Collection<UserRole> userRoleCollection;
+    private Collection<Notification> notificationCollection;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "users")
     private Teacher teacher;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "users")
     private Student student;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
+    private Collection<UserRole> userRoleCollection;
 
     public Users() {
     }
@@ -182,12 +184,12 @@ public class Users implements Serializable {
     }
 
     @XmlTransient
-    public Collection<UserRole> getUserRoleCollection() {
-        return userRoleCollection;
+    public Collection<Notification> getNotificationCollection() {
+        return notificationCollection;
     }
 
-    public void setUserRoleCollection(Collection<UserRole> userRoleCollection) {
-        this.userRoleCollection = userRoleCollection;
+    public void setNotificationCollection(Collection<Notification> notificationCollection) {
+        this.notificationCollection = notificationCollection;
     }
 
     public Teacher getTeacher() {
@@ -204,6 +206,15 @@ public class Users implements Serializable {
 
     public void setStudent(Student student) {
         this.student = student;
+    }
+
+    @XmlTransient
+    public Collection<UserRole> getUserRoleCollection() {
+        return userRoleCollection;
+    }
+
+    public void setUserRoleCollection(Collection<UserRole> userRoleCollection) {
+        this.userRoleCollection = userRoleCollection;
     }
 
     @Override

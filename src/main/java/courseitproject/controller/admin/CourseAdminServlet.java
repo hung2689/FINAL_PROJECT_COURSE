@@ -232,7 +232,12 @@ public class CourseAdminServlet extends HttpServlet {
                 Teacher teacher = teacherService.findTeacherById(teacher_id);
 
                 if (teacher == null) {
-                    throw new Exception("Teacher not found");
+
+                    response.sendRedirect(
+                            request.getContextPath()
+                            + "/courseAdmin?modal=update&courseId=" + course_id + "&error=teacher"
+                    );
+                    return;
                 }
             }
 
