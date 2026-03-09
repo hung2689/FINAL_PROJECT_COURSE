@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+ 
 package courseitproject.model;
 
 import jakarta.persistence.Basic;
@@ -23,11 +20,7 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-
-/**
- *
- * @author ASUS
- */
+ 
 @Entity
 @Table(name = "CoursePayment")
 @XmlRootElement
@@ -160,5 +153,5 @@ public class CoursePayment implements Serializable {
     public String toString() {
         return "courseitproject.model.CoursePayment[ paymentId=" + paymentId + " ]";
     }
-    
+ 
 }

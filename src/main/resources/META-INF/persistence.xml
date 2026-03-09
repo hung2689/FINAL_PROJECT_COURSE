@@ -10,7 +10,7 @@
     <class>courseitproject.model.CourseCategory</class>
     <class>courseitproject.model.Course</class>
     <class>courseitproject.model.CourseTeacher</class>
-    <class>courseitproject.model.Section</class>
+     <class>courseitproject.model.Section</class>
     <class>courseitproject.model.Quiz</class>
     <class>courseitproject.model.Question</class>
     <class>courseitproject.model.Answer</class>
@@ -32,6 +32,7 @@
     <class>courseitproject.model.CoursePayment</class>
     <class>courseitproject.model.CartItem</class>
     <class>courseitproject.model.CourseOrder</class>
+ 
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <!-- Provider JPA (EclipseLink hoặc Hibernate) -->
     <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>

@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+ 
 package courseitproject.model;
 
 import jakarta.persistence.Basic;
@@ -28,10 +25,7 @@ import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
 
-/**
- *
- * @author ASUS
- */
+ 
 @Entity
 @Table(name = "CourseOrder")
 @XmlRootElement
@@ -67,7 +61,8 @@ public class CourseOrder implements Serializable {
     @JoinColumn(name = "student_id", referencedColumnName = "student_id")
     @ManyToOne(optional = false)
     private Student studentId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderId")
+     @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderId")
+ 
     private Collection<CourseOrderItem> courseOrderItemCollection;
 
     public CourseOrder() {
@@ -163,5 +158,5 @@ public class CourseOrder implements Serializable {
     public String toString() {
         return "courseitproject.model.CourseOrder[ orderId=" + orderId + " ]";
     }
-    
+ 
 }

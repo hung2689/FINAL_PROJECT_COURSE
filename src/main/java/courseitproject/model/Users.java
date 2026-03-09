@@ -47,12 +47,6 @@ import java.util.Date;
     @NamedQuery(name = "Users.findByEmailVerified", query = "SELECT u FROM Users u WHERE u.emailVerified = :emailVerified")})
 public class Users implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "user_id")
-    private Integer userId;
     @Size(max = 255)
     @Column(name = "username")
     private String username;
@@ -69,9 +63,6 @@ public class Users implements Serializable {
     @Size(max = 255)
     @Column(name = "status")
     private String status;
-    @Column(name = "created_at")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createdAt;
     @Size(max = 255)
     @Column(name = "provider")
     private String provider;
@@ -82,6 +73,16 @@ public class Users implements Serializable {
     @NotNull
     @Column(name = "email_verified")
     private boolean emailVerified;
+
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "user_id")
+    private Integer userId;
+    @Column(name = "created_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private Collection<Notification> notificationCollection;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "users")
@@ -111,29 +112,6 @@ public class Users implements Serializable {
         this.userId = userId;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
     public String getFullName() {
         return fullName;
@@ -143,13 +121,6 @@ public class Users implements Serializable {
         this.fullName = fullName;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 
     public Date getCreatedAt() {
         return createdAt;
@@ -159,13 +130,6 @@ public class Users implements Serializable {
         this.createdAt = createdAt;
     }
 
-    public String getProvider() {
-        return provider;
-    }
-
-    public void setProvider(String provider) {
-        this.provider = provider;
-    }
 
     public String getProviderId() {
         return providerId;
@@ -241,5 +205,46 @@ public class Users implements Serializable {
     public String toString() {
         return "courseitproject.model.Users[ userId=" + userId + " ]";
     }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getProvider() {
+        return provider;
+    }
+
+    public void setProvider(String provider) {
+        this.provider = provider;
+    }
+
     
 }

@@ -200,12 +200,17 @@
                                         </div>
                                     </div>
 
-                                    <button
+<!--                                    <button
                                         class="w-full flex justify-center items-center gap-2 py-3.5 bg-primary text-white text-[15px] font-bold rounded-xl hover:bg-emerald-600 hover:shadow-lg hover:shadow-primary/30 transition-all duration-300">
                                         Checkout $
                                         <fmt:formatNumber value="${totalPrice}" minFractionDigits="2"
                                             maxFractionDigits="2" />
-                                    </button>
+                                    </button>-->
+                                        <a href="${pageContext.request.contextPath}/checkout" 
+   class="w-full flex justify-center items-center gap-2 py-3.5 bg-primary text-white text-[15px] font-bold rounded-xl hover:bg-emerald-600 hover:shadow-lg hover:shadow-primary/30 transition-all duration-300"
+   style="text-decoration: none;">
+    Checkout $<fmt:formatNumber value="${totalPrice}" minFractionDigits="2" maxFractionDigits="2"/>
+</a>
                                 </div>
                             </div>
 

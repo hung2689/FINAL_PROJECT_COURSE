@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package courseitproject.model;
 
 import jakarta.persistence.Basic;
@@ -48,36 +45,47 @@ import java.util.Date;
 public class Course implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "course_id")
     private Integer courseId;
+
     @Size(max = 255)
     @Column(name = "title")
     private String title;
+
     @Size(max = 255)
     @Column(name = "description")
     private String description;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(name = "price")
-    private BigDecimal price;
+
     @Size(max = 255)
     @Column(name = "level")
     private String level;
+
     @Size(max = 255)
     @Column(name = "thumbnail_url")
     private String thumbnailUrl;
+ 
+
+ 
     @Size(max = 255)
     @Column(name = "status")
     private String status;
+    
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "price")
+    private BigDecimal price;
+
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
+
     @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "courseId")
+     @OneToMany(cascade = CascadeType.ALL, mappedBy = "courseId")
     private Collection<CartItem> cartItemCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "courseId")
     private Collection<Enrollment> enrollmentCollection;
@@ -94,7 +102,9 @@ public class Course implements Serializable {
     private Collection<Section> sectionCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "courseId")
     private Collection<Recommendation> recommendationCollection;
+ 
 
+     
     public Course() {
     }
 
@@ -110,22 +120,6 @@ public class Course implements Serializable {
         this.courseId = courseId;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public BigDecimal getPrice() {
         return price;
     }
@@ -134,28 +128,12 @@ public class Course implements Serializable {
         this.price = price;
     }
 
-    public String getLevel() {
-        return level;
-    }
-
-    public void setLevel(String level) {
-        this.level = level;
-    }
-
     public String getThumbnailUrl() {
         return thumbnailUrl;
     }
 
     public void setThumbnailUrl(String thumbnailUrl) {
         this.thumbnailUrl = thumbnailUrl;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public Date getCreatedAt() {
@@ -269,5 +247,40 @@ public class Course implements Serializable {
     public String toString() {
         return "courseitproject.model.Course[ courseId=" + courseId + " ]";
     }
+ 
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     
 }
+ 

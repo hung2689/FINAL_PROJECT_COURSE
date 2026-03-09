@@ -1,8 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package courseitproject.model;
+ 
+
+ package courseitproject.model;
 
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
@@ -21,11 +19,9 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.Date;
 
-/**
- *
- * @author ASUS
- */
-@Entity
+ 
+
+ @Entity
 @Table(name = "CartItem")
 @XmlRootElement
 @NamedQueries({
@@ -48,7 +44,8 @@ public class CartItem implements Serializable {
     private Cart cartId;
     @JoinColumn(name = "course_id", referencedColumnName = "course_id")
     @ManyToOne(optional = false)
-    private Course courseId;
+     private Course courseId;
+ 
 
     public CartItem() {
     }
@@ -81,12 +78,13 @@ public class CartItem implements Serializable {
         this.cartId = cartId;
     }
 
-    public Course getCourseId() {
+     public Course getCourseId() {
         return courseId;
     }
 
     public void setCourseId(Course courseId) {
         this.courseId = courseId;
+ 
     }
 
     @Override
@@ -113,5 +111,5 @@ public class CartItem implements Serializable {
     public String toString() {
         return "courseitproject.model.CartItem[ cartItemId=" + cartItemId + " ]";
     }
-    
+ 
 }
