@@ -4,14 +4,21 @@ import courseitproject.service.EnrollmentServiceImp;
 import courseitproject.service.IEnrollmentService;
 import courseitproject.service.IStudentService;
 import courseitproject.service.IUserService;
+import courseitproject.service.StudentBillingService;
 import courseitproject.service.StudentServiceImp;
 import courseitproject.service.UserServiceImp;
+import courseitproject.model.CourseOrder;
+import courseitproject.model.CourseOrderItem;
+import courseitproject.model.CoursePayment;
 import courseitproject.model.Enrollment;
 import courseitproject.model.Student;
 import courseitproject.model.Users;
 import java.io.IOException;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -26,6 +33,7 @@ public class StudentProfileController extends HttpServlet {
     private final IUserService userService = new UserServiceImp();
     private final IStudentService studentService = new StudentServiceImp();
     private final IEnrollmentService enrollmentService = new EnrollmentServiceImp();
+    private final StudentBillingService billingService = new StudentBillingService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -163,6 +171,63 @@ public class StudentProfileController extends HttpServlet {
 
                 break;
 
+            }
+
+            case "billing": {
+                try {
+                    Student student = studentService.getStudentById(sessionUser.getUserId());
+                    if (student != null) {
+                        List<CourseOrder> orders = billingService.getOrdersByStudentId(student.getStudentId());
+                        request.setAttribute("orders", orders);
+                    } else {
+                        request.setAttribute("orders", List.of());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    request.setAttribute("orders", List.of());
+                }
+                request.getRequestDispatcher("/views/student/student-billing.jsp")
+                        .forward(request, response);
+                break;
+            }
+
+            case "billingDetail": {
+                try {
+                    int orderId = Integer.parseInt(request.getParameter("orderId"));
+                    CourseOrder order = billingService.getOrderDetail(orderId);
+
+                    // Security: ensure order belongs to the current student
+                    if (order != null && order.getStudentId() != null
+                            && order.getStudentId().getStudentId().equals(sessionUser.getUserId())) {
+                        request.setAttribute("order", order);
+
+                        // Get payment info
+                        CoursePayment payment = billingService.getPaymentByOrderId(orderId);
+                        request.setAttribute("payment", payment);
+
+                        // Build instructor names map for each order item
+                        Map<Integer, String> instructorMap = new HashMap<>();
+                        if (order.getCourseOrderItemCollection() != null) {
+                            for (CourseOrderItem item : order.getCourseOrderItemCollection()) {
+                                if (item.getCourseId() != null) {
+                                    String instructor = billingService.getInstructorName(item.getCourseId().getCourseId());
+                                    instructorMap.put(item.getCourseId().getCourseId(), instructor);
+                                }
+                            }
+                        }
+                        request.setAttribute("instructorMap", instructorMap);
+                    } else {
+                        request.setAttribute("error", "Order not found or access denied.");
+                    }
+                } catch (NumberFormatException e) {
+                    request.setAttribute("error", "Invalid order ID.");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    request.setAttribute("error", "An error occurred loading order details.");
+                }
+                request.getRequestDispatcher("/views/student/student-bill-detail.jsp")
+                        .forward(request, response);
+                break;
             }
 
             case "profile":

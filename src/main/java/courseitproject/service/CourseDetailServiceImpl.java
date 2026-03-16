@@ -1,7 +1,7 @@
 package courseitproject.service;
 
+import courseitproject.dao.CourseDetailDAOImpl;
 import courseitproject.dao.ICourseDetailDAO;
-import courseitproject.dao.impl.CourseDetailDAOImpl;
 import courseitproject.dto.CourseDetailDTO;
 import courseitproject.dto.LessonDTO;
 import courseitproject.dto.SectionDTO;

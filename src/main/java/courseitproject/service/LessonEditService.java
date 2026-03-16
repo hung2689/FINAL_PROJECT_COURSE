@@ -25,6 +25,12 @@ public class LessonEditService extends GenericDAO<Lesson> {
         lesson.setOrderIndex(orderIndex);
         try {
             tx.begin();
+
+            em.createQuery("UPDATE Lesson l SET l.orderIndex = l.orderIndex + 1 WHERE l.sectionId.sectionId = :sid AND l.orderIndex >= :idx")
+              .setParameter("sid", section.getSectionId())
+              .setParameter("idx", orderIndex)
+              .executeUpdate();
+
             em.persist(lesson);
             tx.commit();
             return lesson;

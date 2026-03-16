@@ -111,26 +111,37 @@ public class UserServiceImp implements IUserService {
     public static void main(String[] args) {
         UserServiceImp dao = new UserServiceImp();
         System.out.println();
-        dao.findAllPaging(1, 10).forEach(System.out::print);
+        dao.UserSendEmail("phamduyhung0809@gmail.com");
     }
 
     @Override
     public void UserSendEmail(String email) {
+        System.out.println("[UserServiceImp] Initiating email sending process for: " + email);
+        System.out.println("[UserServiceImp] Before generating OTP...");
         String otp = otputil.generateAndStore(email);
-        emailutil.send(email, "Verify Your Email Address - DevLearn", "Hello,\n"
-                + "\n"
-                + "Thank you for registering an account on DevLearn.\n"
-                + "\n"
-                + "To complete your registration, please use the verification code below:\n"
-                + "\n"
-                + "Your verification code:\n"
-                + otp
-                + "\n"
-                + "This code is valid for 5 minutes.\n"
-                + "Please do not share this code with anyone.\n"
-                + "\n"
-                + "Best regards,\n"
-                + "DevLearn Team\n");
+        System.out.println("[UserServiceImp] OTP successfully generated. Entering EmailUtil.send()...");
+
+        try {
+            emailutil.send(email, "Verify Your Email Address - DevLearn", "Hello,\n"
+                    + "\n"
+                    + "Thank you for registering an account on DevLearn.\n"
+                    + "\n"
+                    + "To complete your registration, please use the verification code below:\n"
+                    + "\n"
+                    + "Your verification code:\n"
+                    + otp
+                    + "\n"
+                    + "This code is valid for 5 minutes.\n"
+                    + "Please do not share this code with anyone.\n"
+                    + "\n"
+                    + "Best regards,\n"
+                    + "DevLearn Team\n");
+            System.out.println("[UserServiceImp] Email delivery process completed successfully for: " + email);
+        } catch (Exception e) {
+            System.err.println("[UserServiceImp] Fatal error caught during email delivery for: " + email);
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     @Override
@@ -420,7 +431,7 @@ public class UserServiceImp implements IUserService {
             }
             List<Object[]> results = em.createQuery(
                     "SELECT ur.userId.userId, ur.roleId.roleName FROM UserRole ur "
-                    + "WHERE ur.userId.userId IN :ids",
+                            + "WHERE ur.userId.userId IN :ids",
                     Object[].class)
                     .setParameter("ids", userIds)
                     .getResultList();

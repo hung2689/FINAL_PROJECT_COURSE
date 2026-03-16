@@ -72,4 +72,6 @@ public interface ICourseService {
         BigDecimal getMaxCoursePrice();
 
         public List<Course> findTopByCategoryId(int categoryId);
+
+        List<Course> getCoursePaging(int page, int size);
 }

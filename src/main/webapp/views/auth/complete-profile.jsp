@@ -44,12 +44,19 @@
                 -webkit-backdrop-filter: blur(12px);
                 border: 1px solid rgba(255, 255, 255, 0.3);
             }
+            @keyframes fadeInUp {
+                from { opacity: 0; transform: translateY(24px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            .animate-card {
+                animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+            }
         </style>
     </head>
     <body class="bg-background-light dark:bg-background-dark min-h-screen flex items-center justify-center p-6">
         <div class="w-full max-w-[640px]">
             <!-- Main Onboarding Card -->
-            <div class="glass-card rounded-xl shadow-2xl p-8 md:p-12 flex flex-col items-center">
+            <div class="glass-card rounded-xl shadow-2xl p-8 md:p-12 flex flex-col items-center animate-card">
                 <!-- Progress & Avatar -->
                 <div class="relative mb-8">
                     <div class="size-24 rounded-full p-1 ring-4 ring-primary ring-offset-2 overflow-hidden bg-white">

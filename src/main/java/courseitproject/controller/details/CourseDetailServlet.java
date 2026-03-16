@@ -5,6 +5,8 @@ import courseitproject.model.Role;
 import courseitproject.model.Users;
 import courseitproject.service.ICourseDetailService;
 import courseitproject.service.CourseDetailServiceImpl;
+import courseitproject.service.ICourseService;
+import courseitproject.service.CourseServiceImp;
 import courseitproject.service.IUserService;
 import courseitproject.service.UserServiceImp;
 import java.io.IOException;
@@ -15,16 +17,18 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-@WebServlet(name = "CourseDetailServlet", urlPatterns = {"/course-detail"})
+@WebServlet(name = "CourseDetailServlet", urlPatterns = { "/course-detail" })
 public class CourseDetailServlet extends HttpServlet {
 
     private ICourseDetailService courseDetailService;
     private IUserService userService;
+    private ICourseService courseService;
 
     @Override
     public void init() {
         userService = new UserServiceImp();
         courseDetailService = new CourseDetailServiceImpl();
+        courseService = new CourseServiceImp();
     }
 
     @Override
@@ -57,12 +61,12 @@ public class CourseDetailServlet extends HttpServlet {
             if (currentUser != null) {
                 for (Role r : userService.findRolesByUserId(currentUser.getUserId())) {
 
- 
                     if ("STUDENT".equals(r.getRoleName())) {
                         studentId = currentUser.getUserId();
                     }
 
-                    if ("ADMIN".equals(r.getRoleName()) || courseDetailService.isTeacherOfCourse(currentUser.getUserId(), courseId)) {
+                    if ("ADMIN".equals(r.getRoleName())
+                            || courseDetailService.isTeacherOfCourse(currentUser.getUserId(), courseId)) {
                         isEditAllowed = true;
                     }
                 }
@@ -78,6 +82,8 @@ public class CourseDetailServlet extends HttpServlet {
 
         request.setAttribute("isEditAllowed", isEditAllowed);
         request.setAttribute("courseDetail", dto);
+        request.setAttribute("enrolled", dto.isEnrolled());
+        request.setAttribute("moreCourses", courseService.getCoursePaging(1, 8));
 
         request.getRequestDispatcher("views/details/course-detail.jsp")
                 .forward(request, response);

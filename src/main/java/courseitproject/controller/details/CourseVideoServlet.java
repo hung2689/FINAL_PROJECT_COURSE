@@ -47,7 +47,7 @@ public class CourseVideoServlet extends HttpServlet {
 
         LessonResource currentResource = courseDetailService.getLessonResourceById(resourceId);
         if (currentResource == null) {
-               response.sendRedirect(request.getContextPath() + "/course-detail");
+            response.sendRedirect(request.getContextPath() + "/course-detail");
             return;
         }
 
@@ -56,16 +56,22 @@ public class CourseVideoServlet extends HttpServlet {
                 : currentResource.getLessonId().getSectionId().getCourseId().getCourseId();
 
         Integer studentId = null;
+        boolean isEditAllowed = false;
         HttpSession session = request.getSession(false);
         if (session != null) {
-            Users currentUser = (Users) session.getAttribute("user");
+            Users currentUser = (Users) session.getAttribute("USER");
             if (currentUser != null) {
                 boolean isStudent = false;
-                if (currentUser.getUserRoleCollection() != null) {
-                    for (UserRole ur : currentUser.getUserRoleCollection()) {
-                        if (ur.getRoleId() != null && "STUDENT".equals(ur.getRoleId().getRoleName())) {
+                courseitproject.service.IUserService userService = new courseitproject.service.UserServiceImp();
+                java.util.List<courseitproject.model.Role> roles = userService
+                        .findRolesByUserId(currentUser.getUserId());
+                if (roles != null) {
+                    for (courseitproject.model.Role r : roles) {
+                        if ("STUDENT".equalsIgnoreCase(r.getRoleName())) {
                             isStudent = true;
-                            break;
+                        }
+                        if ("ADMIN".equals(r.getRoleName()) || courseDetailService.isTeacherOfCourse(currentUser.getUserId(), courseId)) {
+                            isEditAllowed = true;
                         }
                     }
                 }
@@ -73,6 +79,21 @@ public class CourseVideoServlet extends HttpServlet {
                 if (isStudent) {
                     studentId = currentUser.getUserId();
                 }
+            }
+        }
+
+        request.setAttribute("isEditAllowed", isEditAllowed);
+
+        if (!isEditAllowed) {
+            if (studentId == null) {
+                response.sendRedirect(request.getContextPath() + "/course-detail?id=" + courseId);
+                return;
+            }
+
+            courseitproject.service.IEnrollmentService enrollmentService = new courseitproject.service.EnrollmentServiceImp();
+            if (!enrollmentService.isStudentEnrolled(studentId, courseId)) {
+                response.sendRedirect(request.getContextPath() + "/course-detail?id=" + courseId);
+                return;
             }
         }
 

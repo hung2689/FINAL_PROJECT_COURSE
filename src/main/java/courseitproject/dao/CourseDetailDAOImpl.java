@@ -1,4 +1,4 @@
-package courseitproject.dao.impl;
+package courseitproject.dao;
 
 import courseitproject.dao.ICourseDetailDAO;
 import courseitproject.dao.base.BaseDAO;
@@ -40,6 +40,13 @@ public class CourseDetailDAOImpl extends BaseDAO implements ICourseDetailDAO {
                     rQuery.setParameter("lessonId", lesson.getLessonId());
                     java.util.List<courseitproject.model.LessonResource> resources = rQuery.getResultList();
                     lesson.setLessonResourceCollection(resources);
+
+                    String assJpql = "SELECT a FROM Assignment a WHERE a.lessonId.lessonId = :lessonId";
+                    TypedQuery<courseitproject.model.Assignment> aQuery = em.createQuery(assJpql,
+                            courseitproject.model.Assignment.class);
+                    aQuery.setParameter("lessonId", lesson.getLessonId());
+                    java.util.List<courseitproject.model.Assignment> assignments = aQuery.getResultList();
+                    lesson.setAssignmentCollection(assignments);
                 }
                 section.setLessonCollection(lessons);
             }

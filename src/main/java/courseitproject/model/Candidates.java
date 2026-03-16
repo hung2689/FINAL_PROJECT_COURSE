@@ -10,6 +10,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
@@ -37,7 +39,8 @@ import java.util.Date;
     @NamedQuery(name = "Candidates.findBySkillsCount", query = "SELECT c FROM Candidates c WHERE c.skillsCount = :skillsCount"),
     @NamedQuery(name = "Candidates.findByProjectsCount", query = "SELECT c FROM Candidates c WHERE c.projectsCount = :projectsCount"),
     @NamedQuery(name = "Candidates.findByCvText", query = "SELECT c FROM Candidates c WHERE c.cvText = :cvText"),
-    @NamedQuery(name = "Candidates.findByCreatedAt", query = "SELECT c FROM Candidates c WHERE c.createdAt = :createdAt")})
+    @NamedQuery(name = "Candidates.findByCreatedAt", query = "SELECT c FROM Candidates c WHERE c.createdAt = :createdAt"),
+    @NamedQuery(name = "Candidates.findByInterviewTime", query = "SELECT c FROM Candidates c WHERE c.interviewTime = :interviewTime")})
 public class Candidates implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -68,6 +71,15 @@ public class Candidates implements Serializable {
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
+    @Column(name = "interview_time")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date interviewTime;
+    @JoinColumn(name = "job_id", referencedColumnName = "job_id")
+    @ManyToOne
+    private TeacherJob jobId;
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    @ManyToOne
+    private Users userId;
 
     public Candidates() {
     }
@@ -146,6 +158,30 @@ public class Candidates implements Serializable {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Date getInterviewTime() {
+        return interviewTime;
+    }
+
+    public void setInterviewTime(Date interviewTime) {
+        this.interviewTime = interviewTime;
+    }
+
+    public TeacherJob getJobId() {
+        return jobId;
+    }
+
+    public void setJobId(TeacherJob jobId) {
+        this.jobId = jobId;
+    }
+
+    public Users getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Users userId) {
+        this.userId = userId;
     }
 
     @Override

@@ -219,7 +219,6 @@ public class AutherServlet extends HttpServlet {
         String username = request.getParameter("username");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
-        String role = request.getParameter("role");
 
         if (userService.findUserByUsername(username) != null
                 || userService.findUserByEmail(email) != null) {
@@ -235,7 +234,6 @@ public class AutherServlet extends HttpServlet {
         session.setAttribute("REG_USERNAME", username);
         session.setAttribute("REG_EMAIL", email);
         session.setAttribute("REG_PASSWORD", password);
-        session.setAttribute("REG_ROLE", role);
 
         // chuyển trang OTP
         response.sendRedirect(request.getContextPath() + "/otpRegister");
@@ -267,7 +265,6 @@ public class AutherServlet extends HttpServlet {
         String fullname = (String) session.getAttribute("REG_FULLNAME");
         String username = (String) session.getAttribute("REG_USERNAME");
         String password = (String) session.getAttribute("REG_PASSWORD");
-        String role = (String) session.getAttribute("REG_ROLE");
 
         Users user = new Users();
         String hashedPwd = BCrypt.hashpw(password, BCrypt.gensalt());
@@ -285,17 +282,9 @@ public class AutherServlet extends HttpServlet {
         session.removeAttribute("REG_USERNAME");
         session.removeAttribute("REG_EMAIL");
         session.removeAttribute("REG_PASSWORD");
-        session.removeAttribute("REG_ROLE");
         try {
-            userService.register(user, role);
-            if ("TEACHER".equalsIgnoreCase(role)) {
-
-                // lưu user vào session để dùng ở bước tiếp
-                session.setAttribute("USER", user);
-
-                response.sendRedirect(request.getContextPath() + "/teacherRegister");
-                return;
-            }
+            // Mặc định tất cả tài khoản mới là STUDENT
+            userService.register(user, "STUDENT");
             request.setAttribute("registerSuccess", "true");
             request.getRequestDispatcher("/views/auth/registerOtp.jsp").forward(request, response);
         } catch (Exception e) {

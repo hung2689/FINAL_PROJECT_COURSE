@@ -207,20 +207,6 @@
                                 </button>
                             </div>
 
-                            <!-- Role Select - styled to match -->
-                            <div class="relative">
-                                <select required id="role" name="role"
-                                    class="glass-input peer appearance-none text-white pb-2 [&:not(:valid)]:text-transparent cursor-pointer">
-                                    <option value="" disabled selected class="text-zinc-900">Select Role</option>
-                                    <option value="STUDENT" class="text-zinc-900">Student</option>
-                                    <option value="TEACHER" class="text-zinc-900">Teacher</option>
-                                </select>
-                                <label for="role" class="floating-label !-translate-y-2 !text-xs !text-emerald-400">You
-                                    are joining as</label>
-                                <span
-                                    class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none">expand_more</span>
-                            </div>
-
                             <!-- Terms -->
                             <div class="flex items-start gap-3 pt-2">
                                 <div class="flex items-center h-5">

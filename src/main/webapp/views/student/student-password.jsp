@@ -21,6 +21,13 @@
                 .material-symbols-outlined {
                     font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
                 }
+                @keyframes fadeInUp {
+                    from { opacity: 0; transform: translateY(16px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+                .animate-card {
+                    animation: fadeInUp 0.5s ease-out backwards;
+                }
             </style>
         </head>
 
@@ -60,6 +67,11 @@
                                     <span class="material-symbols-outlined text-lg">menu_book</span>
                                     My Courses
                                 </a>
+                                <a href="${pageContext.request.contextPath}/student?action=billing"
+                                    class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors">
+                                    <span class="material-symbols-outlined text-lg">receipt_long</span>
+                                    Billing
+                                </a>
                             </nav>
                         </div>
                     </aside>
@@ -85,7 +97,7 @@
                                         </div>
                                     </c:if>
 
-                                    <div class="bg-white rounded-2xl shadow-sm border border-slate-100">
+                                    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 animate-card">
                                         <div class="px-8 py-6 border-b border-slate-100">
                                             <h1 class="text-xl font-bold text-slate-800">Change Password</h1>
                                             <p class="text-sm text-slate-400 mt-0.5">Keep your account secure with a

@@ -51,6 +51,8 @@ public class Users implements Serializable {
     @Column(name = "username")
     private String username;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
+    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
+    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
     @Size(max = 255)
     @Column(name = "email")
     private String email;
@@ -89,6 +91,8 @@ public class Users implements Serializable {
     private Teacher teacher;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "users")
     private Student student;
+    @OneToMany(mappedBy = "userId")
+    private Collection<Candidates> candidatesCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private Collection<UserRole> userRoleCollection;
 
@@ -173,6 +177,15 @@ public class Users implements Serializable {
     }
 
     @XmlTransient
+    public Collection<Candidates> getCandidatesCollection() {
+        return candidatesCollection;
+    }
+
+    public void setCandidatesCollection(Collection<Candidates> candidatesCollection) {
+        this.candidatesCollection = candidatesCollection;
+    }
+
+    @XmlTransient
     public Collection<UserRole> getUserRoleCollection() {
         return userRoleCollection;
     }
@@ -230,6 +243,9 @@ public class Users implements Serializable {
         this.password = password;
     }
 
+    
+
+  
     public String getStatus() {
         return status;
     }
@@ -246,5 +262,9 @@ public class Users implements Serializable {
         this.provider = provider;
     }
 
+  
+   
+
+   
     
 }

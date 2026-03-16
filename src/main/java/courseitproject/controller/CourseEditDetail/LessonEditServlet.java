@@ -55,13 +55,18 @@ public class LessonEditServlet extends HttpServlet {
                 int sectionId = Integer.parseInt(request.getParameter("section_id"));
                 String title = request.getParameter("title");
                 Section section = new Section(sectionId);
-                // Assume course ID is passed or available, for simplicty proxying here
                 String courseIdStr = request.getParameter("course_id");
                 if (courseIdStr != null) {
                     section.setCourseId(new Course(Integer.parseInt(courseIdStr)));
                 }
 
-                int orderIndex = lessonDAO.getNextOrderIndex(section.getSectionId());
+                String orderIndexStr = request.getParameter("order_index");
+                int orderIndex;
+                if (orderIndexStr != null && !orderIndexStr.isEmpty()) {
+                    orderIndex = Integer.parseInt(orderIndexStr);
+                } else {
+                    orderIndex = lessonDAO.getNextOrderIndex(section.getSectionId());
+                }
 
                 Lesson newLesson = lessonDAO.create(section, title, orderIndex);
 
@@ -69,6 +74,7 @@ public class LessonEditServlet extends HttpServlet {
                     jsonResponse.addProperty("status", "success");
                     jsonResponse.addProperty("lesson_id", newLesson.getLessonId());
                     jsonResponse.addProperty("title", newLesson.getTitle());
+                    jsonResponse.addProperty("order_index", newLesson.getOrderIndex());
                 } else {
                     jsonResponse.addProperty("status", "error");
                     jsonResponse.addProperty("message", "Failed to create lesson.");

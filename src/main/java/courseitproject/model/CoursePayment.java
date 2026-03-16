@@ -1,4 +1,7 @@
- 
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package courseitproject.model;
 
 import jakarta.persistence.Basic;
@@ -14,13 +17,16 @@ import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
- 
+
+/**
+ *
+ * @author ASUS
+ */
 @Entity
 @Table(name = "CoursePayment")
 @XmlRootElement
@@ -41,17 +47,15 @@ public class CoursePayment implements Serializable {
     @Column(name = "payment_id")
     private Integer paymentId;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "amount")
     private BigDecimal amount;
-    @Size(max = 50)
+    @Size(max = 255)
     @Column(name = "payment_method")
     private String paymentMethod;
-    @Size(max = 100)
+    @Size(max = 255)
     @Column(name = "vnp_txn_ref")
     private String vnpTxnRef;
-    @Size(max = 50)
+    @Size(max = 255)
     @Column(name = "status")
     private String status;
     @Column(name = "created_at")
@@ -66,11 +70,6 @@ public class CoursePayment implements Serializable {
 
     public CoursePayment(Integer paymentId) {
         this.paymentId = paymentId;
-    }
-
-    public CoursePayment(Integer paymentId, BigDecimal amount) {
-        this.paymentId = paymentId;
-        this.amount = amount;
     }
 
     public Integer getPaymentId() {
@@ -153,5 +152,5 @@ public class CoursePayment implements Serializable {
     public String toString() {
         return "courseitproject.model.CoursePayment[ paymentId=" + paymentId + " ]";
     }
- 
+    
 }

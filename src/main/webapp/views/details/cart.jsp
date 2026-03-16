@@ -39,6 +39,22 @@
                     .toggle-checkbox:checked+.toggle-label {
                         background-color: #10B981;
                     }
+
+                    @keyframes fadeInUp {
+                        from {
+                            opacity: 0;
+                            transform: translateY(24px);
+                        }
+                        to {
+                            opacity: 1;
+                            transform: translateY(0);
+                        }
+                    }
+                    .animate-card {
+                        animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+                    }
+                    .animate-delay-1 { animation-delay: 0.08s; }
+                    .animate-delay-2 { animation-delay: 0.18s; }
                 </style>
             </head>
 
@@ -49,12 +65,12 @@
                 <main class="flex-grow pt-[120px] pb-20">
                     <div class="max-w-[1200px] mx-auto px-6 lg:px-12">
 
-                        <h1 class="text-3xl font-black tracking-tight mb-8">Shopping Cart</h1>
+                        <h1 class="text-3xl font-black tracking-tight mb-8 animate-card">Shopping Cart</h1>
                         <c:set var="totalPrice" value="0" />
 
                         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-                            <div class="lg:col-span-2 space-y-6">
+                            <div class="lg:col-span-2 space-y-6 animate-card animate-delay-1">
                                 <c:choose>
                                     <c:when test="${empty sessionScope.cart or sessionScope.cart.size() == 0}">
                                         <div
@@ -162,7 +178,7 @@
                                 </c:choose>
                             </div>
 
-                            <div class="lg:col-span-1">
+                            <div class="lg:col-span-1 animate-card animate-delay-2">
                                 <div
                                     class="sticky top-[120px] bg-white p-6 rounded-2xl border border-emerald-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
                                     <div class="flex justify-between items-end mb-6 pb-6 border-b border-slate-100">

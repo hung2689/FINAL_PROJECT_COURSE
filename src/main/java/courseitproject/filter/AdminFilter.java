@@ -16,7 +16,8 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-@WebFilter(filterName = "AdminFilter", urlPatterns = {"/courseAdmin", "/userAdmin", "/admin/users"})
+@WebFilter(filterName = "AdminFilter", urlPatterns = {"/courseAdmin", "/userAdmin", "/admin/users",
+    "/candidatesAdmin   ", "/transactionAdmin", "/admin/transaction-detail"})
 public class AdminFilter implements Filter {
 
     private IUserService userService;
@@ -28,8 +29,8 @@ public class AdminFilter implements Filter {
 
     @Override
     public void doFilter(jakarta.servlet.ServletRequest request,
-                         jakarta.servlet.ServletResponse response,
-                         FilterChain chain) throws IOException, ServletException {
+            jakarta.servlet.ServletResponse response,
+            FilterChain chain) throws IOException, ServletException {
 
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;

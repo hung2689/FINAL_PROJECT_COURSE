@@ -1,4 +1,7 @@
- 
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package courseitproject.model;
 
 import jakarta.persistence.Basic;
@@ -16,7 +19,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlTransient;
@@ -25,7 +27,10 @@ import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
 
- 
+/**
+ *
+ * @author ASUS
+ */
 @Entity
 @Table(name = "CourseOrder")
 @XmlRootElement
@@ -45,14 +50,12 @@ public class CourseOrder implements Serializable {
     @Column(name = "order_id")
     private Integer orderId;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "total_amount")
     private BigDecimal totalAmount;
-    @Size(max = 50)
+    @Size(max = 255)
     @Column(name = "status")
     private String status;
-    @Size(max = 100)
+    @Size(max = 255)
     @Column(name = "vnp_txn_ref")
     private String vnpTxnRef;
     @Column(name = "created_at")
@@ -61,8 +64,7 @@ public class CourseOrder implements Serializable {
     @JoinColumn(name = "student_id", referencedColumnName = "student_id")
     @ManyToOne(optional = false)
     private Student studentId;
-     @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderId")
- 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderId")
     private Collection<CourseOrderItem> courseOrderItemCollection;
 
     public CourseOrder() {
@@ -70,11 +72,6 @@ public class CourseOrder implements Serializable {
 
     public CourseOrder(Integer orderId) {
         this.orderId = orderId;
-    }
-
-    public CourseOrder(Integer orderId, BigDecimal totalAmount) {
-        this.orderId = orderId;
-        this.totalAmount = totalAmount;
     }
 
     public Integer getOrderId() {
@@ -158,5 +155,5 @@ public class CourseOrder implements Serializable {
     public String toString() {
         return "courseitproject.model.CourseOrder[ orderId=" + orderId + " ]";
     }
- 
+    
 }

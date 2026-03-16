@@ -22,7 +22,7 @@ import jakarta.servlet.http.HttpServletResponse;
  *
  * @author ASUS
  */
-@WebFilter(filterName = "BlockJsp", urlPatterns = {"/*"})
+@WebFilter(filterName = "BlockJsp", urlPatterns = {"/*"}, asyncSupported = true)
 public class BlockJsp implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain)

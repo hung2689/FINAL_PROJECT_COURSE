@@ -1,7 +1,13 @@
 // Toggles edit mode on the body
 function toggleEditMode() {
-    document.body.classList.toggle('edit-mode');
+    const isEditMode = document.body.classList.toggle('edit-mode');
+    localStorage.setItem('courseEditMode', isEditMode ? 'true' : 'false');
+    updateEditModeBtn();
+}
+
+function updateEditModeBtn() {
     const btn = document.getElementById('toggleEditModeBtn');
+    if (!btn) return;
     if (document.body.classList.contains('edit-mode')) {
         btn.classList.replace('bg-emerald-100', 'bg-red-100');
         btn.classList.replace('text-emerald-700', 'text-red-700');
@@ -12,6 +18,14 @@ function toggleEditMode() {
         btn.innerHTML = '<span class="material-symbols-outlined text-[16px]">edit</span> Edit Mode';
     }
 }
+
+// Restore Edit Mode on Page Load
+document.addEventListener('DOMContentLoaded', () => {
+    if (localStorage.getItem('courseEditMode') === 'true') {
+        document.body.classList.add('edit-mode');
+        updateEditModeBtn();
+    }
+});
 
 // Convert a title span to an input field
 function makeEditable(element, type, id) {
@@ -188,7 +202,124 @@ function createResourceHTML(id, title, url, type, contextPath) {
     `;
 }
 
-// Add Section — show inline input
+// === Custom Position Dropdown Helper ===
+function createPosDropdownHTML(count, selectedVal, label) {
+    let items = '';
+    for (let i = 1; i <= count; i++) {
+        const sel = (i === selectedVal) ? 'selected' : '';
+        items += `
+            <div class="pos-dropdown-item ${sel}" data-value="${i}">
+                <span class="pos-item-num">${i}</span>
+                <span>Position ${i}</span>
+                <span class="material-symbols-outlined pos-item-check">check</span>
+            </div>`;
+    }
+    return `
+        <div class="pos-dropdown" data-value="${selectedVal}">
+            <div class="pos-dropdown-toggle">
+                <span class="pos-icon"><span class="material-symbols-outlined" style="font-size:14px">swap_vert</span></span>
+                <span class="pos-label">${label} <small>#${selectedVal}</small></span>
+                <span class="material-symbols-outlined pos-arrow">expand_more</span>
+            </div>
+            <div class="pos-dropdown-menu">${items}</div>
+        </div>`;
+}
+
+// Global active menu tracker to close previous dropdown automatically
+let activePosMenuCloseFn = null;
+
+function initPosDropdown(dropdownEl) {
+    const toggle = dropdownEl.querySelector('.pos-dropdown-toggle');
+    const menu = dropdownEl.querySelector('.pos-dropdown-menu');
+    const labelEl = dropdownEl.querySelector('.pos-label');
+    const labelText = labelEl.textContent.split('#')[0].trim();
+
+    // Move menu to body to avoid overflow hidden issues from parent elements
+    document.body.appendChild(menu);
+
+    const closeMenu = () => {
+        menu.classList.remove('open');
+        toggle.classList.remove('active');
+        document.removeEventListener('click', outsideClickListener);
+        document.removeEventListener('scroll', scrollListener, true);
+        window.removeEventListener('resize', scrollListener);
+        if (activePosMenuCloseFn === closeMenu) activePosMenuCloseFn = null;
+    };
+
+    const outsideClickListener = (e) => {
+        if (!toggle.contains(e.target) && !menu.contains(e.target)) {
+            closeMenu();
+        }
+    };
+
+    const scrollListener = (e) => {
+        // Only close if scrolling outside the menu
+        if (menu.contains(e.target)) return;
+        closeMenu();
+    };
+
+    const openMenu = () => {
+        if (activePosMenuCloseFn && activePosMenuCloseFn !== closeMenu) {
+            activePosMenuCloseFn();
+        }
+
+        const rect = toggle.getBoundingClientRect();
+        menu.style.position = 'fixed';
+        menu.style.top = `${rect.bottom + 6}px`;
+        menu.style.left = `${rect.left}px`;
+        menu.style.width = `${rect.width}px`;
+        menu.style.zIndex = '999999';
+        
+        menu.classList.add('open');
+        toggle.classList.add('active');
+        activePosMenuCloseFn = closeMenu;
+
+        // Add listeners after a timeout to prevent catching the current event or immediate layout shift
+        setTimeout(() => {
+            document.addEventListener('click', outsideClickListener);
+            document.addEventListener('scroll', scrollListener, true);
+            window.addEventListener('resize', scrollListener);
+        }, 10);
+    };
+
+    // Prevent focus loss from input when clicking the toggle
+    toggle.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+    });
+
+    toggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        if (menu.classList.contains('open')) {
+            closeMenu();
+        } else {
+            openMenu();
+        }
+    });
+
+    menu.querySelectorAll('.pos-dropdown-item').forEach(item => {
+        // Prevent focus loss when clicking items
+        item.addEventListener('mousedown', (e) => e.preventDefault());
+
+        item.addEventListener('click', (e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            const val = item.getAttribute('data-value');
+            dropdownEl.setAttribute('data-value', val);
+            
+            menu.querySelectorAll('.pos-dropdown-item').forEach(i => i.classList.remove('selected'));
+            item.classList.add('selected');
+            
+            labelEl.innerHTML = `${labelText} <small>#${val}</small>`;
+            closeMenu();
+        });
+    });
+
+    return menu;
+}
+
+// Add Section — show inline input with position selector
 function addSection() {
     const addBtn = document.getElementById('addSectionBtn');
     if (!addBtn)
@@ -196,10 +327,19 @@ function addSection() {
     if (addBtn.parentElement.querySelector('.inline-add-input'))
         return;
 
+    // Count existing sections to build position options
+    const spaceY4Container = addBtn.closest('.space-y-4');
+    const allDetailGroups = document.querySelectorAll('details.group').length;
+    const existingSections = spaceY4Container ? spaceY4Container.querySelectorAll(':scope > details.group').length : allDetailGroups;
+    const nextPos = existingSections + 1;
+
+    const dropdownHTML = createPosDropdownHTML(nextPos, nextPos, 'Section');
+
     const wrapper = document.createElement('div');
     wrapper.className = 'inline-add-input mt-4 flex justify-center w-full';
     wrapper.innerHTML = `
         <div class="flex flex-col sm:flex-row items-center gap-3 w-full max-w-xl">
+            ${dropdownHTML}
             <input type="text" placeholder="Enter new section title..."
                 class="w-full sm:flex-1 h-11 border border-slate-300 rounded-lg px-4 text-sm text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 shadow-sm transition-all" autofocus>
             <button type="button" class="submit-section-btn w-full sm:w-auto h-11 shrink-0 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold text-sm px-6 rounded-lg shadow-sm transition-colors flex items-center justify-center gap-2">
@@ -210,7 +350,16 @@ function addSection() {
     addBtn.parentElement.insertBefore(wrapper, addBtn);
     const input = wrapper.querySelector('input');
     const submitBtn = wrapper.querySelector('.submit-section-btn');
+    const posDropdown = wrapper.querySelector('.pos-dropdown');
+    const menuEl = initPosDropdown(posDropdown);
     input.focus();
+
+    // Clean up detached menu when wrapper is removed
+    const originalRemove = wrapper.remove;
+    wrapper.remove = function() {
+        if (menuEl && menuEl.parentNode) menuEl.parentNode.removeChild(menuEl);
+        originalRemove.call(this);
+    };
 
     async function submitSection() {
         const title = input.value.trim();
@@ -220,11 +369,14 @@ function addSection() {
         }
 
         input.disabled = true;
+        posDropdown.style.pointerEvents = 'none';
+        posDropdown.style.opacity = '0.6';
 
         const body = new URLSearchParams();
         body.append('action', 'create');
         body.append('course_id', window.COURSE_ID);
         body.append('title', title);
+        body.append('order_index', posDropdown.getAttribute('data-value'));
 
         try {
             const response = await fetch((window.CONTEXT_PATH || '') + '/sectionAdmin', {
@@ -234,19 +386,13 @@ function addSection() {
             });
             const result = await response.json();
             if (result.status === 'success') {
-
-                const sectionId = result.section_id;
-                const orderIndex = result.order_index;
-
-                const sectionHtml = createSectionHTML(sectionId, title, orderIndex);
-                const sectionContainer = document.createElement('div');
-                sectionContainer.innerHTML = sectionHtml;
-
-                addBtn.parentElement.parentElement.insertBefore(sectionContainer.firstElementChild, addBtn.parentElement);
                 wrapper.remove();
+                await refreshCourseContent();
             } else {
                 alert('Error creating section: ' + (result.message || 'Unknown error'));
                 input.disabled = false;
+                posDropdown.style.pointerEvents = '';
+                posDropdown.style.opacity = '';
                 input.focus();
             }
         } catch (error) {
@@ -255,7 +401,6 @@ function addSection() {
             wrapper.remove();
         }
     }
-
     submitBtn.addEventListener('click', submitSection);
     input.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
@@ -265,15 +410,18 @@ function addSection() {
             wrapper.remove();
         }
     });
+    
+    // Using setTimeout to check if focus moved completely outside our wrapper
     input.addEventListener('blur', () => {
         setTimeout(() => {
-            if (document.body.contains(wrapper))
+            if (document.body.contains(wrapper) && !wrapper.contains(document.activeElement) && !menuEl.classList.contains('open')) {
                 wrapper.remove();
-        }, 200);
+            }
+        }, 150);
     });
 }
 
-// Add Lesson — show inline input
+// Add Lesson — show inline input with position selector
 function addLesson(sectionId) {
     const btn = event.currentTarget;
     const container = btn.closest('.edit-only');
@@ -282,10 +430,19 @@ function addLesson(sectionId) {
     if (container.querySelector('.inline-add-input'))
         return;
 
+    // Count existing lessons in this section
+    const details = container.closest('details');
+    const ul = details ? details.querySelector('ul.lesson-list, ul.space-y-4') : null;
+    const existingLessons = ul ? ul.querySelectorAll(':scope > li').length : 0;
+    const nextPos = existingLessons + 1;
+
+    const dropdownHTML = createPosDropdownHTML(nextPos, nextPos, 'Lesson');
+
     const wrapper = document.createElement('div');
     wrapper.className = 'inline-add-input mt-3 flex justify-center w-full';
     wrapper.innerHTML = `
         <div class="flex flex-col sm:flex-row items-center gap-3 w-full max-w-xl">
+            ${dropdownHTML}
             <input type="text" placeholder="Enter new lesson title..."
                 class="w-full sm:flex-1 h-10 border border-slate-300 rounded-lg px-4 text-sm text-slate-900 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 shadow-sm transition-all" autofocus>
             <button type="button" class="submit-lesson-btn w-full sm:w-auto h-10 shrink-0 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold text-sm px-5 rounded-lg shadow-sm transition-colors flex items-center justify-center gap-2">
@@ -296,7 +453,16 @@ function addLesson(sectionId) {
     container.insertBefore(wrapper, btn);
     const input = wrapper.querySelector('input');
     const submitBtn = wrapper.querySelector('.submit-lesson-btn');
+    const posDropdown = wrapper.querySelector('.pos-dropdown');
+    const menuEl = initPosDropdown(posDropdown);
     input.focus();
+
+    // Clean up detached menu
+    const originalRemove = wrapper.remove;
+    wrapper.remove = function() {
+        if (menuEl && menuEl.parentNode) menuEl.parentNode.removeChild(menuEl);
+        originalRemove.call(this);
+    };
 
     async function submitLesson() {
         const title = input.value.trim();
@@ -306,12 +472,15 @@ function addLesson(sectionId) {
         }
 
         input.disabled = true;
+        posDropdown.style.pointerEvents = 'none';
+        posDropdown.style.opacity = '0.6';
 
         const body = new URLSearchParams();
         body.append('action', 'create');
         body.append('course_id', window.COURSE_ID);
         body.append('section_id', sectionId);
         body.append('title', title);
+        body.append('order_index', posDropdown.getAttribute('data-value'));
 
         try {
             const response = await fetch((window.CONTEXT_PATH || '') + '/lessonAdmin', {
@@ -321,24 +490,13 @@ function addLesson(sectionId) {
             });
             const result = await response.json();
             if (result.status === 'success') {
-                const lessonId = result.lesson_id || new Date().getTime();
-                const lessonHtml = createLessonHTML(lessonId, title);
-                const liContainer = document.createElement('div');
-                liContainer.innerHTML = lessonHtml;
-
-                const details = container.closest('details');
-                let ul = details.querySelector('ul');
-                if (!ul) {
-                    ul = document.createElement('ul');
-                    ul.className = 'space-y-4 mt-4';
-                    container.parentElement.insertBefore(ul, container);
-                }
-
-                ul.appendChild(liContainer.firstElementChild);
                 wrapper.remove();
+                await refreshCourseContent();
             } else {
                 alert('Error creating lesson: ' + (result.message || 'Unknown error'));
                 input.disabled = false;
+                posDropdown.style.pointerEvents = '';
+                posDropdown.style.opacity = '';
                 input.focus();
             }
         } catch (error) {
@@ -357,11 +515,14 @@ function addLesson(sectionId) {
             wrapper.remove();
         }
     });
+    
+    // Using setTimeout to check if focus moved completely outside our wrapper
     input.addEventListener('blur', () => {
         setTimeout(() => {
-            if (document.body.contains(wrapper))
+            if (document.body.contains(wrapper) && !wrapper.contains(document.activeElement) && !menuEl.classList.contains('open')) {
                 wrapper.remove();
-        }, 200);
+            }
+        }, 150);
     });
 }
 
@@ -440,6 +601,10 @@ async function saveResourceEdit(resourceId) {
     } catch (error) {
         console.error('Error:', error);
         alert('Request failed');
+        // If an error occurs during save, it's best to refresh the content
+        // or at least revert the form, as the state might be inconsistent.
+        // For now, just alert and let the user retry or refresh manually.
+        // If we want to refresh, we'd call await refreshCourseContent(); here.
     }
 }
 
@@ -456,16 +621,25 @@ function showAddResourceForm(btn, type) {
     formWrapper.innerHTML = `
         <div class="flex flex-col gap-2 p-3 bg-slate-50 border border-emerald-200 rounded-lg w-full shadow-sm">
             <div class="flex items-center gap-2 mb-1">
-                <span class="material-symbols-outlined text-[16px] text-[#10B981]">${type === 'video' ? 'play_circle' : 'menu_book'}</span>
+                <span class="material-symbols-outlined text-[16px] text-[#10B981]">${type === 'video' ? 'play_circle' : (type === 'document' ? 'menu_book' : 'terminal')}</span>
                 <span class="text-xs font-bold text-slate-700 uppercase tracking-wide">New ${type}</span>
             </div>
-            <input type="text" id="new-res-title" placeholder="${type === 'video' ? 'Video' : 'Document'} Title..."
+            <input type="text" id="new-res-title" placeholder="${type === 'video' ? 'Video' : (type === 'document' ? 'Document' : 'Assignment')} Title..."
                 class="border border-emerald-300 rounded px-3 py-1.5 text-sm text-slate-900 w-full focus:outline-none focus:ring-2 focus:ring-emerald-500" autofocus>
+            
+            ${type !== 'assignment' ? `
             <input type="text" id="new-res-url" placeholder="Resource URL..."
                 class="border border-emerald-300 rounded px-3 py-1.5 text-sm text-slate-900 w-full focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            ` : `
+            <textarea id="new-res-desc" placeholder="Assignment Description..." class="border border-emerald-300 rounded px-3 py-1.5 text-sm text-slate-900 w-full focus:outline-none focus:ring-2 focus:ring-emerald-500" rows="2"></textarea>
+            <textarea id="new-res-reqs" placeholder="Assignment Requirements / Criteria..." class="border border-emerald-300 rounded px-3 py-1.5 text-sm text-slate-900 w-full focus:outline-none focus:ring-2 focus:ring-emerald-500" rows="2"></textarea>
+            <textarea id="new-res-output" placeholder="Expected Output..." class="border border-emerald-300 rounded px-3 py-1.5 text-sm text-slate-900 w-full focus:outline-none focus:ring-2 focus:ring-emerald-500" rows="2"></textarea>
+            <input type="text" id="new-res-files" placeholder="File Extensions (e.g. .java, .cpp)" class="border border-emerald-300 rounded px-3 py-1.5 text-sm text-slate-900 w-full focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            `}
+
             <div class="flex justify-end gap-2 mt-2">
                 <button type="button" class="cancel-res-btn text-xs text-slate-600 hover:text-slate-900 font-medium px-3 py-1.5 rounded transition-colors">Cancel</button>
-                <button type="button" class="submit-res-btn text-xs bg-emerald-500 text-white font-bold rounded px-4 py-1.5 hover:bg-emerald-600 shadow-sm transition-colors">Add ${type === 'video' ? 'Video' : 'Doc'}</button>
+                <button type="button" class="submit-res-btn text-xs bg-emerald-500 text-white font-bold rounded px-4 py-1.5 hover:bg-emerald-600 shadow-sm transition-colors">Add ${type === 'video' ? 'Video' : (type === 'document' ? 'Doc' : 'Task')}</button>
             </div>
         </div>
     `;
@@ -477,72 +651,110 @@ function showAddResourceForm(btn, type) {
 
     async function submitAddResource() {
         const title = titleInput.value.trim();
-        const url = urlInput.value.trim();
-        if (!title || !url)
-            return;
-
-        titleInput.disabled = true;
-        urlInput.disabled = true;
-
+        
         const body = new URLSearchParams();
         body.append('action', 'create');
         body.append('lesson_id', lessonId);
         body.append('title', title);
-        body.append('url', url);
-        body.append('resource_type', type);
+
+        let endpoint = '/resourceAdmin';
+
+        if (type === 'assignment') {
+            const desc = formWrapper.querySelector('#new-res-desc').value.trim();
+            const reqs = formWrapper.querySelector('#new-res-reqs').value.trim();
+            const output = formWrapper.querySelector('#new-res-output').value.trim();
+            const files = formWrapper.querySelector('#new-res-files').value.trim();
+            
+            if (!title) return;
+            body.append('description', desc);
+            body.append('criteria', reqs);
+            body.append('expected_output', output);
+            body.append('file_extensions', files);
+            endpoint = '/assignmentAdmin';
+        } else {
+            const url = urlInput ? urlInput.value.trim() : '';
+            if (!title || !url) return;
+            body.append('url', url);
+            body.append('resource_type', type);
+        }
+
+        const btn = formWrapper.querySelector('.submit-res-btn');
+        btn.disabled = true;
+        btn.innerText = 'Adding...';
 
         try {
-            const response = await fetch((window.CONTEXT_PATH || '') + '/resourceAdmin', {
+            const response = await fetch((window.CONTEXT_PATH || '') + endpoint, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: body
             });
             const result = await response.json();
             if (result.status === 'success') {
-                const resourceId = result.resource_id || new Date().getTime();
-
-                const resHtml = createResourceHTML(resourceId, title, url, type, window.CONTEXT_PATH || '');
-                const tempDiv = document.createElement('div');
-                tempDiv.innerHTML = resHtml;
-
-                toolbar.parentElement.insertBefore(tempDiv.firstElementChild, toolbar);
-
-                // Keep form open
-                titleInput.value = '';
-                urlInput.value = '';
-                titleInput.disabled = false;
-                urlInput.disabled = false;
-                titleInput.focus();
+                await refreshCourseContent();
             } else {
-                alert('Error creating resource: ' + (result.message || 'Unknown error'));
-                titleInput.disabled = false;
-                urlInput.disabled = false;
+                alert('Error creating ' + type + ': ' + (result.message || 'Unknown error'));
             }
         } catch (error) {
             console.error('Error:', error);
             alert('Request failed');
-            titleInput.disabled = false;
-            urlInput.disabled = false;
+        } finally {
+            if (btn) {
+                btn.disabled = false;
+                btn.innerText = 'Add ' + type;
+            }
         }
     }
 
     formWrapper.querySelector('.cancel-res-btn').addEventListener('click', () => formWrapper.remove());
     formWrapper.querySelector('.submit-res-btn').addEventListener('click', submitAddResource);
 
-    urlInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            submitAddResource();
-        } else if (e.key === 'Escape') {
-            formWrapper.remove();
-        }
-    });
+    if (urlInput) {
+        urlInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                submitAddResource();
+            } else if (e.key === 'Escape') {
+                formWrapper.remove();
+            }
+        });
+    }
+
     titleInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
             e.preventDefault();
-            urlInput.focus();
+            if (urlInput) {
+                urlInput.focus();
+            } else {
+                submitAddResource();
+            }
         } else if (e.key === 'Escape') {
             formWrapper.remove();
         }
     });
+
+}
+
+// Reload course content DOM dynamically via HTML partial fetch without full page reload
+async function refreshCourseContent() {
+    try {
+        const response = await fetch(window.location.href);
+        if (!response.ok) throw new Error("Fetch failed");
+        
+        const html = await response.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        
+        const currentContent = document.getElementById('course-content-area');
+        const newContent = doc.getElementById('course-content-area');
+        
+        if (currentContent && newContent) {
+            currentContent.innerHTML = newContent.innerHTML;
+        } else {
+            console.warn("Could not find course-content-area, falling back to reload.");
+            window.location.reload();
+        }
+    } catch (e) {
+        console.error("Failed to refresh course content", e);
+        window.location.reload();
+    }
 }

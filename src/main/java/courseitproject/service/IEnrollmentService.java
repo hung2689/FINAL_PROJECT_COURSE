@@ -9,4 +9,6 @@ public interface IEnrollmentService {
     List<Enrollment> getEnrollmentsByStudent(int studentId, int offset, int limit);
 
     int countEnrollmentsByStudent(int studentId);
+
+    boolean isStudentEnrolled(int studentId, int courseId);
 }

@@ -1,4 +1,4 @@
-package courseitproject.dto;
+    package courseitproject.dto;
 
 import courseitproject.model.Lesson;
 import courseitproject.model.LessonResource;

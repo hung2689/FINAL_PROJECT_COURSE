@@ -207,7 +207,8 @@
                                             class="slider-track flex gap-6 transition-transform duration-500 ease-in-out">
                                             <c:forEach var="c" items="${FREE}">
                                                 <div
-                                                    class="group w-[280px] lg:w-[calc(25%-18px)] flex-shrink-0 snap-start flex flex-col bg-white rounded-[2rem] overflow-hidden border border-emerald-100 hover:border-emerald-400/50 hover:shadow-[0_20px_40px_-15px_rgba(16,185,129,0.2)] transition-all duration-300">
+                                                    class="group w-[280px] lg:w-[calc(25%-18px)] flex-shrink-0 snap-start flex flex-col bg-white rounded-[2rem] overflow-hidden border border-emerald-100 hover:border-emerald-400/50 hover:shadow-[0_20px_40px_-15px_rgba(16,185,129,0.2)] transition-all duration-300 cursor-pointer"
+                                                    onclick="window.location.href = '${pageContext.request.contextPath}/course-detail?id=${c.courseId}'">
                                                     <div class="aspect-[16/10] overflow-hidden relative">
                                                         <img alt="Frontend"
                                                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
@@ -243,7 +244,7 @@
                                                             class="flex mt-auto items-center justify-between pt-2 border-t border-slate-100">
                                                             <span
                                                                 class="text-xl font-black text-emerald-400">$${c.price}</span>
-                                                            <button
+                                                            <button onclick="event.stopPropagation();"
                                                                 class="group/cart p-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 transition-all duration-300 hover:bg-emerald-500/20 hover:border-emerald-400 active:scale-90">
                                                                 <span
                                                                     class="material-symbols-outlined text-primary text-xl transition-all duration-300">shopping_cart</span>
@@ -289,7 +290,8 @@
                                             class="slider-track flex gap-6 transition-transform duration-500 ease-in-out">
                                             <c:forEach var="c" items="${SOFT}">
                                                 <div
-                                                    class="group w-[280px] lg:w-[calc(25%-18px)] flex-shrink-0 snap-start flex flex-col bg-white rounded-[2rem] overflow-hidden border border-emerald-100 hover:border-emerald-400/50 hover:shadow-[0_20px_40px_-15px_rgba(16,185,129,0.2)] transition-all duration-300">
+                                                    class="group w-[280px] lg:w-[calc(25%-18px)] flex-shrink-0 snap-start flex flex-col bg-white rounded-[2rem] overflow-hidden border border-emerald-100 hover:border-emerald-400/50 hover:shadow-[0_20px_40px_-15px_rgba(16,185,129,0.2)] transition-all duration-300 cursor-pointer"
+                                                    onclick="window.location.href = '${pageContext.request.contextPath}/course-detail?id=${c.courseId}'">
                                                     <div class="aspect-[16/10] overflow-hidden relative">
                                                         <img alt="Frontend"
                                                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
@@ -325,7 +327,7 @@
                                                             class="flex mt-auto items-center justify-between pt-2 border-t border-slate-100">
                                                             <span
                                                                 class="text-xl font-black text-emerald-400">$${c.price}</span>
-                                                            <button
+                                                            <button onclick="event.stopPropagation();"
                                                                 class="group/cart p-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 transition-all duration-300 hover:bg-emerald-500/20 hover:border-emerald-400 active:scale-90">
                                                                 <span
                                                                     class="material-symbols-outlined text-primary text-xl transition-all duration-300">shopping_cart</span>
@@ -371,7 +373,8 @@
                                             class="slider-track flex gap-6 transition-transform duration-500 ease-in-out">
                                             <c:forEach var="c" items="${MATH}">
                                                 <div
-                                                    class="group w-[280px] lg:w-[calc(25%-18px)] flex-shrink-0 snap-start flex flex-col bg-white rounded-[2rem] overflow-hidden border border-emerald-100 hover:border-emerald-400/50 hover:shadow-[0_20px_40px_-15px_rgba(16,185,129,0.2)] transition-all duration-300">
+                                                    class="group w-[280px] lg:w-[calc(25%-18px)] flex-shrink-0 snap-start flex flex-col bg-white rounded-[2rem] overflow-hidden border border-emerald-100 hover:border-emerald-400/50 hover:shadow-[0_20px_40px_-15px_rgba(16,185,129,0.2)] transition-all duration-300 cursor-pointer"
+                                                    onclick="window.location.href = '${pageContext.request.contextPath}/course-detail?id=${c.courseId}'">
                                                     <div class="aspect-[16/10] overflow-hidden relative">
                                                         <img alt="Frontend"
                                                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
@@ -407,7 +410,7 @@
                                                             class="flex mt-auto items-center justify-between pt-2 border-t border-slate-100">
                                                             <span
                                                                 class="text-xl font-black text-emerald-400">$${c.price}</span>
-                                                            <button
+                                                            <button onclick="event.stopPropagation();"
                                                                 class="group/cart p-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 transition-all duration-300 hover:bg-emerald-500/20 hover:border-emerald-400 active:scale-90">
                                                                 <span
                                                                     class="material-symbols-outlined text-primary text-xl transition-all duration-300">shopping_cart</span>
@@ -453,7 +456,8 @@
                                             class="slider-track flex gap-6 transition-transform duration-500 ease-in-out">
                                             <c:forEach var="c" items="${FOREIGN}">
                                                 <div
-                                                    class="group w-[280px] lg:w-[calc(25%-18px)] flex-shrink-0 snap-start flex flex-col bg-white rounded-[2rem] overflow-hidden border border-emerald-100 hover:border-emerald-400/50 hover:shadow-[0_20px_40px_-15px_rgba(16,185,129,0.2)] transition-all duration-300">
+                                                    class="group w-[280px] lg:w-[calc(25%-18px)] flex-shrink-0 snap-start flex flex-col bg-white rounded-[2rem] overflow-hidden border border-emerald-100 hover:border-emerald-400/50 hover:shadow-[0_20px_40px_-15px_rgba(16,185,129,0.2)] transition-all duration-300 cursor-pointer"
+                                                    onclick="window.location.href = '${pageContext.request.contextPath}/course-detail?id=${c.courseId}'">
                                                     <div class="aspect-[16/10] overflow-hidden relative">
                                                         <img alt="Frontend"
                                                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
@@ -489,7 +493,7 @@
                                                             class="flex mt-auto items-center justify-between pt-2 border-t border-slate-100">
                                                             <span
                                                                 class="text-xl font-black text-emerald-400">$${c.price}</span>
-                                                            <button
+                                                            <button onclick="event.stopPropagation();"
                                                                 class="group/cart p-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 transition-all duration-300 hover:bg-emerald-500/20 hover:border-emerald-400 active:scale-90">
                                                                 <span
                                                                     class="material-symbols-outlined text-primary text-xl transition-all duration-300">shopping_cart</span>

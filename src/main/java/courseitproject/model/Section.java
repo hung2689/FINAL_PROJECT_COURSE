@@ -41,12 +41,6 @@ import java.util.Date;
     @NamedQuery(name = "Section.findByCreatedAt", query = "SELECT s FROM Section s WHERE s.createdAt = :createdAt")})
 public class Section implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "section_id")
-    private Integer sectionId;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
@@ -56,6 +50,13 @@ public class Section implements Serializable {
     @NotNull
     @Column(name = "order_index")
     private int orderIndex;
+
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "section_id")
+    private Integer sectionId;
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
@@ -86,13 +87,6 @@ public class Section implements Serializable {
         this.sectionId = sectionId;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
 
     public int getOrderIndex() {
         return orderIndex;
@@ -151,5 +145,16 @@ public class Section implements Serializable {
     public String toString() {
         return "courseitproject.model.Section[ sectionId=" + sectionId + " ]";
     }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     
+
+  
 }

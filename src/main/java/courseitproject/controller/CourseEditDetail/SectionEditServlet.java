@@ -50,10 +50,15 @@ public class SectionEditServlet extends HttpServlet {
             if ("create".equals(action)) {
                 String courseIdStr = request.getParameter("course_id");
                 String title = request.getParameter("title");
-                Course course = new Course(Integer.parseInt(courseIdStr)); // Proxy course object
-                // In a real app we might get the max order index here, we'll dummy it to 999
-                // for now
-                int orderIndex = sectionDAO.getNextOrderIndex(course.getCourseId());
+                Course course = new Course(Integer.parseInt(courseIdStr));
+
+                String orderIndexStr = request.getParameter("order_index");
+                int orderIndex;
+                if (orderIndexStr != null && !orderIndexStr.isEmpty()) {
+                    orderIndex = Integer.parseInt(orderIndexStr);
+                } else {
+                    orderIndex = sectionDAO.getNextOrderIndex(course.getCourseId());
+                }
                 Section newSection = sectionDAO.create(course, title, orderIndex);
 
                 if (newSection != null) {

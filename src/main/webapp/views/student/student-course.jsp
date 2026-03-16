@@ -13,6 +13,17 @@
         body { font-family: 'Inter', sans-serif; }
         .course-card { transition: transform 0.3s ease; }
         .course-card:hover { transform: translateY(-4px); }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-card {
+            animation: fadeInUp 0.5s ease-out backwards;
+        }
+        .animate-card:nth-child(2) { animation-delay: 0.08s; }
+        .animate-card:nth-child(3) { animation-delay: 0.16s; }
+        .animate-card:nth-child(4) { animation-delay: 0.24s; }
+        .animate-card:nth-child(5) { animation-delay: 0.32s; }
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen text-slate-800">
@@ -51,6 +62,10 @@
                         <span class="material-symbols-outlined text-lg">menu_book</span>
                         My Courses
                     </a>
+                    <a href="${pageContext.request.contextPath}/student?action=billing" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors">
+                        <span class="material-symbols-outlined text-lg">receipt_long</span>
+                        Billing
+                    </a>
                 </nav>
             </div>
         </aside>
@@ -85,7 +100,7 @@
                 <c:otherwise>
                     <div class="space-y-4">
                         <c:forEach var="e" items="${enrollments}">
-                            <div class="course-card bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex gap-6 items-start">
+                            <div class="course-card animate-card bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex gap-6 items-start">
                                 
                                 <%-- THUMBNAIL (Cột trái - vuông vắn giống mẫu) --%>
                                 <div class="w-32 h-32 bg-slate-100 rounded-xl overflow-hidden flex-shrink-0 border border-slate-100">

@@ -7,6 +7,15 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <style>
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-card {
+            animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+    </style>
 </head>
 <body class="bg-[#0F172A] font-['Inter'] text-white flex flex-col min-h-screen relative overflow-hidden">
 
@@ -15,7 +24,7 @@
     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#10B981]/20 rounded-full blur-[120px] -z-10 pointer-events-none"></div>
 
     <main class="flex-1 flex justify-center items-center px-6 pt-[120px] pb-20 z-10">
-        <div class="bg-[#0B1120]/80 backdrop-blur-xl border border-white/10 rounded-3xl p-10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)] max-w-[480px] w-full text-center transform transition-all hover:scale-[1.02] duration-500">
+        <div class="bg-[#0B1120]/80 backdrop-blur-xl border border-white/10 rounded-3xl p-10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)] max-w-[480px] w-full text-center transform transition-all hover:scale-[1.02] duration-500 animate-card">
             
             <div class="w-24 h-24 bg-gradient-to-tr from-[#059669] to-[#34d399] rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_30px_rgba(16,185,129,0.4)]">
                 <span class="material-symbols-outlined text-[48px] text-white" style="font-variation-settings: 'wght' 700;">check</span>

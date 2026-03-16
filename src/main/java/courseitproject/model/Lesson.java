@@ -38,18 +38,21 @@ import java.util.Collection;
     @NamedQuery(name = "Lesson.findByOrderIndex", query = "SELECT l FROM Lesson l WHERE l.orderIndex = :orderIndex")})
 public class Lesson implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "lesson_id")
-    private Integer lessonId;
     @Size(max = 255)
     @Column(name = "title")
     private String title;
     @Size(max = 255)
     @Column(name = "content")
     private String content;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "lessonId")
+    private Collection<Assignment> assignmentCollection;
+
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "lesson_id")
+    private Integer lessonId;
     @Column(name = "order_index")
     private Integer orderIndex;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "lessonId")
@@ -80,21 +83,6 @@ public class Lesson implements Serializable {
         this.lessonId = lessonId;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
 
     public Integer getOrderIndex() {
         return orderIndex;
@@ -170,6 +158,32 @@ public class Lesson implements Serializable {
     @Override
     public String toString() {
         return "courseitproject.model.Lesson[ lessonId=" + lessonId + " ]";
+    }
+
+
+    @XmlTransient
+    public Collection<Assignment> getAssignmentCollection() {
+        return assignmentCollection;
+    }
+
+    public void setAssignmentCollection(Collection<Assignment> assignmentCollection) {
+        this.assignmentCollection = assignmentCollection;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
     
 }

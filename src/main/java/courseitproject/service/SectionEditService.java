@@ -45,6 +45,12 @@ public class SectionEditService extends GenericDAO<Section> {
         section.setOrderIndex(orderIndex);
         try {
             tx.begin();
+
+            em.createQuery("UPDATE Section s SET s.orderIndex = s.orderIndex + 1 WHERE s.courseId.courseId = :cid AND s.orderIndex >= :idx")
+              .setParameter("cid", course.getCourseId())
+              .setParameter("idx", orderIndex)
+              .executeUpdate();
+
             em.persist(section);
             tx.commit();
             return section;

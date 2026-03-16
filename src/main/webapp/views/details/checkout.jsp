@@ -9,11 +9,22 @@
         <script src="https://cdn.tailwindcss.com"></script>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+        <style>
+            @keyframes fadeInUp {
+                from { opacity: 0; transform: translateY(24px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            .animate-card {
+                animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+            }
+            .animate-delay-1 { animation-delay: 0.1s; }
+            .animate-delay-2 { animation-delay: 0.2s; }
+        </style>
     </head>
     <body class="bg-[#0F172A] font-['Inter'] text-white flex flex-col min-h-screen relative">
         <jsp:include page="../common/header.jsp" />
         <main class="flex-1 pt-[120px] pb-20 flex justify-center items-center">
-            <div class="max-w-[500px] w-full px-6">
+            <div class="max-w-[500px] w-full px-6 animate-card">
 
                 <div class="bg-white/5 border border-white/10 rounded-xl p-4 mb-6 text-center">
                     <p class="text-lg font-bold">Total Amount: <fmt:formatNumber value="${finalTotal}" pattern="#,###"/> VNĐ</p>

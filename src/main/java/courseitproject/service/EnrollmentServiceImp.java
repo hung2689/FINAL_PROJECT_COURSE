@@ -71,6 +71,28 @@ public class EnrollmentServiceImp implements IEnrollmentService {
         }
     }
 
+    // ===============================
+    // CHECK ENROLLMENT
+    // ===============================
+    @Override
+    public boolean isStudentEnrolled(int studentId, int courseId) {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            Long count = em.createQuery(
+                    "SELECT COUNT(e) FROM Enrollment e "
+                            + "WHERE e.studentId.studentId = :sid "
+                            + "AND e.courseId.courseId = :cid",
+                    Long.class)
+                    .setParameter("sid", studentId)
+                    .setParameter("cid", courseId)
+                    .getSingleResult();
+
+            return count != null && count > 0;
+        } finally {
+            em.close();
+        }
+    }
+
     // ==================================================
     // ENROLL SINGLE COURSE (BUY NOW)
     // ==================================================

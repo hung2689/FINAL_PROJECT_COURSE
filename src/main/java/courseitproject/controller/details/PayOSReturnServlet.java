@@ -53,6 +53,13 @@ public class PayOSReturnServlet extends HttpServlet {
             // Check Idempotency: Ignore if it's already PAID
             if (order != null && !"PAID".equals(order.getStatus())) {
 
+                // Create Payment Record
+                orderService.createPayment(
+                        orderId,
+                        order.getTotalAmount(),
+                        "PAYOS",
+                        "SUCCESS");
+
                 // Update Order Status
                 orderService.updateStatus(orderId, "PAID");
 
