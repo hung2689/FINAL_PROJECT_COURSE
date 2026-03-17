@@ -113,31 +113,23 @@ public class CourseDetailServiceImpl implements ICourseDetailService {
                 List<Lesson> sortedLessons = section.getLessonCollection().stream()
                         .sorted(Comparator.comparingInt(Lesson::getOrderIndex))
                         .toList();
-
-                for (Lesson lesson : sortedLessons) {
-
-                    stats[0]++; // totalLessons
-
-                    List<LessonResource> resources = new ArrayList<>();
-
-                    if (lesson.getLessonResourceCollection() != null) {
-
-                        resources.addAll(lesson.getLessonResourceCollection());
-
-                        for (Lesson resLesson : sortedLessons) {
-                            for (LessonResource res : resLesson.getLessonResourceCollection()) {
-
-                                if ("VIDEO".equalsIgnoreCase(res.getResourceType())
-                                        && res.getDuration() != null) {
-
-                                    stats[1] += res.getDuration(); // totalDuration
-                                }
-                            }
-                        }
-                    }
-
-                    lessonDTOs.add(new LessonDTO(lesson, resources));
-                }
+for (Lesson lesson : sortedLessons) {
+    stats[0]++; // totalLessons
+    List<LessonResource> resources = new ArrayList<>();
+    
+    if (lesson.getLessonResourceCollection() != null) {
+        resources.addAll(lesson.getLessonResourceCollection());
+        
+        // CHỈ lặp qua tài nguyên của bài học HIỆN TẠI
+        for (LessonResource res : lesson.getLessonResourceCollection()) {
+            if ("VIDEO".equalsIgnoreCase(res.getResourceType()) && res.getDuration() != null) {
+                stats[1] += res.getDuration(); // totalDuration
+            }
+        }
+    }
+    lessonDTOs.add(new LessonDTO(lesson, resources));
+}
+        
             }
 
             sectionDTOs.add(new SectionDTO(section, lessonDTOs));

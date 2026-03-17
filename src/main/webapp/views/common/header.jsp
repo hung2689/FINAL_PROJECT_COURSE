@@ -35,9 +35,8 @@
                    href="${pageContext.request.contextPath}/shop">Courses</a>
                 <a class="text-[15px] font-medium text-white/80 hover:text-[#10B981] transition-colors duration-300"
                    href="#">Learning Paths</a>
-                <a class="text-[15px] font-medium text-white/80 hover:text-[#10B981] transition-colors duration-300"
-                   href="#">Community</a>
-                <div class="relative group">
+             
+           <div class="relative group z-50">
                     <button type="button"
                             class="text-[15px] font-medium text-white/80 hover:text-[#10B981] transition-colors duration-300 inline-flex items-center gap-1">
                         About DevLearn
@@ -45,15 +44,17 @@
                     </button>
                     <div
                             class="absolute left-0 mt-2 w-56 rounded-xl bg-slate-900/95 border border-white/10 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-                        <a href="#"
-                           class="block px-4 py-2 text-sm text-white/80 hover:bg-slate-800 hover:text-[#10B981]">About
-                            Company</a>
+                        
+                     
+                            
+                        <a href="${pageContext.request.contextPath}/mentors"
+                           class="block px-4 py-2 text-sm text-white/80 hover:bg-slate-800 hover:text-[#10B981]">Our
+                            Mentors</a>
+
                         <a href="${pageContext.request.contextPath}/teacher-jobs"
                            class="block px-4 py-2 text-sm text-white/80 hover:bg-slate-800 hover:text-[#10B981]">Teacher
                             Recruitment</a>
-                        <a href="#"
-                           class="block px-4 py-2 text-sm text-white/80 hover:bg-slate-800 hover:text-[#10B981]">DevLearn
-                            News</a>
+
                     </div>
                 </div>
             </nav>

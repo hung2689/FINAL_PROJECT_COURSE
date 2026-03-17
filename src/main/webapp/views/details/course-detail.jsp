@@ -753,21 +753,34 @@
                                                             <span class="text-xs font-bold text-gray-500">4.8
                                                                 (1.2k)</span>
                                                         </div>
-                                                        <div
-                                                            class="flex mt-auto items-center justify-between pt-2 border-t border-slate-100">
-                                                            <span
-                                                                class="text-xl font-black text-emerald-400">
-                                                                <c:choose>
-                                                                    <c:when test="${c.price == 0}">Free</c:when>
-                                                                    <c:otherwise>$<fmt:formatNumber value="${c.price}" maxFractionDigits="2" /></c:otherwise>
-                                                                </c:choose>
-                                                            </span>
-                                                            <button onclick="event.stopPropagation();"
-                                                                class="group/cart p-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 transition-all duration-300 hover:bg-emerald-500/20 hover:border-emerald-400 active:scale-90">
-                                                                <span
-                                                                    class="material-symbols-outlined text-[#10B981] text-xl transition-all duration-300">shopping_cart</span>
-                                                            </button>
-                                                        </div>
+                                                    <div class="flex mt-auto items-center justify-between pt-3 border-t border-slate-100">
+    <span class="text-xl font-black text-emerald-400">
+        <c:choose>
+            <c:when test="${c.price <= 0.20}">Free</c:when>
+            <c:otherwise>$<fmt:formatNumber value="${c.price}" minFractionDigits="2" maxFractionDigits="2" /></c:otherwise>
+        </c:choose>
+    </span>
+    
+    <c:choose>
+        <%-- Nếu là khóa Free (<= 0.20) -> Hiện nút Join --%>
+        <c:when test="${c.price <= 0.20 || empty c.price}">
+            <button type="button" onclick="enrollFreeCourseAjax(event, this, ${c.courseId});"
+                class="group/cart px-4 py-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 transition-all duration-300 hover:bg-emerald-500/20 hover:border-emerald-400 active:scale-90 font-bold text-primary">
+                Join
+            </button>
+        </c:when>
+        
+        <%-- Nếu là khóa có phí -> Hiện nút Giỏ hàng --%>
+        <c:otherwise>
+            <button type="button" onclick="addToCartAjax(event, this, ${c.courseId});"
+                class="group/cart p-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 transition-all duration-300 hover:bg-emerald-500/20 hover:border-emerald-400 active:scale-90 flex items-center justify-center">
+                <span class="material-symbols-outlined text-primary text-lg">shopping_cart</span>
+            </button>
+        </c:otherwise>
+    </c:choose>
+</div>
+                                                        
+                                                        
                                                     </div>
                                                 </div>
                                             </c:forEach>
@@ -1783,7 +1796,7 @@
                             });
                         });
                     </script>
-
+ <jsp:include page="../common/footer.jsp" />
                     <jsp:include page="../common/userbuttom.jsp" />
 
                 </body>
