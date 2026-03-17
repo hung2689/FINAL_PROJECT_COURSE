@@ -132,7 +132,7 @@
                                                         </div>
                                                         <span class="text-lg font-black text-slate-900">
                                                             <c:choose>
-                                                                <c:when test="${course.price eq 0}">Free</c:when>
+                                                                <c:when test="${course.price == null || course.price <= 0}">Free</c:when>
                                                                 <c:otherwise>$
                                                                     <fmt:formatNumber value="${course.price}"
                                                                         minFractionDigits="2" maxFractionDigits="2" />
@@ -276,7 +276,7 @@
                                                             <div>
                                                                 <p class="text-primary font-black text-lg">
                                                                     <c:choose>
-                                                                        <c:when test="${sc.price eq 0}">Free</c:when>
+                                                                        <c:when test="${sc.price == null || sc.price <= 0}">Free</c:when>
                                                                         <c:otherwise>$
                                                                             <fmt:formatNumber value="${sc.price}"
                                                                                 minFractionDigits="2"

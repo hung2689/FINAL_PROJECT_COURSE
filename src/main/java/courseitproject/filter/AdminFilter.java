@@ -17,7 +17,7 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebFilter(filterName = "AdminFilter", urlPatterns = {"/courseAdmin", "/userAdmin", "/admin/users",
-    "/candidatesAdmin   ", "/transactionAdmin", "/admin/transaction-detail"})
+    "/candidatesAdmin   ", "/transactionAdmin", "/admin/transaction-detail", "/jobAdmin"})
 public class AdminFilter implements Filter {
 
     private IUserService userService;

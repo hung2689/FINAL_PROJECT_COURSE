@@ -1,75 +1,58 @@
-You are a senior full-stack developer. I need you to refactor both frontend and backend logic for a course platform.
+You are a senior frontend developer.
 
-==================== REQUIREMENTS ====================
+Build a modern Admin Dashboard chart using React + Tailwind + Recharts.
 
-1. FREE COURSES UI CHANGE
-- If a course is FREE (price = 0):
-  - DO NOT show "Add to Cart" button or cart icon
-  - Instead, show a button with text:
-    → "Join" (if user has NOT enrolled)
-    → "Enrolled" (if user ALREADY enrolled)
+=====================
+FEATURE: LOGIN ACTIVITY (LAST 7 DAYS)
+=====================
 
-2. BUTTON BEHAVIOR
-- When user clicks "Join":
-  - Call API to enroll the user into the course
-  - Immediately update UI to "Enrolled"
-  - Disable the button after enrolled
+Create a responsive Line Chart showing student login activity for the last 7 days.
 
-3. ENROLLMENT LOGIC (BACKEND)
-- Create an enrollment when user clicks Join
-- Prevent duplicate enrollment
-- Return status:
-    {
-      enrolled: true
-    }
+REQUIREMENTS:
 
-4. DATABASE
-- Ensure there is a table:
-  Enrollment(user_id, course_id, created_at)
+1. CHART TITLE
+- "Student Login Activity (Last 7 Days)"
 
-- Add unique constraint:
-  (user_id, course_id) must be unique
+2. DATA FORMAT
+Use mock data like:
+[
+  { date: "Mon", users: 120 },
+  { date: "Tue", users: 98 },
+  { date: "Wed", users: 150 },
+  { date: "Thu", users: 200 },
+  { date: "Fri", users: 170 },
+  { date: "Sat", users: 90 },
+  { date: "Sun", users: 60 }
+]
 
-5. API DESIGN
-- POST /api/courses/{courseId}/enroll
-    → Enroll current user
+3. CHART DESIGN
+- Use LineChart from Recharts
+- Smooth line (type="monotone")
+- Add dots on each point
+- Tooltip on hover
+- Grid lines (light)
+- ResponsiveContainer
 
-- GET /api/courses/{courseId}/enrollment-status
-    → Return:
-      {
-        enrolled: true/false
-      }
+4. AXIS
+- X-axis: Day (Mon → Sun)
+- Y-axis: Number of students
 
-6. FRONTEND LOGIC (IMPORTANT)
-- On course load:
-  → Call enrollment-status API
-  → If enrolled = true → show "Enrolled"
-  → Else → show "Join"
+5. STYLE
+- Clean modern dashboard style
+- Rounded card container
+- Soft shadow
+- Padding
 
-- Button states:
-  - Join → clickable
-  - Enrolled → disabled
+6. BONUS
+- Add dropdown filter:
+  - "Today"
+  - "Last 7 Days"
+  - "Last 30 Days"
 
-7. NON-FREE COURSES
-- Keep existing logic:
-  - Show price
-  - Show Add to Cart button
+7. COMPONENT STRUCTURE
+- Create component: LoginChart.jsx
+- Export default component
 
-8. TECH STACK
-- Backend: Java (Spring Boot)
-- Frontend: JSP / Servlet / or React (detect and adapt)
-- Use clean, production-ready code
-
-9. EXTRA
-- Handle loading state when clicking Join
-- Handle API errors gracefully
-
-==================== OUTPUT ====================
-
-Provide:
-1. Backend Controller + Service + Repository
-2. SQL table + constraint
-3. Frontend code (JSP or React depending on context)
-4. Clear explanation of logic
-
-Make sure code is clean, complete, and ready to use.
+8. OUTPUT
+- Return full React component code
+- No explanation

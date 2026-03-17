@@ -315,7 +315,7 @@
                                                             class="flex mt-auto items-center justify-between pt-3 border-t border-slate-100">
                                                             <span class="text-xl font-black text-emerald-400">
                                                                 <c:choose>
-                                                                    <c:when test="${c.price eq 0}">Free</c:when>
+                                                                    <c:when test="${c.price == null || c.price <= 0}">Free</c:when>
                                                                     <c:otherwise>$
                                                                         <fmt:formatNumber value="${c.price}"
                                                                                           minFractionDigits="2"
@@ -325,7 +325,7 @@
                                                             </span>
                                                             <%-- Action Button: Add to Cart (non-free) or Join/Enrolled (free) --%>
                                                             <c:choose>
-                                                                <c:when test="${c.price eq 0}">
+                                                                <c:when test="${c.price == null || c.price <= 0}">
                                                                     <button type="button"
                                                                             onclick="event.stopPropagation(); handleEnrollment(this, ${c.courseId}, ${sessionScope.USER != null})"
                                                                             class="free-course-btn hidden px-4 py-2.5 font-bold text-sm bg-emerald-500 text-white rounded-xl hover:bg-emerald-600 transition-all shadow-md shadow-emerald-500/20 active:scale-95"

@@ -139,7 +139,7 @@
                                                             <p
                                                                 class="text-[#10B981] font-bold text-[14px]">
                                                                 <c:choose>
-                                                                    <c:when test="${c.price eq 0}">Free
+                                                                    <c:when test="${c.price == null || c.price <= 0}">Free
                                                                     </c:when>
                                                                     <c:otherwise>$
                                                                         <fmt:formatNumber
