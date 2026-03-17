@@ -53,7 +53,7 @@ public class CourseVideoServlet extends HttpServlet {
 
         int courseId = currentResource.getLessonId().getCourseId() != null
                 ? currentResource.getLessonId().getCourseId().getCourseId()
-                : currentResource.getLessonId().getSectionId().getCourseId().getCourseId();
+                : currentResource.getLessonId().getSectionId().getCourseId();
 
         Integer studentId = null;
         boolean isEditAllowed = false;

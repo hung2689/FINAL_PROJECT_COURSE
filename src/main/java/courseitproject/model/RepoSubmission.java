@@ -49,12 +49,13 @@ public class RepoSubmission implements Serializable {
     @Basic(optional = false)
     @Column(name = "submission_id")
     private Integer submissionId;
-    @Size(max = 500)
+    @Size(max = 255)
     @Column(name = "github_url")
     private String githubUrl;
     @Column(name = "score")
     private Integer score;
-    @Column(name = "feedback", columnDefinition = "NVARCHAR(MAX)")
+    @Size(max = 2147483647)
+    @Column(name = "feedback", columnDefinition = "nvarchar(MAX)")
     private String feedback;
     @Size(max = 255)
     @Column(name = "status")
@@ -62,14 +63,14 @@ public class RepoSubmission implements Serializable {
     @Column(name = "submitted_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date submittedAt;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "submissionId")
-    private Collection<RepoFileAnalysis> repoFileAnalysisCollection;
     @JoinColumn(name = "assignment_id", referencedColumnName = "assignment_id")
     @ManyToOne(optional = false)
     private Assignment assignmentId;
     @JoinColumn(name = "student_id", referencedColumnName = "student_id")
     @ManyToOne(optional = false)
     private Student studentId;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "submissionId")
+    private Collection<RepoFileAnalysis> repoFileAnalysisCollection;
 
     public RepoSubmission() {
     }
@@ -126,15 +127,6 @@ public class RepoSubmission implements Serializable {
         this.submittedAt = submittedAt;
     }
 
-    @XmlTransient
-    public Collection<RepoFileAnalysis> getRepoFileAnalysisCollection() {
-        return repoFileAnalysisCollection;
-    }
-
-    public void setRepoFileAnalysisCollection(Collection<RepoFileAnalysis> repoFileAnalysisCollection) {
-        this.repoFileAnalysisCollection = repoFileAnalysisCollection;
-    }
-
     public Assignment getAssignmentId() {
         return assignmentId;
     }
@@ -149,6 +141,15 @@ public class RepoSubmission implements Serializable {
 
     public void setStudentId(Student studentId) {
         this.studentId = studentId;
+    }
+
+    @XmlTransient
+    public Collection<RepoFileAnalysis> getRepoFileAnalysisCollection() {
+        return repoFileAnalysisCollection;
+    }
+
+    public void setRepoFileAnalysisCollection(Collection<RepoFileAnalysis> repoFileAnalysisCollection) {
+        this.repoFileAnalysisCollection = repoFileAnalysisCollection;
     }
 
     @Override

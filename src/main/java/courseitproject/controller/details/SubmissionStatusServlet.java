@@ -66,6 +66,8 @@ public class SubmissionStatusServlet extends HttpServlet {
 
         EntityManager em = JPAUtil.getEntityManager();
         try {
+            // Force fresh read from DB (not from Hibernate cache)
+            em.clear();
             RepoSubmission submission = submissionDAO.findById(em, submissionId);
 
             if (submission == null) {

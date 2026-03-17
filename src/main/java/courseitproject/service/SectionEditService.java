@@ -19,7 +19,7 @@ public class SectionEditService extends GenericDAO<Section> {
         try {
 
             Integer max = em.createQuery(
-                    "SELECT MAX(s.orderIndex) FROM Section s WHERE s.courseId.courseId = :cid",
+                    "SELECT MAX(s.orderIndex) FROM Section s WHERE s.courseId = :cid",
                     Integer.class)
                     .setParameter("cid", courseId)
                     .getSingleResult();
@@ -40,13 +40,13 @@ public class SectionEditService extends GenericDAO<Section> {
         EntityManager em = JPAUtil.getEntityManager();
         EntityTransaction tx = em.getTransaction();
         Section section = new Section();
-        section.setCourseId(course);
+        section.setCourseId(course.getCourseId());
         section.setTitle(title);
         section.setOrderIndex(orderIndex);
         try {
             tx.begin();
 
-            em.createQuery("UPDATE Section s SET s.orderIndex = s.orderIndex + 1 WHERE s.courseId.courseId = :cid AND s.orderIndex >= :idx")
+            em.createQuery("UPDATE Section s SET s.orderIndex = s.orderIndex + 1 WHERE s.courseId = :cid AND s.orderIndex >= :idx")
               .setParameter("cid", course.getCourseId())
               .setParameter("idx", orderIndex)
               .executeUpdate();

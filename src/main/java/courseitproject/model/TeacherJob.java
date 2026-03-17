@@ -49,6 +49,12 @@ import java.util.Date;
     @NamedQuery(name = "TeacherJob.findByJobCategory", query = "SELECT t FROM TeacherJob t WHERE t.jobCategory = :jobCategory")})
 public class TeacherJob implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "job_id")
+    private Integer jobId;
     @Size(max = 255)
     @Column(name = "title")
     private String title;
@@ -61,12 +67,23 @@ public class TeacherJob implements Serializable {
     @Size(max = 255)
     @Column(name = "job_type")
     private String jobType;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "salary_min")
+    private BigDecimal salaryMin;
+    @Column(name = "salary_max")
+    private BigDecimal salaryMax;
     @Size(max = 255)
     @Column(name = "salary_unit")
     private String salaryUnit;
     @Size(max = 255)
     @Column(name = "status")
     private String status;
+    @Column(name = "created_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
+    @Column(name = "updated_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updatedAt;
     @Size(max = 255)
     @Column(name = "requirements")
     private String requirements;
@@ -78,24 +95,6 @@ public class TeacherJob implements Serializable {
     private String jobCategory;
     @OneToMany(mappedBy = "jobId")
     private Collection<Candidates> candidatesCollection;
-
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "job_id")
-    private Integer jobId;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(name = "salary_min")
-    private BigDecimal salaryMin;
-    @Column(name = "salary_max")
-    private BigDecimal salaryMax;
-    @Column(name = "created_at")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createdAt;
-    @Column(name = "updated_at")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date updatedAt;
 
     public TeacherJob() {
     }
@@ -112,6 +111,29 @@ public class TeacherJob implements Serializable {
         this.jobId = jobId;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
 
     public String getJobType() {
         return jobType;
@@ -145,6 +167,13 @@ public class TeacherJob implements Serializable {
         this.salaryUnit = salaryUnit;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public Date getCreatedAt() {
         return createdAt;
@@ -162,6 +191,21 @@ public class TeacherJob implements Serializable {
         this.updatedAt = updatedAt;
     }
 
+    public String getRequirements() {
+        return requirements;
+    }
+
+    public void setRequirements(String requirements) {
+        this.requirements = requirements;
+    }
+
+    public String getBenefits() {
+        return benefits;
+    }
+
+    public void setBenefits(String benefits) {
+        this.benefits = benefits;
+    }
 
     public String getJobCategory() {
         return jobCategory;
@@ -169,6 +213,15 @@ public class TeacherJob implements Serializable {
 
     public void setJobCategory(String jobCategory) {
         this.jobCategory = jobCategory;
+    }
+
+    @XmlTransient
+    public Collection<Candidates> getCandidatesCollection() {
+        return candidatesCollection;
+    }
+
+    public void setCandidatesCollection(Collection<Candidates> candidatesCollection) {
+        this.candidatesCollection = candidatesCollection;
     }
 
     @Override
@@ -194,67 +247,6 @@ public class TeacherJob implements Serializable {
     @Override
     public String toString() {
         return "courseitproject.model.TeacherJob[ jobId=" + jobId + " ]";
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-   
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getRequirements() {
-        return requirements;
-    }
-
-    public void setRequirements(String requirements) {
-        this.requirements = requirements;
-    }
-
-    public String getBenefits() {
-        return benefits;
-    }
-
-    public void setBenefits(String benefits) {
-        this.benefits = benefits;
-    }
-
-  
-
-    @XmlTransient
-    public Collection<Candidates> getCandidatesCollection() {
-        return candidatesCollection;
-    }
-
-    public void setCandidatesCollection(Collection<Candidates> candidatesCollection) {
-        this.candidatesCollection = candidatesCollection;
     }
     
 }

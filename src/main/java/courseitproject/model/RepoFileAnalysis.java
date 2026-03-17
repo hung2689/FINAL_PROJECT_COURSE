@@ -41,9 +41,10 @@ public class RepoFileAnalysis implements Serializable {
     @Column(name = "file_id")
     private Integer fileId;
     @Size(max = 500)
-    @Column(name = "file_name", length = 500)
+    @Column(name = "file_name")
     private String fileName;
-    @Column(name = "summary", columnDefinition = "NVARCHAR(MAX)")
+    @Size(max = 2147483647)
+    @Column(name = "summary", columnDefinition = "nvarchar(MAX)")
     private String summary;
     @Column(name = "ai_score")
     private Integer aiScore;

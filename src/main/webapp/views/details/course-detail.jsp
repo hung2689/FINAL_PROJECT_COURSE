@@ -1635,7 +1635,7 @@
                             _pollingTimer = setInterval(async () => {
                                 try {
                                     console.log('Polling status for submissionId:', submissionId);
-                                    const resp = await fetch('${pageContext.request.contextPath}/submissionStatus?id=' + submissionId);
+                                    const resp = await fetch(`${pageContext.request.contextPath}/submissionStatus?id=` + submissionId);
                                     const data = await resp.json();
                                     
                                     console.log('Poll response:', data);

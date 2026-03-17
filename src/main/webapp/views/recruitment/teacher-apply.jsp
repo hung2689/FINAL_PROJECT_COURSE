@@ -1,5 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -162,17 +163,38 @@
                             <div class="prose prose-slate max-w-none prose-headings:font-black prose-headings:text-slate-900 prose-a:text-teal-600 prose-li:marker:text-teal-500">
                                 <c:if test="${not empty job.description}">
                                     <h3 class="font-black text-slate-900 text-lg uppercase mb-4">Job Description</h3>
-                                    ${job.description}
+                                    <ul class="list-disc pl-5 space-y-2 mb-8 text-slate-600">
+                                        <c:forEach var="item" items="${fn:split(job.description, '-')}">
+                                            <c:set var="trimmed" value="${fn:trim(item)}" />
+                                            <c:if test="${fn:length(trimmed) > 0}">
+                                                <li>${trimmed}</li>
+                                            </c:if>
+                                        </c:forEach>
+                                    </ul>
                                 </c:if>
 
                                 <c:if test="${not empty job.requirements}">
                                     <h3 class="font-black text-slate-900 text-lg uppercase mb-4 mt-8">Job Requirements</h3>
-                                    ${job.requirements}
+                                    <ul class="list-disc pl-5 space-y-2 mb-8 text-slate-600">
+                                        <c:forEach var="item" items="${fn:split(job.requirements, '-')}">
+                                            <c:set var="trimmed" value="${fn:trim(item)}" />
+                                            <c:if test="${fn:length(trimmed) > 0}">
+                                                <li>${trimmed}</li>
+                                            </c:if>
+                                        </c:forEach>
+                                    </ul>
                                 </c:if>
 
                                 <c:if test="${not empty job.benefits}">
                                     <h3 class="font-black text-slate-900 text-lg uppercase mb-4 mt-8">Benefits</h3>
-                                    ${job.benefits}
+                                    <ul class="list-disc pl-5 space-y-2 text-slate-600">
+                                        <c:forEach var="item" items="${fn:split(job.benefits, '-')}">
+                                            <c:set var="trimmed" value="${fn:trim(item)}" />
+                                            <c:if test="${fn:length(trimmed) > 0}">
+                                                <li>${trimmed}</li>
+                                            </c:if>
+                                        </c:forEach>
+                                    </ul>
                                 </c:if>
                             </div>
                         </c:when>

@@ -1,5 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -467,12 +468,18 @@
                                class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-400/40 focus:border-emerald-400 transition"
                                oninput="filterJobs()"/>
                     </div>
-                    <select id="typeFilter"
-                            class="w-full md:w-48 px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-400/40 focus:border-emerald-400 transition"
+                    <select id="categoryFilter"
+                            class="w-full md:w-56 px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-400/40 focus:border-emerald-400 transition"
                             onchange="filterJobs()">
-                        <option value="">All Employment Types</option>
-                        <option value="Full time">Full time</option>
-                        <option value="Part time">Part time</option>
+                        <option value="">All Categories</option>
+                        <!-- Dynamically build unique category options from jobs -->
+                        <c:set var="addedCategories" value="," />
+                        <c:forEach var="j" items="${jobs}">
+                            <c:if test="${not empty j.jobCategory and not fn:contains(addedCategories, fn:trim(j.jobCategory))}">
+                                <option value="${fn:trim(j.jobCategory)}">${fn:trim(j.jobCategory)}</option>
+                                <c:set var="addedCategories" value="${addedCategories}${fn:trim(j.jobCategory)}," />
+                            </c:if>
+                        </c:forEach>
                     </select>
                     <div class="ml-auto text-sm text-slate-400 whitespace-nowrap flex-shrink-0">
                         <span class="font-black text-slate-700 text-base" id="countNum">0</span> positions
@@ -484,7 +491,8 @@
                     <c:forEach var="job" items="${jobs}" varStatus="s">
                         <div class="job-card bg-white rounded-2xl border border-slate-100 px-6 py-5 shadow-sm"
                              data-title="${job.title}"
-                             data-type="${not empty job.jobType ? job.jobType : 'Part time'}">
+                             data-type="${not empty job.jobType ? job.jobType : 'Part time'}"
+                             data-category="${not empty job.jobCategory ? fn:trim(job.jobCategory) : ''}">
                             <div class="flex flex-col md:flex-row items-start md:items-center gap-5 justify-between">
 
                                 <div class="flex-1 min-w-0">
@@ -503,10 +511,12 @@
                                                 </span>
                                             </c:otherwise>
                                         </c:choose>
-                                        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-slate-50 text-slate-500 border border-slate-200">
-                                            <span class="material-symbols-outlined text-sm">school</span>
-                                            Teaching Role
-                                        </span>
+                                        <c:if test="${not empty job.jobCategory}">
+                                            <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-slate-50 text-slate-500 border border-slate-200">
+                                                <span class="material-symbols-outlined text-sm">category</span>
+                                                ${job.jobCategory}
+                                            </span>
+                                        </c:if>
                                     </div>
 
                                     <h3 class="text-base md:text-lg font-bold text-slate-900 mb-2">${job.title}</h3>
@@ -635,12 +645,13 @@
 
         function filterJobs() {
             const s = (document.getElementById('searchInput').value || '').toLowerCase().trim();
-            const t = (document.getElementById('typeFilter').value  || '').toLowerCase().trim();
+            const cat = (document.getElementById('categoryFilter').value || '').trim();
             const cards = document.querySelectorAll('#jobListContainer .job-card');
             let v = 0;
             cards.forEach(c => {
-                const ok = (!s || (c.dataset.title || '').toLowerCase().includes(s))
-                        && (!t || (c.dataset.type  || '').toLowerCase().includes(t));
+                const matchSearch = !s || (c.dataset.title || '').toLowerCase().includes(s);
+                const matchCategory = !cat || (c.dataset.category || '') === cat;
+                const ok = matchSearch && matchCategory;
                 c.classList.toggle('hidden', !ok);
                 if (ok) v++;
             });

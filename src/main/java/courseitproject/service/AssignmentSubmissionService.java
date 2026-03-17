@@ -19,6 +19,11 @@ public class AssignmentSubmissionService {
 
     private static final Logger LOG = Logger.getLogger(AssignmentSubmissionService.class.getName());
 
+    // Safe maximum lengths to avoid SQL Server "string or binary data would be truncated" errors.
+    // These should be less than or equal to the corresponding NVARCHAR column sizes.
+    private static final int MAX_DB_SUMMARY_LENGTH = 2000000;
+    private static final int MAX_DB_FEEDBACK_LENGTH = 2000000;
+
     private final RepoSubmissionDAO submissionDAO = new RepoSubmissionDAO();
     private final CodeScannerService codeScanner = new CodeScannerService();
     private final GeminiService geminiService = new GeminiService();
@@ -210,12 +215,14 @@ public class AssignmentSubmissionService {
     private void saveFileAnalysis(int submissionId, String fileName, String fileSummary, Integer score) {
         EntityManager em = JPAUtil.getEntityManager();
         try {
+            String safeSummary = truncateForDb(fileSummary, MAX_DB_SUMMARY_LENGTH);
+
             em.getTransaction().begin();
             RepoSubmission submission = em.find(RepoSubmission.class, submissionId);
             if (submission != null) {
                 RepoFileAnalysis fileAnalysis = new RepoFileAnalysis();
                 fileAnalysis.setFileName(fileName);
-                fileAnalysis.setSummary(fileSummary);
+                fileAnalysis.setSummary(safeSummary);
                 fileAnalysis.setAiScore(score);
                 fileAnalysis.setSubmissionId(submission);
                 em.persist(fileAnalysis);
@@ -232,11 +239,13 @@ public class AssignmentSubmissionService {
     private void failSubmission(int submissionId, String feedback) {
         EntityManager em = JPAUtil.getEntityManager();
         try {
+            String safeFeedback = truncateForDb(feedback, MAX_DB_FEEDBACK_LENGTH);
+
             em.getTransaction().begin();
             RepoSubmission submission = em.find(RepoSubmission.class, submissionId);
             if (submission != null) {
                 submission.setStatus("FAILED");
-                submission.setFeedback(feedback);
+                submission.setFeedback(safeFeedback);
                 submissionDAO.update(em, submission);
             }
             em.getTransaction().commit();
@@ -251,21 +260,42 @@ public class AssignmentSubmissionService {
     private void finishSubmission(int submissionId, int score, String feedback) {
         EntityManager em = JPAUtil.getEntityManager();
         try {
+            String safeFeedback = truncateForDb(feedback, MAX_DB_FEEDBACK_LENGTH);
+
             em.getTransaction().begin();
             RepoSubmission submission = em.find(RepoSubmission.class, submissionId);
             if (submission != null) {
                 submission.setStatus("DONE");
                 submission.setScore(score);
-                submission.setFeedback(feedback);
+                submission.setFeedback(safeFeedback);
                 submissionDAO.update(em, submission);
             }
             em.getTransaction().commit();
         } catch (Exception e) {
             if (em.getTransaction().isActive()) em.getTransaction().rollback();
             LOG.severe("Failed to finish submission: " + e.getMessage());
+            // As a safety net, ensure the submission is not left in a non-terminal state.
+            try {
+                failSubmission(submissionId, "Grading completed but failed to save feedback: " + e.getMessage());
+            } catch (Exception ignored) {
+                // If even marking FAILED fails, we have already logged the original error.
+            }
         } finally {
             if (em.isOpen()) em.close();
         }
+    }
+
+    /**
+     * Truncate a string to fit safely into a database text column.
+     */
+    private String truncateForDb(String value, int maxLength) {
+        if (value == null) {
+            return null;
+        }
+        if (value.length() <= maxLength) {
+            return value;
+        }
+        return value.substring(0, maxLength);
     }
 
     /**

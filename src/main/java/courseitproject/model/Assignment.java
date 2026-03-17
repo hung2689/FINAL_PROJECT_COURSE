@@ -53,28 +53,25 @@ public class Assignment implements Serializable {
     @Size(max = 255)
     @Column(name = "title")
     private String title;
-    @Size(max = 255)
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition="nvarchar(MAX)")
     private String description;
     @Size(max = 255)
     @Column(name = "file_extensions")
     private String fileExtensions;
-    @Size(max = 255)
-    @Column(name = "criteria")
+    @Column(name = "criteria", columnDefinition="nvarchar(MAX)")
     private String criteria;
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
-    @Size(max = 255)
-    @Column(name = "expected_output")
+    @Column(name = "expected_output", columnDefinition="nvarchar(MAX)")
     private String expectedOutput;
     @JoinColumn(name = "lesson_id", referencedColumnName = "lesson_id")
     @ManyToOne(optional = false)
     private Lesson lessonId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "assignmentId")
-    private Collection<AssignmentCriteria> assignmentCriteriaCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "assignmentId")
     private Collection<RepoSubmission> repoSubmissionCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "assignmentId")
+    private Collection<AssignmentCriteria> assignmentCriteriaCollection;
 
     public Assignment() {
     }
@@ -148,21 +145,21 @@ public class Assignment implements Serializable {
     }
 
     @XmlTransient
-    public Collection<AssignmentCriteria> getAssignmentCriteriaCollection() {
-        return assignmentCriteriaCollection;
-    }
-
-    public void setAssignmentCriteriaCollection(Collection<AssignmentCriteria> assignmentCriteriaCollection) {
-        this.assignmentCriteriaCollection = assignmentCriteriaCollection;
-    }
-
-    @XmlTransient
     public Collection<RepoSubmission> getRepoSubmissionCollection() {
         return repoSubmissionCollection;
     }
 
     public void setRepoSubmissionCollection(Collection<RepoSubmission> repoSubmissionCollection) {
         this.repoSubmissionCollection = repoSubmissionCollection;
+    }
+
+    @XmlTransient
+    public Collection<AssignmentCriteria> getAssignmentCriteriaCollection() {
+        return assignmentCriteriaCollection;
+    }
+
+    public void setAssignmentCriteriaCollection(Collection<AssignmentCriteria> assignmentCriteriaCollection) {
+        this.assignmentCriteriaCollection = assignmentCriteriaCollection;
     }
 
     @Override

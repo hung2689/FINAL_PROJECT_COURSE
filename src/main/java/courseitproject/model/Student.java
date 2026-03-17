@@ -39,12 +39,6 @@ import java.util.Date;
     @NamedQuery(name = "Student.findByLevel", query = "SELECT s FROM Student s WHERE s.level = :level")})
 public class Student implements Serializable {
 
-    @Size(max = 255)
-    @Column(name = "level")
-    private String level;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "studentId")
-    private Collection<RepoSubmission> repoSubmissionCollection;
-
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -54,8 +48,13 @@ public class Student implements Serializable {
     @Column(name = "date_of_birth")
     @Temporal(TemporalType.DATE)
     private Date dateOfBirth;
+    @Size(max = 255)
+    @Column(name = "level")
+    private String level;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "studentId")
     private Collection<CourseOrder> courseOrderCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "studentId")
+    private Collection<RepoSubmission> repoSubmissionCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "studentId")
     private Collection<Enrollment> enrollmentCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "studentId")
@@ -101,6 +100,13 @@ public class Student implements Serializable {
         this.dateOfBirth = dateOfBirth;
     }
 
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
 
     @XmlTransient
     public Collection<CourseOrder> getCourseOrderCollection() {
@@ -109,6 +115,15 @@ public class Student implements Serializable {
 
     public void setCourseOrderCollection(Collection<CourseOrder> courseOrderCollection) {
         this.courseOrderCollection = courseOrderCollection;
+    }
+
+    @XmlTransient
+    public Collection<RepoSubmission> getRepoSubmissionCollection() {
+        return repoSubmissionCollection;
+    }
+
+    public void setRepoSubmissionCollection(Collection<RepoSubmission> repoSubmissionCollection) {
+        this.repoSubmissionCollection = repoSubmissionCollection;
     }
 
     @XmlTransient
@@ -222,24 +237,6 @@ public class Student implements Serializable {
     @Override
     public String toString() {
         return "courseitproject.model.Student[ studentId=" + studentId + " ]";
-    }
-
-
-    @XmlTransient
-    public Collection<RepoSubmission> getRepoSubmissionCollection() {
-        return repoSubmissionCollection;
-    }
-
-    public void setRepoSubmissionCollection(Collection<RepoSubmission> repoSubmissionCollection) {
-        this.repoSubmissionCollection = repoSubmissionCollection;
-    }
-
-    public String getLevel() {
-        return level;
-    }
-
-    public void setLevel(String level) {
-        this.level = level;
     }
     
 }

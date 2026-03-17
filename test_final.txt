@@ -1,0 +1,2549 @@
+﻿[INFO] Scanning for projects...
+[INFO] 
+[INFO] -----------------------< com.team:courseProject >-----------------------
+[INFO] Building courseProject 1.0
+[INFO]   from pom.xml
+[INFO] --------------------------------[ war ]---------------------------------
+[INFO] 
+[INFO] --- exec:3.6.3:java (default-cli) @ courseProject ---
+mvn.cmd : thg 3 16, 2026 
+6:15:53 CH org.hibernate.jpa.int
+ernal.util.LogHelper 
+logPersistenceUnitInformation
+At line:1 char:48
++ ... va\jdk-21"; & "C:\Program 
+Files\NetBeans-25\netbeans\java\
+maven\bin\m ...
++                 ~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~
+    + CategoryInfo          : N 
+   otSpecified: (thg 3 16, 202  
+  6 ...UnitInformation:String   
+ ) [], RemoteException
+    + FullyQualifiedErrorId : N 
+   ativeCommandError
+ 
+INFO: HHH000204: Processing 
+PersistenceUnitInfo [name: 
+courseManager]
+thg 3 16, 2026 6:15:53 CH 
+org.hibernate.Version logVersion
+INFO: HHH000412: Hibernate ORM 
+core version 7.1.2.Final
+thg 3 16, 2026 6:15:54 CH org.hi
+bernate.engine.jdbc.connections.
+internal.DriverManagerConnection
+ProviderImpl configure
+WARN: HHH10001002: Using 
+built-in connection pool (not 
+intended for production use)
+thg 3 16, 2026 6:15:54 CH org.hi
+bernate.engine.jdbc.dialect.inte
+rnal.DialectFactoryImpl 
+constructDialect
+WARN: HHH90000025: 
+SQLServerDialect does not need 
+to be specified explicitly 
+using 'hibernate.dialect' 
+(remove the property setting 
+and it will be selected by 
+default)
+thg 3 16, 2026 6:15:55 CH org.hi
+bernate.engine.jdbc.env.internal
+.JdbcEnvironmentInitiator 
+logConnectionInfo
+INFO: HHH10001005: Database 
+info:
+	Database JDBC URL [jdbc:sqlserv
+er://localhost:1433;databaseName
+=Course_Final_Project;encrypt=tr
+ue;trustServerCertificate=true]
+	Database driver: Microsoft 
+JDBC Driver 13.2 for SQL Server
+	Database dialect: 
+SQLServerDialect
+	Database version: 16.0
+	Default catalog/schema: 
+Course_Final_Project/dbo
+	Autocommit mode: false
+	Isolation level: READ_COMMITTED
+	JDBC fetch size: 128
+	Pool: DriverManagerConnectionPr
+oviderImpl
+	Minimum pool size: 1
+	Maximum pool size: 20
+thg 3 16, 2026 6:15:55 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.Users.c
+reatedAt.
+thg 3 16, 2026 6:15:55 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.Student
+.dateOfBirth.
+thg 3 16, 2026 6:15:55 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.Enrollm
+ent.enrollmentDate.
+thg 3 16, 2026 6:15:55 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.Course.
+createdAt.
+thg 3 16, 2026 6:15:55 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.Course.
+updatedAt.
+thg 3 16, 2026 6:15:55 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.Section
+.createdAt.
+thg 3 16, 2026 6:15:55 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.QuizRes
+ult.attemptTime.
+thg 3 16, 2026 6:15:55 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.LessonR
+esource.createdAt.
+thg 3 16, 2026 6:15:55 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.Learnin
+gProgress.lastAccess.
+thg 3 16, 2026 6:15:55 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.AIPredi
+ction.createdAt.
+thg 3 16, 2026 6:15:55 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.StudyLo
+g.accessTime.
+thg 3 16, 2026 6:15:55 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.Subscri
+ption.endDate.
+thg 3 16, 2026 6:15:55 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.Subscri
+ption.startDate.
+thg 3 16, 2026 6:15:55 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.Notific
+ation.createdAt.
+thg 3 16, 2026 6:15:55 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.Payment
+.paymentDate.
+thg 3 16, 2026 6:15:55 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.Candida
+tes.createdAt.
+thg 3 16, 2026 6:15:55 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.Candida
+tes.interviewTime.
+thg 3 16, 2026 6:15:55 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.Cart.cr
+eatedAt.
+thg 3 16, 2026 6:15:55 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.CourseP
+ayment.createdAt.
+thg 3 16, 2026 6:15:55 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.CartIte
+m.addedAt.
+thg 3 16, 2026 6:15:55 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.CourseO
+rder.createdAt.
+thg 3 16, 2026 6:15:55 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.RepoSub
+mission.submittedAt.
+thg 3 16, 2026 6:15:55 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.Assignm
+ent.createdAt.
+thg 3 16, 2026 6:15:55 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.Teacher
+Job.createdAt.
+thg 3 16, 2026 6:15:55 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.Teacher
+Job.updatedAt.
+thg 3 16, 2026 6:15:57 CH org.hi
+bernate.engine.transaction.jta.p
+latform.internal.JtaPlatformInit
+iator initiateService
+INFO: HHH000489: No JTA 
+platform available (set 'hiberna
+te.transaction.jta.platform' to 
+enable JTA platform integration)
+Hibernate: 
+    alter table Assignment 
+       alter column criteria nvarchar(MAX)
+Hibernate: 
+    alter table Assignment 
+       alter column description nvarchar(MAX)
+Hibernate: 
+    alter table Assignment 
+       alter column expected_output nvarchar(MAX)
+Hibernate: 
+    alter table RepoFileAnalysis 
+       alter column summary nvarchar(MAX)
+Hibernate: 
+    alter table RepoSubmission 
+       alter column feedback nvarchar(MAX)
+Hibernate: 
+    alter table sysdiagrams 
+       alter column definition varbinary(max)
+Hibernate: 
+    alter table sysdiagrams 
+       alter column name varchar(255)
+thg 3 16, 2026 6:15:58 CH org.hi
+bernate.tool.schema.internal.Exc
+eptionHandlerLoggedImpl 
+handleException
+WARN: GenerationTarget 
+encountered exception accepting 
+command : Error executing DDL "
+    alter table sysdiagrams 
+       alter column name 
+varchar(255)" via JDBC [The 
+object 'UK_principal_name' is 
+dependent on column 'name'.]
+org.hibernate.tool.schema.spi.Co
+mmandAcceptanceException: Error 
+executing DDL "
+    alter table sysdiagrams 
+       alter column name 
+varchar(255)" via JDBC [The 
+object 'UK_principal_name' is 
+dependent on column 'name'.]
+	at org.hibernate.tool.schema.in
+ternal.exec.GenerationTargetToDa
+tabase.accept(GenerationTargetTo
+Database.java:93)
+	at org.hibernate.tool.schema.in
+ternal.AbstractSchemaMigrator.ap
+plySqlString(AbstractSchemaMigra
+tor.java:573)
+	at org.hibernate.tool.schema.in
+ternal.AbstractSchemaMigrator.ap
+plySqlStrings(AbstractSchemaMigr
+ator.java:513)
+	at org.hibernate.tool.schema.in
+ternal.AbstractSchemaMigrator.mi
+grateTable(AbstractSchemaMigrato
+r.java:331)
+	at org.hibernate.tool.schema.in
+ternal.GroupedSchemaMigratorImpl
+.performTablesMigration(GroupedS
+chemaMigratorImpl.java:82)
+	at org.hibernate.tool.schema.in
+ternal.AbstractSchemaMigrator.pe
+rformMigration(AbstractSchemaMig
+rator.java:230)
+	at org.hibernate.tool.schema.in
+ternal.AbstractSchemaMigrator.do
+Migration(AbstractSchemaMigrator
+.java:109)
+	at org.hibernate.tool.schema.sp
+i.SchemaManagementToolCoordinato
+r.performDatabaseAction(SchemaMa
+nagementToolCoordinator.java:267
+)
+	at org.hibernate.tool.schema.sp
+i.SchemaManagementToolCoordinato
+r.lambda$process$5(SchemaManagem
+entToolCoordinator.java:142)
+	at java.base/java.util.HashMap.
+forEach(HashMap.java:1429)
+	at org.hibernate.tool.schema.sp
+i.SchemaManagementToolCoordinato
+r.process(SchemaManagementToolCo
+ordinator.java:139)
+	at org.hibernate.boot.internal.
+SessionFactoryObserverForSchemaE
+xport.sessionFactoryCreated(Sess
+ionFactoryObserverForSchemaExpor
+t.java:35)
+	at org.hibernate.internal.Sessi
+onFactoryObserverChain.sessionFa
+ctoryCreated(SessionFactoryObser
+verChain.java:33)
+	at org.hibernate.internal.Sessi
+onFactoryImpl.<init>(SessionFact
+oryImpl.java:350)
+	at org.hibernate.boot.internal.
+SessionFactoryBuilderImpl.build(
+SessionFactoryBuilderImpl.java:4
+36)
+	at org.hibernate.jpa.boot.inter
+nal.EntityManagerFactoryBuilderI
+mpl.build(EntityManagerFactoryBu
+ilderImpl.java:1459)
+	at org.hibernate.jpa.HibernateP
+ersistenceProvider.createEntityM
+anagerFactory(HibernatePersisten
+ceProvider.java:56)
+	at jakarta.persistence.Persiste
+nce.createEntityManagerFactory(P
+ersistence.java:90)
+	at jakarta.persistence.Persiste
+nce.createEntityManagerFactory(P
+ersistence.java:66)
+	at courseitproject.dao.base.Bas
+eDAO.<clinit>(BaseDAO.java:9)
+	at courseitproject.service.Assi
+gnmentSubmissionService.<init>(A
+ssignmentSubmissionService.java:
+27)
+	at courseitproject.TestCustomer
+RepoAsync.main(TestCustomerRepoA
+sync.java:7)
+	at java.base/jdk.internal.refle
+ct.DirectMethodHandleAccessor.in
+voke(DirectMethodHandleAccessor.
+java:103)
+	at java.base/java.lang.reflect.
+Method.invoke(Method.java:580)
+	at org.codehaus.mojo.exec.Abstr
+actExecJavaBase.executeMainMetho
+d(AbstractExecJavaBase.java:402)
+	at org.codehaus.mojo.exec.ExecJ
+avaMojo.executeMainMethod(ExecJa
+vaMojo.java:142)
+	at org.codehaus.mojo.exec.Abstr
+actExecJavaBase.doExecClassLoade
+r(AbstractExecJavaBase.java:377)
+	at org.codehaus.mojo.exec.Abstr
+actExecJavaBase.lambda$execute$0
+(AbstractExecJavaBase.java:287)
+	at java.base/java.lang.Thread.r
+un(Thread.java:1583)
+Caused by: com.microsoft.sqlserv
+er.jdbc.SQLServerException: The 
+object 'UK_principal_name' is 
+dependent on column 'name'.
+	at com.microsoft.sqlserver.jdbc
+.SQLServerException.makeFromData
+baseError(SQLServerException.jav
+a:278)
+	at com.microsoft.sqlserver.jdbc
+.SQLServerStatement.getNextResul
+t(SQLServerStatement.java:1788)
+	at com.microsoft.sqlserver.jdbc
+.SQLServerStatement.doExecuteSta
+tement(SQLServerStatement.java:9
+75)
+	at com.microsoft.sqlserver.jdbc
+.SQLServerStatement$StmtExecCmd.
+doExecute(SQLServerStatement.jav
+a:869)
+	at com.microsoft.sqlserver.jdbc
+.TDSCommand.execute(IOBuffer.jav
+a:7825)
+	at com.microsoft.sqlserver.jdbc
+.SQLServerConnection.executeComm
+and(SQLServerConnection.java:482
+8)
+	at com.microsoft.sqlserver.jdbc
+.SQLServerStatement.executeComma
+nd(SQLServerStatement.java:321)
+	at com.microsoft.sqlserver.jdbc
+.SQLServerStatement.executeState
+ment(SQLServerStatement.java:253
+)
+	at com.microsoft.sqlserver.jdbc
+.SQLServerStatement.execute(SQLS
+erverStatement.java:842)
+	at org.hibernate.tool.schema.in
+ternal.exec.GenerationTargetToDa
+tabase.accept(GenerationTargetTo
+Database.java:79)
+	... 28 more
+
+Submitting https://github.com/hung2689/Customer.git...
+thg 3 16, 2026 6:15:59 CH org.hi
+bernate.jpa.internal.util.LogHel
+per 
+logPersistenceUnitInformation
+INFO: HHH000204: Processing 
+PersistenceUnitInfo [name: 
+courseManager]
+thg 3 16, 2026 6:15:59 CH org.hi
+bernate.engine.jdbc.connections.
+internal.DriverManagerConnection
+ProviderImpl configure
+WARN: HHH10001002: Using 
+built-in connection pool (not 
+intended for production use)
+thg 3 16, 2026 6:15:59 CH org.hi
+bernate.engine.jdbc.dialect.inte
+rnal.DialectFactoryImpl 
+constructDialect
+WARN: HHH90000025: 
+SQLServerDialect does not need 
+to be specified explicitly 
+using 'hibernate.dialect' 
+(remove the property setting 
+and it will be selected by 
+default)
+thg 3 16, 2026 6:15:59 CH org.hi
+bernate.engine.jdbc.env.internal
+.JdbcEnvironmentInitiator 
+logConnectionInfo
+INFO: HHH10001005: Database 
+info:
+	Database JDBC URL [jdbc:sqlserv
+er://localhost:1433;databaseName
+=Course_Final_Project;encrypt=tr
+ue;trustServerCertificate=true]
+	Database driver: Microsoft 
+JDBC Driver 13.2 for SQL Server
+	Database dialect: 
+SQLServerDialect
+	Database version: 16.0
+	Default catalog/schema: 
+Course_Final_Project/dbo
+	Autocommit mode: false
+	Isolation level: READ_COMMITTED
+	JDBC fetch size: 128
+	Pool: DriverManagerConnectionPr
+oviderImpl
+	Minimum pool size: 1
+	Maximum pool size: 20
+thg 3 16, 2026 6:15:59 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.Users.c
+reatedAt.
+thg 3 16, 2026 6:15:59 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.Student
+.dateOfBirth.
+thg 3 16, 2026 6:15:59 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.Enrollm
+ent.enrollmentDate.
+thg 3 16, 2026 6:15:59 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.Course.
+createdAt.
+thg 3 16, 2026 6:15:59 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.Course.
+updatedAt.
+thg 3 16, 2026 6:15:59 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.Section
+.createdAt.
+thg 3 16, 2026 6:15:59 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.QuizRes
+ult.attemptTime.
+thg 3 16, 2026 6:15:59 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.LessonR
+esource.createdAt.
+thg 3 16, 2026 6:15:59 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.Learnin
+gProgress.lastAccess.
+thg 3 16, 2026 6:15:59 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.AIPredi
+ction.createdAt.
+thg 3 16, 2026 6:15:59 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.StudyLo
+g.accessTime.
+thg 3 16, 2026 6:15:59 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.Subscri
+ption.endDate.
+thg 3 16, 2026 6:15:59 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.Subscri
+ption.startDate.
+thg 3 16, 2026 6:15:59 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.Notific
+ation.createdAt.
+thg 3 16, 2026 6:15:59 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.Payment
+.paymentDate.
+thg 3 16, 2026 6:15:59 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.Candida
+tes.createdAt.
+thg 3 16, 2026 6:15:59 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.Candida
+tes.interviewTime.
+thg 3 16, 2026 6:15:59 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.Cart.cr
+eatedAt.
+thg 3 16, 2026 6:15:59 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.CourseP
+ayment.createdAt.
+thg 3 16, 2026 6:15:59 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.CartIte
+m.addedAt.
+thg 3 16, 2026 6:15:59 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.CourseO
+rder.createdAt.
+thg 3 16, 2026 6:15:59 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.RepoSub
+mission.submittedAt.
+thg 3 16, 2026 6:15:59 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.Assignm
+ent.createdAt.
+thg 3 16, 2026 6:15:59 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.Teacher
+Job.createdAt.
+thg 3 16, 2026 6:15:59 CH org.hi
+bernate.boot.model.internal.Basi
+cValueBinder 
+prepareBasicAttribute
+WARN: HHH90000033: Encountered 
+use of deprecated annotation 
+[interface 
+jakarta.persistence.Temporal] 
+at courseitproject.model.Teacher
+Job.updatedAt.
+thg 3 16, 2026 6:15:59 CH org.hi
+bernate.engine.transaction.jta.p
+latform.internal.JtaPlatformInit
+iator initiateService
+INFO: HHH000489: No JTA 
+platform available (set 'hiberna
+te.transaction.jta.platform' to 
+enable JTA platform integration)
+Hibernate: 
+    alter table Assignment 
+       alter column criteria nvarchar(MAX)
+Hibernate: 
+    alter table Assignment 
+       alter column description nvarchar(MAX)
+Hibernate: 
+    alter table Assignment 
+       alter column expected_output nvarchar(MAX)
+Hibernate: 
+    alter table RepoFileAnalysis 
+       alter column summary nvarchar(MAX)
+Hibernate: 
+    alter table RepoSubmission 
+       alter column feedback nvarchar(MAX)
+Hibernate: 
+    alter table sysdiagrams 
+       alter column definition varbinary(max)
+Hibernate: 
+    alter table sysdiagrams 
+       alter column name varchar(255)
+thg 3 16, 2026 6:15:59 CH org.hi
+bernate.tool.schema.internal.Exc
+eptionHandlerLoggedImpl 
+handleException
+WARN: GenerationTarget 
+encountered exception accepting 
+command : Error executing DDL "
+    alter table sysdiagrams 
+       alter column name 
+varchar(255)" via JDBC [The 
+object 'UK_principal_name' is 
+dependent on column 'name'.]
+org.hibernate.tool.schema.spi.Co
+mmandAcceptanceException: Error 
+executing DDL "
+    alter table sysdiagrams 
+       alter column name 
+varchar(255)" via JDBC [The 
+object 'UK_principal_name' is 
+dependent on column 'name'.]
+	at org.hibernate.tool.schema.in
+ternal.exec.GenerationTargetToDa
+tabase.accept(GenerationTargetTo
+Database.java:93)
+	at org.hibernate.tool.schema.in
+ternal.AbstractSchemaMigrator.ap
+plySqlString(AbstractSchemaMigra
+tor.java:573)
+	at org.hibernate.tool.schema.in
+ternal.AbstractSchemaMigrator.ap
+plySqlStrings(AbstractSchemaMigr
+ator.java:513)
+	at org.hibernate.tool.schema.in
+ternal.AbstractSchemaMigrator.mi
+grateTable(AbstractSchemaMigrato
+r.java:331)
+	at org.hibernate.tool.schema.in
+ternal.GroupedSchemaMigratorImpl
+.performTablesMigration(GroupedS
+chemaMigratorImpl.java:82)
+	at org.hibernate.tool.schema.in
+ternal.AbstractSchemaMigrator.pe
+rformMigration(AbstractSchemaMig
+rator.java:230)
+	at org.hibernate.tool.schema.in
+ternal.AbstractSchemaMigrator.do
+Migration(AbstractSchemaMigrator
+.java:109)
+	at org.hibernate.tool.schema.sp
+i.SchemaManagementToolCoordinato
+r.performDatabaseAction(SchemaMa
+nagementToolCoordinator.java:267
+)
+	at org.hibernate.tool.schema.sp
+i.SchemaManagementToolCoordinato
+r.lambda$process$5(SchemaManagem
+entToolCoordinator.java:142)
+	at java.base/java.util.HashMap.
+forEach(HashMap.java:1429)
+	at org.hibernate.tool.schema.sp
+i.SchemaManagementToolCoordinato
+r.process(SchemaManagementToolCo
+ordinator.java:139)
+	at org.hibernate.boot.internal.
+SessionFactoryObserverForSchemaE
+xport.sessionFactoryCreated(Sess
+ionFactoryObserverForSchemaExpor
+t.java:35)
+	at org.hibernate.internal.Sessi
+onFactoryObserverChain.sessionFa
+ctoryCreated(SessionFactoryObser
+verChain.java:33)
+	at org.hibernate.internal.Sessi
+onFactoryImpl.<init>(SessionFact
+oryImpl.java:350)
+	at org.hibernate.boot.internal.
+SessionFactoryBuilderImpl.build(
+SessionFactoryBuilderImpl.java:4
+36)
+	at org.hibernate.jpa.boot.inter
+nal.EntityManagerFactoryBuilderI
+mpl.build(EntityManagerFactoryBu
+ilderImpl.java:1459)
+	at org.hibernate.jpa.HibernateP
+ersistenceProvider.createEntityM
+anagerFactory(HibernatePersisten
+ceProvider.java:56)
+	at jakarta.persistence.Persiste
+nce.createEntityManagerFactory(P
+ersistence.java:90)
+	at jakarta.persistence.Persiste
+nce.createEntityManagerFactory(P
+ersistence.java:66)
+	at courseitproject.utils.JPAUti
+l.<clinit>(JPAUtil.java:13)
+	at courseitproject.service.Assi
+gnmentSubmissionService.createSu
+bmission(AssignmentSubmissionSer
+vice.java:36)
+	at courseitproject.service.Assi
+gnmentSubmissionService.processS
+ubmission(AssignmentSubmissionSe
+rvice.java:305)
+	at courseitproject.TestCustomer
+RepoAsync.main(TestCustomerRepoA
+sync.java:14)
+	at java.base/jdk.internal.refle
+ct.DirectMethodHandleAccessor.in
+voke(DirectMethodHandleAccessor.
+java:103)
+	at java.base/java.lang.reflect.
+Method.invoke(Method.java:580)
+	at org.codehaus.mojo.exec.Abstr
+actExecJavaBase.executeMainMetho
+d(AbstractExecJavaBase.java:402)
+	at org.codehaus.mojo.exec.ExecJ
+avaMojo.executeMainMethod(ExecJa
+vaMojo.java:142)
+	at org.codehaus.mojo.exec.Abstr
+actExecJavaBase.doExecClassLoade
+r(AbstractExecJavaBase.java:377)
+	at org.codehaus.mojo.exec.Abstr
+actExecJavaBase.lambda$execute$0
+(AbstractExecJavaBase.java:287)
+	at java.base/java.lang.Thread.r
+un(Thread.java:1583)
+Caused by: com.microsoft.sqlserv
+er.jdbc.SQLServerException: The 
+object 'UK_principal_name' is 
+dependent on column 'name'.
+	at com.microsoft.sqlserver.jdbc
+.SQLServerException.makeFromData
+baseError(SQLServerException.jav
+a:278)
+	at com.microsoft.sqlserver.jdbc
+.SQLServerStatement.getNextResul
+t(SQLServerStatement.java:1788)
+	at com.microsoft.sqlserver.jdbc
+.SQLServerStatement.doExecuteSta
+tement(SQLServerStatement.java:9
+75)
+	at com.microsoft.sqlserver.jdbc
+.SQLServerStatement$StmtExecCmd.
+doExecute(SQLServerStatement.jav
+a:869)
+	at com.microsoft.sqlserver.jdbc
+.TDSCommand.execute(IOBuffer.jav
+a:7825)
+	at com.microsoft.sqlserver.jdbc
+.SQLServerConnection.executeComm
+and(SQLServerConnection.java:482
+8)
+	at com.microsoft.sqlserver.jdbc
+.SQLServerStatement.executeComma
+nd(SQLServerStatement.java:321)
+	at com.microsoft.sqlserver.jdbc
+.SQLServerStatement.executeState
+ment(SQLServerStatement.java:253
+)
+	at com.microsoft.sqlserver.jdbc
+.SQLServerStatement.execute(SQLS
+erverStatement.java:842)
+	at org.hibernate.tool.schema.in
+ternal.exec.GenerationTargetToDa
+tabase.accept(GenerationTargetTo
+Database.java:79)
+	... 29 more
+
+Hibernate: 
+    select
+        s1_0.student_id,
+        c1_0.cart_id,
+        c1_0.created_at,
+        c1_0.student_id,
+        s1_0.date_of_birth,
+        s1_0.level,
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.email_verified,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.provider,
+        u1_0.provider_id,
+        u1_0.status,
+        t1_0.teacher_id,
+        t1_0.approval_status,
+        t1_0.cv_url,
+        t1_0.experience_year,
+        t1_0.specialization,
+        u1_0.username 
+    from
+        Student s1_0 
+    left join
+        Cart c1_0 
+            on s1_0.student_id=c1_0.student_id 
+    join
+        Users u1_0 
+            on u1_0.user_id=s1_0.student_id 
+    left join
+        Teacher t1_0 
+            on u1_0.user_id=t1_0.teacher_id 
+    where
+        s1_0.student_id=?
+Hibernate: 
+    select
+        a1_0.assignment_id,
+        a1_0.created_at,
+        a1_0.criteria,
+        a1_0.description,
+        a1_0.expected_output,
+        a1_0.file_extensions,
+        a1_0.lesson_id,
+        li1_0.lesson_id,
+        li1_0.content,
+        li1_0.course_id,
+        ci1_0.course_id,
+        ci2_0.category_id,
+        ci2_0.name,
+        ci1_0.created_at,
+        ci1_0.description,
+        ci1_0.level,
+        ci1_0.price,
+        ci1_0.status,
+        ci1_0.thumbnail_url,
+        ci1_0.title,
+        ci1_0.updated_at,
+        li1_0.order_index,
+        si1_0.section_id,
+        si1_0.course_id,
+        si1_0.created_at,
+        si1_0.order_index,
+        si1_0.title,
+        li1_0.title,
+        a1_0.title 
+    from
+        Assignment a1_0 
+    join
+        Lesson li1_0 
+            on li1_0.lesson_id=a1_0.lesson_id 
+    join
+        Course ci1_0 
+            on ci1_0.course_id=li1_0.course_id 
+    left join
+        CourseCategory ci2_0 
+            on ci2_0.category_id=ci1_0.category_id 
+    left join
+        Section si1_0 
+            on si1_0.section_id=li1_0.section_id 
+    where
+        a1_0.assignment_id=?
+Hibernate: 
+    insert 
+    into
+        RepoSubmission
+        (assignment_id, feedback, github_url, score, status, student_id, submitted_at) 
+    values
+        (?, ?, ?, ?, ?, ?, ?)
+thg 3 16, 2026 6:16:00 CH course
+itproject.service.AssignmentSubm
+issionService createSubmission
+INFO: [Submission] Created 
+submission ID: 88
+Hibernate: 
+    select
+        rs1_0.submission_id,
+        rs1_0.assignment_id,
+        ai1_0.assignment_id,
+        ai1_0.created_at,
+        ai1_0.criteria,
+        ai1_0.description,
+        ai1_0.expected_output,
+        ai1_0.file_extensions,
+        ai1_0.lesson_id,
+        li1_0.lesson_id,
+        li1_0.content,
+        li1_0.course_id,
+        ci1_0.course_id,
+        ci2_0.category_id,
+        ci2_0.name,
+        ci1_0.created_at,
+        ci1_0.description,
+        ci1_0.level,
+        ci1_0.price,
+        ci1_0.status,
+        ci1_0.thumbnail_url,
+        ci1_0.title,
+        ci1_0.updated_at,
+        li1_0.order_index,
+        si1_0.section_id,
+        si1_0.course_id,
+        si1_0.created_at,
+        si1_0.order_index,
+        si1_0.title,
+        li1_0.title,
+        ai1_0.title,
+        rs1_0.feedback,
+        rs1_0.github_url,
+        rs1_0.score,
+        rs1_0.status,
+        rs1_0.student_id,
+        si2_0.student_id,
+        c1_0.cart_id,
+        c1_0.created_at,
+        c1_0.student_id,
+        si2_0.date_of_birth,
+        si2_0.level,
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.email_verified,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.provider,
+        u1_0.provider_id,
+        u1_0.status,
+        t1_0.teacher_id,
+        t1_0.approval_status,
+        t1_0.cv_url,
+        t1_0.experience_year,
+        t1_0.specialization,
+        u1_0.username,
+        rs1_0.submitted_at 
+    from
+        RepoSubmission rs1_0 
+    join
+        Assignment ai1_0 
+            on ai1_0.assignment_id=rs1_0.assignment_id 
+    join
+        Lesson li1_0 
+            on li1_0.lesson_id=ai1_0.lesson_id 
+    join
+        Course ci1_0 
+            on ci1_0.course_id=li1_0.course_id 
+    left join
+        CourseCategory ci2_0 
+            on ci2_0.category_id=ci1_0.category_id 
+    left join
+        Section si1_0 
+            on si1_0.section_id=li1_0.section_id 
+    join
+        Student si2_0 
+            on si2_0.student_id=rs1_0.student_id 
+    left join
+        Cart c1_0 
+            on si2_0.student_id=c1_0.student_id 
+    join
+        Users u1_0 
+            on u1_0.user_id=si2_0.student_id 
+    left join
+        Teacher t1_0 
+            on u1_0.user_id=t1_0.teacher_id 
+    where
+        rs1_0.submission_id=?
+thg 3 16, 2026 6:16:00 CH course
+itproject.service.AssignmentSubm
+issionService 
+processSubmissionAsync
+INFO: [Submission] Starting 
+async processing for submission 
+88
+Hibernate: 
+    select
+        rs1_0.submission_id,
+        rs1_0.assignment_id,
+        ai1_0.assignment_id,
+        ai1_0.created_at,
+        ai1_0.criteria,
+        ai1_0.description,
+        ai1_0.expected_output,
+        ai1_0.file_extensions,
+        ai1_0.lesson_id,
+        li1_0.lesson_id,
+        li1_0.content,
+        li1_0.course_id,
+        ci1_0.course_id,
+        ci2_0.category_id,
+        ci2_0.name,
+        ci1_0.created_at,
+        ci1_0.description,
+        ci1_0.level,
+        ci1_0.price,
+        ci1_0.status,
+        ci1_0.thumbnail_url,
+        ci1_0.title,
+        ci1_0.updated_at,
+        li1_0.order_index,
+        si1_0.section_id,
+        si1_0.course_id,
+        si1_0.created_at,
+        si1_0.order_index,
+        si1_0.title,
+        li1_0.title,
+        ai1_0.title,
+        rs1_0.feedback,
+        rs1_0.github_url,
+        rs1_0.score,
+        rs1_0.status,
+        rs1_0.student_id,
+        si2_0.student_id,
+        c1_0.cart_id,
+        c1_0.created_at,
+        c1_0.student_id,
+        si2_0.date_of_birth,
+        si2_0.level,
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.email_verified,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.provider,
+        u1_0.provider_id,
+        u1_0.status,
+        t1_0.teacher_id,
+        t1_0.approval_status,
+        t1_0.cv_url,
+        t1_0.experience_year,
+        t1_0.specialization,
+        u1_0.username,
+        rs1_0.submitted_at 
+    from
+        RepoSubmission rs1_0 
+    join
+        Assignment ai1_0 
+            on ai1_0.assignment_id=rs1_0.assignment_id 
+    join
+        Lesson li1_0 
+            on li1_0.lesson_id=ai1_0.lesson_id 
+    join
+        Course ci1_0 
+            on ci1_0.course_id=li1_0.course_id 
+    left join
+        CourseCategory ci2_0 
+            on ci2_0.category_id=ci1_0.category_id 
+    left join
+        Section si1_0 
+            on si1_0.section_id=li1_0.section_id 
+    join
+        Student si2_0 
+            on si2_0.student_id=rs1_0.student_id 
+    left join
+        Cart c1_0 
+            on si2_0.student_id=c1_0.student_id 
+    join
+        Users u1_0 
+            on u1_0.user_id=si2_0.student_id 
+    left join
+        Teacher t1_0 
+            on u1_0.user_id=t1_0.teacher_id 
+    where
+        rs1_0.submission_id=?
+Hibernate: 
+    update
+        RepoSubmission 
+    set
+        assignment_id=?,
+        feedback=?,
+        github_url=?,
+        score=?,
+        status=?,
+        student_id=?,
+        submitted_at=? 
+    where
+        submission_id=?
+thg 3 16, 2026 6:16:00 CH course
+itproject.service.AssignmentSubm
+issionService 
+processSubmissionAsync
+INFO: [Submission] Cloning 
+repository to: C:\Users\ASUS\App
+Data\Local\Temp\\repos\submissio
+n_88
+thg 3 16, 2026 6:16:01 CH course
+itproject.utils.GitCloneUtil 
+cloneRepository
+INFO: [Git] Clone succeeded for 
+URL: https://github.com/hung2689
+/Customer.git
+thg 3 16, 2026 6:16:01 CH course
+itproject.service.AssignmentSubm
+issionService 
+processSubmissionAsync
+INFO: [Submission] Clone 
+successful.
+Hibernate: 
+    select
+        rs1_0.submission_id,
+        rs1_0.assignment_id,
+        ai1_0.assignment_id,
+        ai1_0.created_at,
+        ai1_0.criteria,
+        ai1_0.description,
+        ai1_0.expected_output,
+        ai1_0.file_extensions,
+        ai1_0.lesson_id,
+        li1_0.lesson_id,
+        li1_0.content,
+        li1_0.course_id,
+        ci1_0.course_id,
+        ci2_0.category_id,
+        ci2_0.name,
+        ci1_0.created_at,
+        ci1_0.description,
+        ci1_0.level,
+        ci1_0.price,
+        ci1_0.status,
+        ci1_0.thumbnail_url,
+        ci1_0.title,
+        ci1_0.updated_at,
+        li1_0.order_index,
+        si1_0.section_id,
+        si1_0.course_id,
+        si1_0.created_at,
+        si1_0.order_index,
+        si1_0.title,
+        li1_0.title,
+        ai1_0.title,
+        rs1_0.feedback,
+        rs1_0.github_url,
+        rs1_0.score,
+        rs1_0.status,
+        rs1_0.student_id,
+        si2_0.student_id,
+        c1_0.cart_id,
+        c1_0.created_at,
+        c1_0.student_id,
+        si2_0.date_of_birth,
+        si2_0.level,
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.email_verified,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.provider,
+        u1_0.provider_id,
+        u1_0.status,
+        t1_0.teacher_id,
+        t1_0.approval_status,
+        t1_0.cv_url,
+        t1_0.experience_year,
+        t1_0.specialization,
+        u1_0.username,
+        rs1_0.submitted_at 
+    from
+        RepoSubmission rs1_0 
+    join
+        Assignment ai1_0 
+            on ai1_0.assignment_id=rs1_0.assignment_id 
+    join
+        Lesson li1_0 
+            on li1_0.lesson_id=ai1_0.lesson_id 
+    join
+        Course ci1_0 
+            on ci1_0.course_id=li1_0.course_id 
+    left join
+        CourseCategory ci2_0 
+            on ci2_0.category_id=ci1_0.category_id 
+    left join
+        Section si1_0 
+            on si1_0.section_id=li1_0.section_id 
+    join
+        Student si2_0 
+            on si2_0.student_id=rs1_0.student_id 
+    left join
+        Cart c1_0 
+            on si2_0.student_id=c1_0.student_id 
+    join
+        Users u1_0 
+            on u1_0.user_id=si2_0.student_id 
+    left join
+        Teacher t1_0 
+            on u1_0.user_id=t1_0.teacher_id 
+    where
+        rs1_0.submission_id=?
+Hibernate: 
+    update
+        RepoSubmission 
+    set
+        assignment_id=?,
+        feedback=?,
+        github_url=?,
+        score=?,
+        status=?,
+        student_id=?,
+        submitted_at=? 
+    where
+        submission_id=?
+thg 3 16, 2026 6:16:01 CH course
+itproject.service.AssignmentSubm
+issionService 
+processSubmissionAsync
+INFO: [Submission] Scanning 
+files with extensions: java
+thg 3 16, 2026 6:16:01 CH course
+itproject.service.CodeScannerSer
+vice scanRepositoryFiles
+INFO: [Scanner] Scanned 6 files 
+from: C:\Users\ASUS\AppData\Loca
+l\Temp\\repos\submission_88
+thg 3 16, 2026 6:16:01 CH course
+itproject.service.AssignmentSubm
+issionService 
+processSubmissionAsync
+INFO: [Submission] Found 6 
+source files to analyze.
+Hibernate: 
+    select
+        rs1_0.submission_id,
+        rs1_0.assignment_id,
+        ai1_0.assignment_id,
+        ai1_0.created_at,
+        ai1_0.criteria,
+        ai1_0.description,
+        ai1_0.expected_output,
+        ai1_0.file_extensions,
+        ai1_0.lesson_id,
+        li1_0.lesson_id,
+        li1_0.content,
+        li1_0.course_id,
+        ci1_0.course_id,
+        ci2_0.category_id,
+        ci2_0.name,
+        ci1_0.created_at,
+        ci1_0.description,
+        ci1_0.level,
+        ci1_0.price,
+        ci1_0.status,
+        ci1_0.thumbnail_url,
+        ci1_0.title,
+        ci1_0.updated_at,
+        li1_0.order_index,
+        si1_0.section_id,
+        si1_0.course_id,
+        si1_0.created_at,
+        si1_0.order_index,
+        si1_0.title,
+        li1_0.title,
+        ai1_0.title,
+        rs1_0.feedback,
+        rs1_0.github_url,
+        rs1_0.score,
+        rs1_0.status,
+        rs1_0.student_id,
+        si2_0.student_id,
+        c1_0.cart_id,
+        c1_0.created_at,
+        c1_0.student_id,
+        si2_0.date_of_birth,
+        si2_0.level,
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.email_verified,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.provider,
+        u1_0.provider_id,
+        u1_0.status,
+        t1_0.teacher_id,
+        t1_0.approval_status,
+        t1_0.cv_url,
+        t1_0.experience_year,
+        t1_0.specialization,
+        u1_0.username,
+        rs1_0.submitted_at 
+    from
+        RepoSubmission rs1_0 
+    join
+        Assignment ai1_0 
+            on ai1_0.assignment_id=rs1_0.assignment_id 
+    join
+        Lesson li1_0 
+            on li1_0.lesson_id=ai1_0.lesson_id 
+    join
+        Course ci1_0 
+            on ci1_0.course_id=li1_0.course_id 
+    left join
+        CourseCategory ci2_0 
+            on ci2_0.category_id=ci1_0.category_id 
+    left join
+        Section si1_0 
+            on si1_0.section_id=li1_0.section_id 
+    join
+        Student si2_0 
+            on si2_0.student_id=rs1_0.student_id 
+    left join
+        Cart c1_0 
+            on si2_0.student_id=c1_0.student_id 
+    join
+        Users u1_0 
+            on u1_0.user_id=si2_0.student_id 
+    left join
+        Teacher t1_0 
+            on u1_0.user_id=t1_0.teacher_id 
+    where
+        rs1_0.submission_id=?
+Hibernate: 
+    update
+        RepoSubmission 
+    set
+        assignment_id=?,
+        feedback=?,
+        github_url=?,
+        score=?,
+        status=?,
+        student_id=?,
+        submitted_at=? 
+    where
+        submission_id=?
+thg 3 16, 2026 6:16:01 CH course
+itproject.service.AssignmentSubm
+issionService 
+processSubmissionAsync
+INFO: [Submission] Analyzing 
+file: src\java\controller\Custom
+erController.java (1715 chars)
+thg 3 16, 2026 6:16:01 CH course
+itproject.service.GeminiService 
+analyzeCodeFile
+INFO: [AI] Analyzing file: src\j
+ava\controller\CustomerControlle
+r.java (1715 chars)
+thg 3 16, 2026 6:16:01 CH course
+itproject.service.GeminiService 
+callGroqAPI
+INFO: [AI] Sending request to 
+Groq (llama-3.1-8b-instant), 
+attempt 1/5, body: 2369 bytes
+thg 3 16, 2026 6:16:03 CH course
+itproject.service.GeminiService 
+callGroqAPI
+INFO: [AI] Response status: 200
+Hibernate: 
+    select
+        rs1_0.submission_id,
+        rs1_0.assignment_id,
+        ai1_0.assignment_id,
+        ai1_0.created_at,
+        ai1_0.criteria,
+        ai1_0.description,
+        ai1_0.expected_output,
+        ai1_0.file_extensions,
+        ai1_0.lesson_id,
+        li1_0.lesson_id,
+        li1_0.content,
+        li1_0.course_id,
+        ci1_0.course_id,
+        ci2_0.category_id,
+        ci2_0.name,
+        ci1_0.created_at,
+        ci1_0.description,
+        ci1_0.level,
+        ci1_0.price,
+        ci1_0.status,
+        ci1_0.thumbnail_url,
+        ci1_0.title,
+        ci1_0.updated_at,
+        li1_0.order_index,
+        si1_0.section_id,
+        si1_0.course_id,
+        si1_0.created_at,
+        si1_0.order_index,
+        si1_0.title,
+        li1_0.title,
+        ai1_0.title,
+        rs1_0.feedback,
+        rs1_0.github_url,
+        rs1_0.score,
+        rs1_0.status,
+        rs1_0.student_id,
+        si2_0.student_id,
+        c1_0.cart_id,
+        c1_0.created_at,
+        c1_0.student_id,
+        si2_0.date_of_birth,
+        si2_0.level,
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.email_verified,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.provider,
+        u1_0.provider_id,
+        u1_0.status,
+        t1_0.teacher_id,
+        t1_0.approval_status,
+        t1_0.cv_url,
+        t1_0.experience_year,
+        t1_0.specialization,
+        u1_0.username,
+        rs1_0.submitted_at 
+    from
+        RepoSubmission rs1_0 
+    join
+        Assignment ai1_0 
+            on ai1_0.assignment_id=rs1_0.assignment_id 
+    join
+        Lesson li1_0 
+            on li1_0.lesson_id=ai1_0.lesson_id 
+    join
+        Course ci1_0 
+            on ci1_0.course_id=li1_0.course_id 
+    left join
+        CourseCategory ci2_0 
+            on ci2_0.category_id=ci1_0.category_id 
+    left join
+        Section si1_0 
+            on si1_0.section_id=li1_0.section_id 
+    join
+        Student si2_0 
+            on si2_0.student_id=rs1_0.student_id 
+    left join
+        Cart c1_0 
+            on si2_0.student_id=c1_0.student_id 
+    join
+        Users u1_0 
+            on u1_0.user_id=si2_0.student_id 
+    left join
+        Teacher t1_0 
+            on u1_0.user_id=t1_0.teacher_id 
+    where
+        rs1_0.submission_id=?
+Hibernate: 
+    insert 
+    into
+        RepoFileAnalysis
+        (ai_score, file_name, submission_id, summary) 
+    values
+        (?, ?, ?, ?)
+thg 3 16, 2026 6:16:03 CH course
+itproject.service.AssignmentSubm
+issionService 
+processSubmissionAsync
+INFO: [Submission] Analyzing 
+file: 
+src\java\dal\CustomerDAO.java 
+(4095 chars)
+thg 3 16, 2026 6:16:03 CH course
+itproject.service.GeminiService 
+analyzeCodeFile
+INFO: [AI] Analyzing file: 
+src\java\dal\CustomerDAO.java 
+(4095 chars)
+thg 3 16, 2026 6:16:03 CH course
+itproject.service.GeminiService 
+callGroqAPI
+INFO: [AI] Sending request to 
+Groq (llama-3.1-8b-instant), 
+attempt 1/5, body: 5068 bytes
+thg 3 16, 2026 6:16:04 CH course
+itproject.service.GeminiService 
+callGroqAPI
+INFO: [AI] Response status: 200
+Hibernate: 
+    select
+        rs1_0.submission_id,
+        rs1_0.assignment_id,
+        ai1_0.assignment_id,
+        ai1_0.created_at,
+        ai1_0.criteria,
+        ai1_0.description,
+        ai1_0.expected_output,
+        ai1_0.file_extensions,
+        ai1_0.lesson_id,
+        li1_0.lesson_id,
+        li1_0.content,
+        li1_0.course_id,
+        ci1_0.course_id,
+        ci2_0.category_id,
+        ci2_0.name,
+        ci1_0.created_at,
+        ci1_0.description,
+        ci1_0.level,
+        ci1_0.price,
+        ci1_0.status,
+        ci1_0.thumbnail_url,
+        ci1_0.title,
+        ci1_0.updated_at,
+        li1_0.order_index,
+        si1_0.section_id,
+        si1_0.course_id,
+        si1_0.created_at,
+        si1_0.order_index,
+        si1_0.title,
+        li1_0.title,
+        ai1_0.title,
+        rs1_0.feedback,
+        rs1_0.github_url,
+        rs1_0.score,
+        rs1_0.status,
+        rs1_0.student_id,
+        si2_0.student_id,
+        c1_0.cart_id,
+        c1_0.created_at,
+        c1_0.student_id,
+        si2_0.date_of_birth,
+        si2_0.level,
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.email_verified,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.provider,
+        u1_0.provider_id,
+        u1_0.status,
+        t1_0.teacher_id,
+        t1_0.approval_status,
+        t1_0.cv_url,
+        t1_0.experience_year,
+        t1_0.specialization,
+        u1_0.username,
+        rs1_0.submitted_at 
+    from
+        RepoSubmission rs1_0 
+    join
+        Assignment ai1_0 
+            on ai1_0.assignment_id=rs1_0.assignment_id 
+    join
+        Lesson li1_0 
+            on li1_0.lesson_id=ai1_0.lesson_id 
+    join
+        Course ci1_0 
+            on ci1_0.course_id=li1_0.course_id 
+    left join
+        CourseCategory ci2_0 
+            on ci2_0.category_id=ci1_0.category_id 
+    left join
+        Section si1_0 
+            on si1_0.section_id=li1_0.section_id 
+    join
+        Student si2_0 
+            on si2_0.student_id=rs1_0.student_id 
+    left join
+        Cart c1_0 
+            on si2_0.student_id=c1_0.student_id 
+    join
+        Users u1_0 
+            on u1_0.user_id=si2_0.student_id 
+    left join
+        Teacher t1_0 
+            on u1_0.user_id=t1_0.teacher_id 
+    where
+        rs1_0.submission_id=?
+Hibernate: 
+    insert 
+    into
+        RepoFileAnalysis
+        (ai_score, file_name, submission_id, summary) 
+    values
+        (?, ?, ?, ?)
+thg 3 16, 2026 6:16:04 CH course
+itproject.service.AssignmentSubm
+issionService 
+processSubmissionAsync
+INFO: [Submission] Analyzing 
+file: src\java\controller\Remove
+Controller.java (1252 chars)
+thg 3 16, 2026 6:16:04 CH course
+itproject.service.GeminiService 
+analyzeCodeFile
+INFO: [AI] Analyzing file: src\j
+ava\controller\RemoveController.
+java (1252 chars)
+thg 3 16, 2026 6:16:04 CH course
+itproject.service.GeminiService 
+callGroqAPI
+INFO: [AI] Sending request to 
+Groq (llama-3.1-8b-instant), 
+attempt 1/5, body: 1846 bytes
+thg 3 16, 2026 6:16:04 CH course
+itproject.service.GeminiService 
+callGroqAPI
+INFO: [AI] Response status: 200
+Hibernate: 
+    select
+        rs1_0.submission_id,
+        rs1_0.assignment_id,
+        ai1_0.assignment_id,
+        ai1_0.created_at,
+        ai1_0.criteria,
+        ai1_0.description,
+        ai1_0.expected_output,
+        ai1_0.file_extensions,
+        ai1_0.lesson_id,
+        li1_0.lesson_id,
+        li1_0.content,
+        li1_0.course_id,
+        ci1_0.course_id,
+        ci2_0.category_id,
+        ci2_0.name,
+        ci1_0.created_at,
+        ci1_0.description,
+        ci1_0.level,
+        ci1_0.price,
+        ci1_0.status,
+        ci1_0.thumbnail_url,
+        ci1_0.title,
+        ci1_0.updated_at,
+        li1_0.order_index,
+        si1_0.section_id,
+        si1_0.course_id,
+        si1_0.created_at,
+        si1_0.order_index,
+        si1_0.title,
+        li1_0.title,
+        ai1_0.title,
+        rs1_0.feedback,
+        rs1_0.github_url,
+        rs1_0.score,
+        rs1_0.status,
+        rs1_0.student_id,
+        si2_0.student_id,
+        c1_0.cart_id,
+        c1_0.created_at,
+        c1_0.student_id,
+        si2_0.date_of_birth,
+        si2_0.level,
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.email_verified,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.provider,
+        u1_0.provider_id,
+        u1_0.status,
+        t1_0.teacher_id,
+        t1_0.approval_status,
+        t1_0.cv_url,
+        t1_0.experience_year,
+        t1_0.specialization,
+        u1_0.username,
+        rs1_0.submitted_at 
+    from
+        RepoSubmission rs1_0 
+    join
+        Assignment ai1_0 
+            on ai1_0.assignment_id=rs1_0.assignment_id 
+    join
+        Lesson li1_0 
+            on li1_0.lesson_id=ai1_0.lesson_id 
+    join
+        Course ci1_0 
+            on ci1_0.course_id=li1_0.course_id 
+    left join
+        CourseCategory ci2_0 
+            on ci2_0.category_id=ci1_0.category_id 
+    left join
+        Section si1_0 
+            on si1_0.section_id=li1_0.section_id 
+    join
+        Student si2_0 
+            on si2_0.student_id=rs1_0.student_id 
+    left join
+        Cart c1_0 
+            on si2_0.student_id=c1_0.student_id 
+    join
+        Users u1_0 
+            on u1_0.user_id=si2_0.student_id 
+    left join
+        Teacher t1_0 
+            on u1_0.user_id=t1_0.teacher_id 
+    where
+        rs1_0.submission_id=?
+Hibernate: 
+    insert 
+    into
+        RepoFileAnalysis
+        (ai_score, file_name, submission_id, summary) 
+    values
+        (?, ?, ?, ?)
+thg 3 16, 2026 6:16:04 CH course
+itproject.service.AssignmentSubm
+issionService 
+processSubmissionAsync
+INFO: [Submission] Analyzing 
+file: 
+src\java\dal\DBContext.java 
+(1375 chars)
+thg 3 16, 2026 6:16:04 CH course
+itproject.service.GeminiService 
+analyzeCodeFile
+INFO: [AI] Analyzing file: 
+src\java\dal\DBContext.java 
+(1375 chars)
+thg 3 16, 2026 6:16:04 CH course
+itproject.service.GeminiService 
+callGroqAPI
+INFO: [AI] Sending request to 
+Groq (llama-3.1-8b-instant), 
+attempt 1/5, body: 2038 bytes
+thg 3 16, 2026 6:16:05 CH course
+itproject.service.GeminiService 
+callGroqAPI
+INFO: [AI] Response status: 200
+Hibernate: 
+    select
+        rs1_0.submission_id,
+        rs1_0.assignment_id,
+        ai1_0.assignment_id,
+        ai1_0.created_at,
+        ai1_0.criteria,
+        ai1_0.description,
+        ai1_0.expected_output,
+        ai1_0.file_extensions,
+        ai1_0.lesson_id,
+        li1_0.lesson_id,
+        li1_0.content,
+        li1_0.course_id,
+        ci1_0.course_id,
+        ci2_0.category_id,
+        ci2_0.name,
+        ci1_0.created_at,
+        ci1_0.description,
+        ci1_0.level,
+        ci1_0.price,
+        ci1_0.status,
+        ci1_0.thumbnail_url,
+        ci1_0.title,
+        ci1_0.updated_at,
+        li1_0.order_index,
+        si1_0.section_id,
+        si1_0.course_id,
+        si1_0.created_at,
+        si1_0.order_index,
+        si1_0.title,
+        li1_0.title,
+        ai1_0.title,
+        rs1_0.feedback,
+        rs1_0.github_url,
+        rs1_0.score,
+        rs1_0.status,
+        rs1_0.student_id,
+        si2_0.student_id,
+        c1_0.cart_id,
+        c1_0.created_at,
+        c1_0.student_id,
+        si2_0.date_of_birth,
+        si2_0.level,
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.email_verified,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.provider,
+        u1_0.provider_id,
+        u1_0.status,
+        t1_0.teacher_id,
+        t1_0.approval_status,
+        t1_0.cv_url,
+        t1_0.experience_year,
+        t1_0.specialization,
+        u1_0.username,
+        rs1_0.submitted_at 
+    from
+        RepoSubmission rs1_0 
+    join
+        Assignment ai1_0 
+            on ai1_0.assignment_id=rs1_0.assignment_id 
+    join
+        Lesson li1_0 
+            on li1_0.lesson_id=ai1_0.lesson_id 
+    join
+        Course ci1_0 
+            on ci1_0.course_id=li1_0.course_id 
+    left join
+        CourseCategory ci2_0 
+            on ci2_0.category_id=ci1_0.category_id 
+    left join
+        Section si1_0 
+            on si1_0.section_id=li1_0.section_id 
+    join
+        Student si2_0 
+            on si2_0.student_id=rs1_0.student_id 
+    left join
+        Cart c1_0 
+            on si2_0.student_id=c1_0.student_id 
+    join
+        Users u1_0 
+            on u1_0.user_id=si2_0.student_id 
+    left join
+        Teacher t1_0 
+            on u1_0.user_id=t1_0.teacher_id 
+    where
+        rs1_0.submission_id=?
+Hibernate: 
+    insert 
+    into
+        RepoFileAnalysis
+        (ai_score, file_name, submission_id, summary) 
+    values
+        (?, ?, ?, ?)
+thg 3 16, 2026 6:16:05 CH course
+itproject.service.AssignmentSubm
+issionService 
+processSubmissionAsync
+INFO: [Submission] Analyzing 
+file: 
+src\java\model\Customer.java 
+(1241 chars)
+thg 3 16, 2026 6:16:05 CH course
+itproject.service.GeminiService 
+analyzeCodeFile
+INFO: [AI] Analyzing file: 
+src\java\model\Customer.java 
+(1241 chars)
+thg 3 16, 2026 6:16:05 CH course
+itproject.service.GeminiService 
+callGroqAPI
+INFO: [AI] Sending request to 
+Groq (llama-3.1-8b-instant), 
+attempt 1/5, body: 1894 bytes
+thg 3 16, 2026 6:16:06 CH course
+itproject.service.GeminiService 
+callGroqAPI
+INFO: [AI] Response status: 200
+Hibernate: 
+    select
+        rs1_0.submission_id,
+        rs1_0.assignment_id,
+        ai1_0.assignment_id,
+        ai1_0.created_at,
+        ai1_0.criteria,
+        ai1_0.description,
+        ai1_0.expected_output,
+        ai1_0.file_extensions,
+        ai1_0.lesson_id,
+        li1_0.lesson_id,
+        li1_0.content,
+        li1_0.course_id,
+        ci1_0.course_id,
+        ci2_0.category_id,
+        ci2_0.name,
+        ci1_0.created_at,
+        ci1_0.description,
+        ci1_0.level,
+        ci1_0.price,
+        ci1_0.status,
+        ci1_0.thumbnail_url,
+        ci1_0.title,
+        ci1_0.updated_at,
+        li1_0.order_index,
+        si1_0.section_id,
+        si1_0.course_id,
+        si1_0.created_at,
+        si1_0.order_index,
+        si1_0.title,
+        li1_0.title,
+        ai1_0.title,
+        rs1_0.feedback,
+        rs1_0.github_url,
+        rs1_0.score,
+        rs1_0.status,
+        rs1_0.student_id,
+        si2_0.student_id,
+        c1_0.cart_id,
+        c1_0.created_at,
+        c1_0.student_id,
+        si2_0.date_of_birth,
+        si2_0.level,
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.email_verified,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.provider,
+        u1_0.provider_id,
+        u1_0.status,
+        t1_0.teacher_id,
+        t1_0.approval_status,
+        t1_0.cv_url,
+        t1_0.experience_year,
+        t1_0.specialization,
+        u1_0.username,
+        rs1_0.submitted_at 
+    from
+        RepoSubmission rs1_0 
+    join
+        Assignment ai1_0 
+            on ai1_0.assignment_id=rs1_0.assignment_id 
+    join
+        Lesson li1_0 
+            on li1_0.lesson_id=ai1_0.lesson_id 
+    join
+        Course ci1_0 
+            on ci1_0.course_id=li1_0.course_id 
+    left join
+        CourseCategory ci2_0 
+            on ci2_0.category_id=ci1_0.category_id 
+    left join
+        Section si1_0 
+            on si1_0.section_id=li1_0.section_id 
+    join
+        Student si2_0 
+            on si2_0.student_id=rs1_0.student_id 
+    left join
+        Cart c1_0 
+            on si2_0.student_id=c1_0.student_id 
+    join
+        Users u1_0 
+            on u1_0.user_id=si2_0.student_id 
+    left join
+        Teacher t1_0 
+            on u1_0.user_id=t1_0.teacher_id 
+    where
+        rs1_0.submission_id=?
+Hibernate: 
+    insert 
+    into
+        RepoFileAnalysis
+        (ai_score, file_name, submission_id, summary) 
+    values
+        (?, ?, ?, ?)
+thg 3 16, 2026 6:16:06 CH course
+itproject.service.AssignmentSubm
+issionService 
+processSubmissionAsync
+INFO: [Submission] Analyzing 
+file: src\java\controller\Update
+Controller.java (1764 chars)
+thg 3 16, 2026 6:16:06 CH course
+itproject.service.GeminiService 
+analyzeCodeFile
+INFO: [AI] Analyzing file: src\j
+ava\controller\UpdateController.
+java (1764 chars)
+thg 3 16, 2026 6:16:06 CH course
+itproject.service.GeminiService 
+callGroqAPI
+INFO: [AI] Sending request to 
+Groq (llama-3.1-8b-instant), 
+attempt 1/5, body: 2423 bytes
+thg 3 16, 2026 6:16:06 CH course
+itproject.service.GeminiService 
+callGroqAPI
+INFO: [AI] Response status: 200
+Hibernate: 
+    select
+        rs1_0.submission_id,
+        rs1_0.assignment_id,
+        ai1_0.assignment_id,
+        ai1_0.created_at,
+        ai1_0.criteria,
+        ai1_0.description,
+        ai1_0.expected_output,
+        ai1_0.file_extensions,
+        ai1_0.lesson_id,
+        li1_0.lesson_id,
+        li1_0.content,
+        li1_0.course_id,
+        ci1_0.course_id,
+        ci2_0.category_id,
+        ci2_0.name,
+        ci1_0.created_at,
+        ci1_0.description,
+        ci1_0.level,
+        ci1_0.price,
+        ci1_0.status,
+        ci1_0.thumbnail_url,
+        ci1_0.title,
+        ci1_0.updated_at,
+        li1_0.order_index,
+        si1_0.section_id,
+        si1_0.course_id,
+        si1_0.created_at,
+        si1_0.order_index,
+        si1_0.title,
+        li1_0.title,
+        ai1_0.title,
+        rs1_0.feedback,
+        rs1_0.github_url,
+        rs1_0.score,
+        rs1_0.status,
+        rs1_0.student_id,
+        si2_0.student_id,
+        c1_0.cart_id,
+        c1_0.created_at,
+        c1_0.student_id,
+        si2_0.date_of_birth,
+        si2_0.level,
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.email_verified,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.provider,
+        u1_0.provider_id,
+        u1_0.status,
+        t1_0.teacher_id,
+        t1_0.approval_status,
+        t1_0.cv_url,
+        t1_0.experience_year,
+        t1_0.specialization,
+        u1_0.username,
+        rs1_0.submitted_at 
+    from
+        RepoSubmission rs1_0 
+    join
+        Assignment ai1_0 
+            on ai1_0.assignment_id=rs1_0.assignment_id 
+    join
+        Lesson li1_0 
+            on li1_0.lesson_id=ai1_0.lesson_id 
+    join
+        Course ci1_0 
+            on ci1_0.course_id=li1_0.course_id 
+    left join
+        CourseCategory ci2_0 
+            on ci2_0.category_id=ci1_0.category_id 
+    left join
+        Section si1_0 
+            on si1_0.section_id=li1_0.section_id 
+    join
+        Student si2_0 
+            on si2_0.student_id=rs1_0.student_id 
+    left join
+        Cart c1_0 
+            on si2_0.student_id=c1_0.student_id 
+    join
+        Users u1_0 
+            on u1_0.user_id=si2_0.student_id 
+    left join
+        Teacher t1_0 
+            on u1_0.user_id=t1_0.teacher_id 
+    where
+        rs1_0.submission_id=?
+Hibernate: 
+    insert 
+    into
+        RepoFileAnalysis
+        (ai_score, file_name, submission_id, summary) 
+    values
+        (?, ?, ?, ?)
+thg 3 16, 2026 6:16:06 CH course
+itproject.service.AssignmentSubm
+issionService 
+processSubmissionAsync
+INFO: [Submission] Starting 
+final grading...
+thg 3 16, 2026 6:16:06 CH course
+itproject.service.GeminiService 
+gradeAssignment
+INFO: [AI] Grading assignment. 
+Summaries length: 9297 chars
+thg 3 16, 2026 6:16:06 CH course
+itproject.service.GeminiService 
+callGroqAPI
+INFO: [AI] Sending request to 
+Groq (llama-3.1-8b-instant), 
+attempt 1/5, body: 12558 bytes
+thg 3 16, 2026 6:16:06 CH course
+itproject.service.GeminiService 
+callGroqAPI
+INFO: [AI] Response status: 429
+thg 3 16, 2026 6:16:06 CH course
+itproject.service.GeminiService 
+callGroqAPI
+WARNING: [AI] Rate limited 
+(429). Waiting 8000ms before 
+retry 2/5...
+thg 3 16, 2026 6:16:14 CH course
+itproject.service.GeminiService 
+callGroqAPI
+INFO: [AI] Sending request to 
+Groq (llama-3.1-8b-instant), 
+attempt 2/5, body: 12558 bytes
+thg 3 16, 2026 6:16:16 CH course
+itproject.service.GeminiService 
+callGroqAPI
+INFO: [AI] Response status: 200
+thg 3 16, 2026 6:16:16 CH course
+itproject.service.GeminiService 
+parseGradingResult
+INFO: [AI] Parsing grading 
+result (2815 chars)
+thg 3 16, 2026 6:16:16 CH course
+itproject.service.GeminiService 
+parseGradingResult
+INFO: [AI] Parsed score: 55
+thg 3 16, 2026 6:16:16 CH course
+itproject.service.AssignmentSubm
+issionService 
+processSubmissionAsync
+INFO: [Submission] Grading 
+complete! Score: 55
+Hibernate: 
+    select
+        rs1_0.submission_id,
+        rs1_0.assignment_id,
+        ai1_0.assignment_id,
+        ai1_0.created_at,
+        ai1_0.criteria,
+        ai1_0.description,
+        ai1_0.expected_output,
+        ai1_0.file_extensions,
+        ai1_0.lesson_id,
+        li1_0.lesson_id,
+        li1_0.content,
+        li1_0.course_id,
+        ci1_0.course_id,
+        ci2_0.category_id,
+        ci2_0.name,
+        ci1_0.created_at,
+        ci1_0.description,
+        ci1_0.level,
+        ci1_0.price,
+        ci1_0.status,
+        ci1_0.thumbnail_url,
+        ci1_0.title,
+        ci1_0.updated_at,
+        li1_0.order_index,
+        si1_0.section_id,
+        si1_0.course_id,
+        si1_0.created_at,
+        si1_0.order_index,
+        si1_0.title,
+        li1_0.title,
+        ai1_0.title,
+        rs1_0.feedback,
+        rs1_0.github_url,
+        rs1_0.score,
+        rs1_0.status,
+        rs1_0.student_id,
+        si2_0.student_id,
+        c1_0.cart_id,
+        c1_0.created_at,
+        c1_0.student_id,
+        si2_0.date_of_birth,
+        si2_0.level,
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.email_verified,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.provider,
+        u1_0.provider_id,
+        u1_0.status,
+        t1_0.teacher_id,
+        t1_0.approval_status,
+        t1_0.cv_url,
+        t1_0.experience_year,
+        t1_0.specialization,
+        u1_0.username,
+        rs1_0.submitted_at 
+    from
+        RepoSubmission rs1_0 
+    join
+        Assignment ai1_0 
+            on ai1_0.assignment_id=rs1_0.assignment_id 
+    join
+        Lesson li1_0 
+            on li1_0.lesson_id=ai1_0.lesson_id 
+    join
+        Course ci1_0 
+            on ci1_0.course_id=li1_0.course_id 
+    left join
+        CourseCategory ci2_0 
+            on ci2_0.category_id=ci1_0.category_id 
+    left join
+        Section si1_0 
+            on si1_0.section_id=li1_0.section_id 
+    join
+        Student si2_0 
+            on si2_0.student_id=rs1_0.student_id 
+    left join
+        Cart c1_0 
+            on si2_0.student_id=c1_0.student_id 
+    join
+        Users u1_0 
+            on u1_0.user_id=si2_0.student_id 
+    left join
+        Teacher t1_0 
+            on u1_0.user_id=t1_0.teacher_id 
+    where
+        rs1_0.submission_id=?
+Hibernate: 
+    update
+        RepoSubmission 
+    set
+        assignment_id=?,
+        feedback=?,
+        github_url=?,
+        score=?,
+        status=?,
+        student_id=?,
+        submitted_at=? 
+    where
+        submission_id=?
+thg 3 16, 2026 6:16:16 CH course
+itproject.service.AssignmentSubm
+issionService 
+processSubmissionAsync
+INFO: [Submission] Processing 
+completed successfully for 
+submission 88
+thg 3 16, 2026 6:16:16 CH course
+itproject.service.AssignmentSubm
+issionService 
+processSubmissionAsync
+INFO: [Submission] Cleaned up 
+repo at: C:\Users\ASUS\AppData\L
+ocal\Temp\\repos\submission_88
+Hibernate: 
+    select
+        rs1_0.submission_id,
+        rs1_0.assignment_id,
+        ai1_0.assignment_id,
+        ai1_0.created_at,
+        ai1_0.criteria,
+        ai1_0.description,
+        ai1_0.expected_output,
+        ai1_0.file_extensions,
+        ai1_0.lesson_id,
+        li1_0.lesson_id,
+        li1_0.content,
+        li1_0.course_id,
+        ci1_0.course_id,
+        ci2_0.category_id,
+        ci2_0.name,
+        ci1_0.created_at,
+        ci1_0.description,
+        ci1_0.level,
+        ci1_0.price,
+        ci1_0.status,
+        ci1_0.thumbnail_url,
+        ci1_0.title,
+        ci1_0.updated_at,
+        li1_0.order_index,
+        si1_0.section_id,
+        si1_0.course_id,
+        si1_0.created_at,
+        si1_0.order_index,
+        si1_0.title,
+        li1_0.title,
+        ai1_0.title,
+        rs1_0.feedback,
+        rs1_0.github_url,
+        rs1_0.score,
+        rs1_0.status,
+        rs1_0.student_id,
+        si2_0.student_id,
+        c1_0.cart_id,
+        c1_0.created_at,
+        c1_0.student_id,
+        si2_0.date_of_birth,
+        si2_0.level,
+        u1_0.user_id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.email_verified,
+        u1_0.full_name,
+        u1_0.password,
+        u1_0.provider,
+        u1_0.provider_id,
+        u1_0.status,
+        t1_0.teacher_id,
+        t1_0.approval_status,
+        t1_0.cv_url,
+        t1_0.experience_year,
+        t1_0.specialization,
+        u1_0.username,
+        rs1_0.submitted_at 
+    from
+        RepoSubmission rs1_0 
+    join
+        Assignment ai1_0 
+            on ai1_0.assignment_id=rs1_0.assignment_id 
+    join
+        Lesson li1_0 
+            on li1_0.lesson_id=ai1_0.lesson_id 
+    join
+        Course ci1_0 
+            on ci1_0.course_id=li1_0.course_id 
+    left join
+        CourseCategory ci2_0 
+            on ci2_0.category_id=ci1_0.category_id 
+    left join
+        Section si1_0 
+            on si1_0.section_id=li1_0.section_id 
+    join
+        Student si2_0 
+            on si2_0.student_id=rs1_0.student_id 
+    left join
+        Cart c1_0 
+            on si2_0.student_id=c1_0.student_id 
+    join
+        Users u1_0 
+            on u1_0.user_id=si2_0.student_id 
+    left join
+        Teacher t1_0 
+            on u1_0.user_id=t1_0.teacher_id 
+    where
+        rs1_0.submission_id=?
+processSubmission returned: true

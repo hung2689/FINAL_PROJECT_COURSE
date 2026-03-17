@@ -20,7 +20,7 @@ public class CourseDetailDAOImpl extends BaseDAO implements ICourseDetailDAO {
 
             // Manual fetch to guarantee data is fully hydrated and bypass Fetch/Lazy
             // evaluation bugs
-            String sectionJpql = "SELECT s FROM Section s WHERE s.courseId.courseId = :courseId ORDER BY s.orderIndex ASC";
+            String sectionJpql = "SELECT s FROM Section s WHERE s.courseId = :courseId ORDER BY s.orderIndex ASC";
             TypedQuery<courseitproject.model.Section> sQuery = em.createQuery(sectionJpql,
                     courseitproject.model.Section.class);
             sQuery.setParameter("courseId", courseId);

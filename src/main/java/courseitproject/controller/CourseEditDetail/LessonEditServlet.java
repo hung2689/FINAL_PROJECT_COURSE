@@ -57,7 +57,7 @@ public class LessonEditServlet extends HttpServlet {
                 Section section = new Section(sectionId);
                 String courseIdStr = request.getParameter("course_id");
                 if (courseIdStr != null) {
-                    section.setCourseId(new Course(Integer.parseInt(courseIdStr)));
+                    section.setCourseId(Integer.parseInt(courseIdStr));
                 }
 
                 String orderIndexStr = request.getParameter("order_index");

@@ -10,8 +10,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
@@ -36,11 +34,22 @@ import java.util.Date;
 @NamedQueries({
     @NamedQuery(name = "Section.findAll", query = "SELECT s FROM Section s"),
     @NamedQuery(name = "Section.findBySectionId", query = "SELECT s FROM Section s WHERE s.sectionId = :sectionId"),
+    @NamedQuery(name = "Section.findByCourseId", query = "SELECT s FROM Section s WHERE s.courseId = :courseId"),
     @NamedQuery(name = "Section.findByTitle", query = "SELECT s FROM Section s WHERE s.title = :title"),
     @NamedQuery(name = "Section.findByOrderIndex", query = "SELECT s FROM Section s WHERE s.orderIndex = :orderIndex"),
     @NamedQuery(name = "Section.findByCreatedAt", query = "SELECT s FROM Section s WHERE s.createdAt = :createdAt")})
 public class Section implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "section_id")
+    private Integer sectionId;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "course_id")
+    private int courseId;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
@@ -50,21 +59,11 @@ public class Section implements Serializable {
     @NotNull
     @Column(name = "order_index")
     private int orderIndex;
-
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "section_id")
-    private Integer sectionId;
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
     @OneToMany(mappedBy = "sectionId")
     private Collection<Lesson> lessonCollection;
-    @JoinColumn(name = "course_id", referencedColumnName = "course_id")
-    @ManyToOne(optional = false)
-    private Course courseId;
 
     public Section() {
     }
@@ -73,8 +72,9 @@ public class Section implements Serializable {
         this.sectionId = sectionId;
     }
 
-    public Section(Integer sectionId, String title, int orderIndex) {
+    public Section(Integer sectionId, int courseId, String title, int orderIndex) {
         this.sectionId = sectionId;
+        this.courseId = courseId;
         this.title = title;
         this.orderIndex = orderIndex;
     }
@@ -87,6 +87,21 @@ public class Section implements Serializable {
         this.sectionId = sectionId;
     }
 
+    public int getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(int courseId) {
+        this.courseId = courseId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public int getOrderIndex() {
         return orderIndex;
@@ -113,14 +128,6 @@ public class Section implements Serializable {
         this.lessonCollection = lessonCollection;
     }
 
-    public Course getCourseId() {
-        return courseId;
-    }
-
-    public void setCourseId(Course courseId) {
-        this.courseId = courseId;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -145,16 +152,5 @@ public class Section implements Serializable {
     public String toString() {
         return "courseitproject.model.Section[ sectionId=" + sectionId + " ]";
     }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     
-
-  
 }

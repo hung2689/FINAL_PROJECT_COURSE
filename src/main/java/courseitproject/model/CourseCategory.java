@@ -33,16 +33,15 @@ import java.util.Collection;
     @NamedQuery(name = "CourseCategory.findByName", query = "SELECT c FROM CourseCategory c WHERE c.name = :name")})
 public class CourseCategory implements Serializable {
 
-    @Size(max = 255)
-    @Column(name = "name")
-    private String name;
-
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "category_id")
     private Integer categoryId;
+    @Size(max = 255)
+    @Column(name = "name")
+    private String name;
     @OneToMany(mappedBy = "categoryId")
     private Collection<Course> courseCollection;
 
@@ -61,6 +60,13 @@ public class CourseCategory implements Serializable {
         this.categoryId = categoryId;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     @XmlTransient
     public Collection<Course> getCourseCollection() {
@@ -94,14 +100,6 @@ public class CourseCategory implements Serializable {
     @Override
     public String toString() {
         return "courseitproject.model.CourseCategory[ categoryId=" + categoryId + " ]";
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
     
 }

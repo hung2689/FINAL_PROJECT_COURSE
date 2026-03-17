@@ -20,7 +20,7 @@ public class LessonEditService extends GenericDAO<Lesson> {
         EntityTransaction tx = em.getTransaction();
         Lesson lesson = new Lesson();
         lesson.setSectionId(section);
-        lesson.setCourseId(section.getCourseId());
+        lesson.setCourseId(new Course(section.getCourseId()));
         lesson.setTitle(title);
         lesson.setOrderIndex(orderIndex);
         try {
