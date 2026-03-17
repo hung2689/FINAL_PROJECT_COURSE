@@ -11,4 +11,6 @@ public interface IEnrollmentService {
     int countEnrollmentsByStudent(int studentId);
 
     boolean isStudentEnrolled(int studentId, int courseId);
+    
+    void enrollSingleCourse(int studentId, int courseId);
 }

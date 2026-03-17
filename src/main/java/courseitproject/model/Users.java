@@ -64,7 +64,7 @@ public class Users implements Serializable {
     @Column(name = "password")
     private String password;
     @Size(max = 255)
-    @Column(name = "full_name")
+    @Column(name = "full_name", columnDefinition = "NVARCHAR(255)")
     private String fullName;
     @Size(max = 255)
     @Column(name = "status")

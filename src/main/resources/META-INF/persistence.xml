@@ -10,7 +10,7 @@
     <class>courseitproject.model.CourseCategory</class>
     <class>courseitproject.model.Course</class>
     <class>courseitproject.model.CourseTeacher</class>
-    <class>courseitproject.model.Section</class>
+     <class>courseitproject.model.Section</class>
     <class>courseitproject.model.Quiz</class>
     <class>courseitproject.model.Question</class>
     <class>courseitproject.model.Answer</class>
@@ -37,14 +37,15 @@
     <class>courseitproject.model.Assignment</class>
     <class>courseitproject.model.AssignmentCriteria</class>
     <class>courseitproject.model.TeacherJob</class>
-    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+     <class>courseitproject.model.RoadmapNode</class>
+     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <!-- Provider JPA (EclipseLink hoặc Hibernate) -->
     <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
     <!-- Thông tin Database -->
     <properties>
       <!-- Kết nối SQL Server -->
       <property name="jakarta.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
-      <property name="jakarta.persistence.jdbc.url" value="jdbc:sqlserver://localhost:1433;databaseName=Course_Final_Project;encrypt=true;trustServerCertificate=true"/>
+      <property name="jakarta.persistence.jdbc.url" value="jdbc:sqlserver://localhost:1433;databaseName=Course_Final_Project;encrypt=true;trustServerCertificate=true;sendStringParametersAsUnicode=true"/>
       <property name="jakarta.persistence.jdbc.user" value="sa"/>
       <property name="jakarta.persistence.jdbc.password" value="123456"/>
       <!-- Hibernate Config -->
@@ -52,6 +53,10 @@
       <property name="hibernate.hbm2ddl.auto" value="update"/>
       <property name="hibernate.show_sql" value="true"/>
       <property name="hibernate.format_sql" value="true"/>
+      <!-- Unicode / UTF-8 Encoding -->
+      <property name="hibernate.connection.characterEncoding" value="UTF-8"/>
+      <property name="hibernate.connection.useUnicode" value="true"/>
+      <property name="hibernate.connection.charSet" value="UTF-8"/>
     </properties>
   </persistence-unit>
 </persistence>

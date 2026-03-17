@@ -121,7 +121,13 @@
                             allowfullscreen>
                     </iframe>
                 </div>
-
+                <div class="px-6 md:px-8 py-4 border-b border-gray-100 bg-emerald-50/30 flex justify-end">
+                    <button id="markCompleteBtn" onclick="markLessonCompleted()"
+                            class="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-6 rounded-xl transition-all shadow-sm hover:shadow-md">
+                        <span class="material-symbols-outlined">check_circle</span>
+                        Đánh dấu đã hoàn thành bài học
+                    </button>
+                </div>
                 <!-- Comment Section -->
                 <div class="p-6 md:p-8 flex-1 w-full max-w-5xl">
                     <h3 class="text-xl font-bold mb-6 flex items-center gap-2 text-slate-800">
@@ -433,6 +439,122 @@
         </main>
 
         <jsp:include page="../common/userbuttom.jsp" />
+
+        <div id="ai-debug-box" style="position: fixed; bottom: 20px; left: 20px; background: #fff; border: 4px solid red; padding: 15px; z-index: 99999; box-shadow: 0 0 15px rgba(0,0,0,0.3); border-radius: 8px;">
+            <h3 style="color: red; font-weight: 900; margin-bottom: 10px; font-size: 16px;">🔍 RADAR TÌM ID HỌC VIÊN</h3>
+
+            <p>1. Thử tìm biến <b>user</b>: <span style="color:blue; font-weight:bold; font-size:18px;">${sessionScope.user.userId} ${sessionScope.user.id}</span></p>
+            <p>2. Thử tìm biến <b>account</b>: <span style="color:blue; font-weight:bold; font-size:18px;">${sessionScope.account.userId} ${sessionScope.account.id}</span></p>
+            <p>3. Thử tìm biến <b>student</b>: <span style="color:blue; font-weight:bold; font-size:18px;">${sessionScope.student.userId} ${sessionScope.student.studentId}</span></p>
+
+            <hr style="margin: 10px 0;">
+            <p style="font-size: 12px; color: #666;">Danh sách các biến đang có trong Session của bạn:</p>
+            <ul style="font-size: 13px; color: purple; margin-top: 5px; font-weight: bold;">
+                <c:forEach items="${sessionScope}" var="attr">
+                    <li>👉 ${attr.key}</li>
+                    </c:forEach>
+            </ul>
+        </div>
+
+        <script>
+            // 🛑 BƯỚC QUAN TRỌNG NHẤT:
+            // Bạn nhìn ra ngoài giao diện Web, xem cái số ID màu xanh lam nó hiện ở dòng 1, 2 hay 3.
+            // Nếu nó hiện ở dòng 2 (biến account), bạn hãy sửa chữ "user.userId" ở dưới thành "account.id" (hoặc thuộc tính tương ứng).
+
+            const currentStudentId = "${sessionScope.USER.userId}"; // <--- BẠN CHỈ CẦN SỬA ĐÚNG DÒNG NÀY
+
+            // Logic xử lý ngầm (Không cần sửa)
+            if (currentStudentId && currentStudentId !== "") {
+                console.log("🟢 Hệ thống theo dõi AI đã kích hoạt cho User ID: " + currentStudentId);
+
+                // Đổi màu bảng Radar sang Xanh lá báo hiệu thành công
+                const debugBox = document.getElementById("ai-debug-box");
+                debugBox.style.borderColor = "#10b981";
+                debugBox.innerHTML += "<div style='margin-top: 15px; padding: 8px; background: #d1fae5; color: #047857; font-weight: bold; border-radius: 4px;'>✅ THÀNH CÔNG! ĐÃ LẤY ĐƯỢC ID: " + currentStudentId + "<br>Hệ thống AI đang chạy ngầm...</div>";
+
+                function sendStudyHeartbeat() {
+                    const url = '${pageContext.request.contextPath}/api/track-study-time';
+
+                    fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: 'studentId=' + currentStudentId
+                    })
+                            .then(response => {
+                                if (response.ok) {
+                                    console.log("💓 [Ping AI] Đã cộng thêm 1 phút học vào CSDL!");
+                                }
+                            })
+                            .catch(error => console.error('Lỗi tracking AI:', error));
+                }
+
+                // Đang để 5000 (5 giây) để test cho lẹ. Chạy thật nhớ đổi lại 60000.
+                setInterval(sendStudyHeartbeat, 60000);
+
+            } else {
+                console.log("🟡 Chưa đăng nhập, hệ thống tracking AI đang ngủ.");
+                document.getElementById("ai-debug-box").innerHTML += "<div style='margin-top: 15px; padding: 8px; background: #fee2e2; color: #b91c1c; font-weight: bold; border-radius: 4px;'>❌ THẤT BẠI: Javascript vẫn nhận được chuỗi rỗng.<br>Hãy sửa dòng `const currentStudentId = ...` cho khớp với Radar phía trên!</div>";
+            }
+
+
+
+            function markLessonCompleted() {
+                // Lấy ID Học Viên
+                const currentStudentId = "${sessionScope.USER.userId}";
+
+                // Lấy ID Tài Nguyên từ thanh URL
+                const currentResourceId = "${param.resourceId}";
+
+                // --- MÁY SIÊU ÂM (In ra console để bắt bệnh) ---
+                console.log("🚀 CHUẨN BỊ GỬI DATA: Student ID = " + currentStudentId + " | Resource ID = " + currentResourceId);
+
+                if (!currentStudentId || currentStudentId === "") {
+                    alert("Vui lòng đăng nhập để lưu tiến độ!");
+                    return;
+                }
+
+                if (!currentResourceId || currentResourceId === "") {
+                    alert("Không lấy được ID tài nguyên từ URL!");
+                    return;
+                }
+
+                const btn = document.getElementById("markCompleteBtn");
+                btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-[20px]">sync</span> Đang lưu...';
+                btn.disabled = true;
+                btn.classList.add('opacity-75', 'cursor-not-allowed');
+
+                const url = '${pageContext.request.contextPath}/api/complete-lesson';
+
+                // ⚠️ ĐÂY LÀ CHỖ QUAN TRỌNG NHẤT: Bắt buộc phải là &resourceId=
+                const payload = 'studentId=' + currentStudentId + '&resourceId=' + currentResourceId;
+
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: payload
+                })
+                        .then(response => {
+                            if (response.ok) {
+                                btn.classList.remove('bg-emerald-600', 'hover:bg-emerald-700', 'text-white');
+                                btn.classList.add('bg-gray-200', 'text-emerald-800');
+                                btn.innerHTML = '<span class="material-symbols-outlined filled text-[20px]">task_alt</span> Đã hoàn thành';
+                            } else {
+                                throw new Error('Server trả về lỗi ' + response.status);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('❌ Lỗi khi lưu tiến độ:', error);
+                            alert("Có lỗi xảy ra, vui lòng thử lại sau!");
+                            btn.disabled = false;
+                            btn.classList.remove('opacity-75', 'cursor-not-allowed');
+                            btn.innerHTML = '<span class="material-symbols-outlined text-[20px]">check_circle</span> Đánh dấu đã hoàn thành bài học';
+                        });
+            }
+        </script>
 
     </body>
 

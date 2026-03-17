@@ -56,13 +56,13 @@ public class TeacherJob implements Serializable {
     @Column(name = "job_id")
     private Integer jobId;
     @Size(max = 255)
-    @Column(name = "title")
+    @Column(name = "title", columnDefinition = "NVARCHAR(255)")
     private String title;
     @Size(max = 2147483647)
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition = "NVARCHAR(MAX)")
     private String description;
     @Size(max = 255)
-    @Column(name = "location")
+    @Column(name = "location", columnDefinition = "NVARCHAR(255)")
     private String location;
     @Size(max = 255)
     @Column(name = "job_type")
@@ -85,13 +85,13 @@ public class TeacherJob implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
     @Size(max = 255)
-    @Column(name = "requirements")
+    @Column(name = "requirements", columnDefinition = "NVARCHAR(MAX)")
     private String requirements;
     @Size(max = 255)
-    @Column(name = "benefits")
+    @Column(name = "benefits", columnDefinition = "NVARCHAR(MAX)")
     private String benefits;
     @Size(max = 255)
-    @Column(name = "job_category")
+    @Column(name = "job_category", columnDefinition = "NVARCHAR(255)")
     private String jobCategory;
     @OneToMany(mappedBy = "jobId")
     private Collection<Candidates> candidatesCollection;
