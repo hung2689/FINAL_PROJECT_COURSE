@@ -207,7 +207,7 @@ public class EnrollmentServiceImp implements IEnrollmentService {
     public void checkAndWarnDropoutRisk(int enrollmentId) {
         EntityManager em = JPAUtil.getEntityManager();
         try {
-            // 1. Find Enrollment information
+            // 1. Tìm thông tin Enrollment
             Enrollment enrollment = em.find(Enrollment.class, enrollmentId);
             if (enrollment == null) {
                 System.out.println("❌ [Error] Enrollment info not found for ID: " + enrollmentId);
@@ -215,8 +215,8 @@ public class EnrollmentServiceImp implements IEnrollmentService {
             }
 
             // =========================================================
-            // [STEP 1] GRACE PERIOD (7 DAYS)
-            // Filter new students to avoid insufficient data for AI
+            // [BƯỚC 1] BỎ QUA 7 NGÀY ĐẦU (GRACE PERIOD)
+            // Lọc học viên mới để tránh AI thiếu dữ liệu phân tích
             // =========================================================
             Date enrollDate = enrollment.getEnrollmentDate();
             if (enrollDate != null) {
@@ -229,30 +229,30 @@ public class EnrollmentServiceImp implements IEnrollmentService {
                 }
             }
 
-            // Get StudentId and CourseId
+            // Lấy StudentId và CourseId
             int studentId = enrollment.getStudentId().getStudentId();
             int courseId = enrollment.getCourseId().getCourseId();
 
             // =========================================================
-            // 2. DATA QUERY & TIME-BASED FEATURES
+            // [BƯỚC 2] TRUY VẤN DỮ LIỆU & TÍNH TOÁN CÁC CHỈ SỐ
             // =========================================================
-            // count_problem: Number of Quiz attempts
+            // count_problem: Số bài Quiz đã làm
             String sqlProblem = "SELECT COUNT(*) FROM QuizResult qr JOIN Quiz q ON qr.quiz_id = q.quiz_id "
                     + "JOIN Lesson l ON q.lesson_id = l.lesson_id WHERE qr.student_id = :sid AND l.course_id = :cid";
             int countProblem = ((Number) em.createNativeQuery(sqlProblem).setParameter("sid", studentId).setParameter("cid", courseId).getSingleResult()).intValue();
 
-            // count_video: Number of Lessons completed
+            // count_video: Số bài học đã hoàn thành
             String sqlVideo = "SELECT COUNT(*) FROM LearningProgress lp JOIN Lesson l ON lp.lesson_id = l.lesson_id "
                     + "WHERE lp.student_id = :sid AND l.course_id = :cid";
             int countVideo = ((Number) em.createNativeQuery(sqlVideo).setParameter("sid", studentId).setParameter("cid", courseId).getSingleResult()).intValue();
 
-            // count_access & active_days: From StudyLog table
+            // count_access & active_days: Từ bảng StudyLog
             int countAccess = ((Number) em.createNativeQuery("SELECT COUNT(*) FROM StudyLog WHERE student_id = :sid")
                     .setParameter("sid", studentId).getSingleResult()).intValue();
             int activeDays = ((Number) em.createNativeQuery("SELECT COUNT(DISTINCT CAST(access_time AS DATE)) FROM StudyLog WHERE student_id = :sid")
                     .setParameter("sid", studentId).getSingleResult()).intValue();
 
-            // === TIME FEATURES ===
+            // === CÁC CHỈ SỐ THỜI GIAN (TIME FEATURES) ===
             String timeFeatureSql
                     = "SELECT "
                     + "   ISNULL(DATEDIFF(day, MAX(access_time), GETDATE()), 999) AS days_since_last_login, "
@@ -270,7 +270,7 @@ public class EnrollmentServiceImp implements IEnrollmentService {
             int trendScore = studyTimeLast7Days - studyTimePrev7Days;
 
             // =========================================================
-            // 3. CALL AI ANALYSIS (PYTHON API)
+            // [BƯỚC 3] GỌI AI PHÂN TÍCH (PYTHON API)
             // =========================================================
             String jsonToAI = String.format(Locale.US,
                     "{\"count_access\": %d, \"count_video\": %d, \"count_problem\": %d, \"active_days\": %d, \"days_since_last_login\": %d, \"study_time_last_7_days\": %d, \"trend_score\": %d}",
@@ -279,7 +279,7 @@ public class EnrollmentServiceImp implements IEnrollmentService {
             double dropoutRisk = AIPredictorUtil.callAIPredictAPI(jsonToAI);
 
             // =========================================================
-            // 4. SAVE RESULTS TO AI_Prediction TABLE
+            // [BƯỚC 4] LƯU KẾT QUẢ VÀO BẢNG AI_Prediction
             // =========================================================
             String level = (dropoutRisk >= 0.8) ? "HIGH" : (dropoutRisk >= 0.5 ? "MEDIUM" : "LOW");
 
@@ -294,7 +294,7 @@ public class EnrollmentServiceImp implements IEnrollmentService {
             em.getTransaction().commit();
 
             // =========================================================
-            // 5. EMAIL NOTIFICATION LOGIC (ANTI-SPAM)
+            // [BƯỚC 5] LOGIC GỬI EMAIL CẢNH BÁO (CÓ CHỐNG SPAM)
             // =========================================================
             double riskPercent = dropoutRisk * 100;
             boolean shouldSendEmail = false;
@@ -309,7 +309,7 @@ public class EnrollmentServiceImp implements IEnrollmentService {
 
                 if (countHigh == 0) {
                     shouldSendEmail = true;
-                    alertType = (riskPercent >= 95) ? "🔥 RED ALERT" : "⚠️ WARNING";
+                    alertType = (riskPercent >= 95) ? "🚨 MỨC ĐỘ NGUY HIỂM" : "⚠️ CẢNH BÁO";
                     System.out.println("🚨 [Alert] First-time high risk detected. Preparing to send email...");
                 } else {
                     String lastLowSql = "SELECT MAX(created_at) FROM AI_Prediction WHERE student_id = :sid AND risk_score < 80";
@@ -325,7 +325,7 @@ public class EnrollmentServiceImp implements IEnrollmentService {
 
                             if (daysSinceLastWarn >= 7) {
                                 shouldSendEmail = true;
-                                alertType = (riskPercent >= 95) ? "🔥 RED ALERT (Repeated)" : "⚠️ WARNING (Repeated)";
+                                alertType = (riskPercent >= 95) ? "🚨 MỨC ĐỘ NGUY HIỂM (Nhắc lại)" : "⚠️ CẢNH BÁO (Nhắc lại)";
                                 System.out.println("🔄 [Alert] Repeated risk after " + daysSinceLastWarn + " days. Sending reminder email!");
                             } else {
                                 System.out.println("⏭️ [Skip] Repeated risk but only " + daysSinceLastWarn + " days since last warning. Anti-spam triggered.");
@@ -337,22 +337,46 @@ public class EnrollmentServiceImp implements IEnrollmentService {
                 }
             }
 
-            // 6. EXECUTE EMAIL SENDING
+            // =========================================================
+            // [BƯỚC 6] THỰC THI GỬI EMAIL (FORM HTML CHUẨN)
+            // =========================================================
             if (shouldSendEmail) {
                 Users user = em.find(Users.class, studentId);
                 if (user != null && user.getEmail() != null) {
                     String courseName = enrollment.getCourseId().getTitle();
                     EmailUtil emailService = new EmailUtil();
 
-                    String subject = alertType + " - Course: " + courseName;
-                    String content = "Hello " + user.getFullName() + ",\n\n"
-                            + "Our system has detected your engagement level is currently at: " + alertType + " (" + String.format("%.2f", riskPercent) + "%).\n"
-                            + "Please log in and continue your learning path to stay on track!\n\n"
-                            + "Best regards,\nDevLearn System.";
+                    String subject = alertType + " - Tiến độ học tập khóa: " + courseName;
+                    
+                    // Xử lý text hiển thị số ngày vắng mặt để tránh lỗi "vắng 999 ngày"
+                    String displayAbsentText = "";
+                    if (daysSinceLastLogin == 999) {
+                        displayAbsentText = "Chưa từng vào học từ lúc đăng ký";
+                    } else {
+                        displayAbsentText = "Đã vắng mặt " + daysSinceLastLogin + " ngày";
+                    }
+                    
+                    // Xây dựng nội dung HTML chuẩn Đại học
+                    String content = "<div style=\"font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto;\">"
+                            + "<p>Thân gửi <strong>" + user.getFullName() + "</strong> , Mã số học viên: <strong>" + user.getUserId() + "</strong></p>"
+                            + "<p>Phòng Chăm sóc Học viên DevLearn thông báo đến bạn về tình trạng gián đoạn tiến độ học tập:</p>"
+                            
+                            // Sử dụng biến displayAbsentText đã xử lý ở trên
+                            + "<p>Khóa học: <strong>" + courseName + "</strong> - Tình trạng: <strong>Cảnh báo rủi ro " + String.format("%.0f", riskPercent) + "% (" + displayAbsentText + ")</strong></p>"
+                            
+                            + "<p>Bạn lưu ý kiểm tra lại tiến độ học tập hàng ngày trên hệ thống DevLearn để theo kịp lộ trình nhé. Trong trường hợp bạn gặp khó khăn làm gián đoạn việc học, vui lòng làm theo hướng dẫn sau:</p>"
+                            + "<p>1. Nếu gặp lỗi kỹ thuật không thể xem video hoặc nộp bài, học viên cần gửi mail cho bộ phận Hỗ trợ Kỹ thuật (<a href=\"mailto:support@devlearn.edu.vn\">support@devlearn.edu.vn</a>) trong vòng 24 giờ kể từ thời điểm phát sinh lỗi để đề nghị xử lý.</p>"
+                            + "<p>2. Đối với các thắc mắc về kiến thức bài giảng, học viên liên hệ trực tiếp với Giảng viên phụ trách qua mục Thảo luận hoặc qua email với nội dung gồm: <em>Họ tên, mã học viên, tên khóa học - bài học, nội dung cần giải đáp</em>.</p>"
+                            + "<p>Trong trường hợp đã liên hệ Giảng viên đúng quy định nhưng sau 48 giờ làm việc không nhận được phản hồi, học viên vui lòng ngay sau đó chuyển tiếp email đã làm việc với Giảng viên qua email Phòng Chăm sóc Học viên (<a href=\"mailto:cskh@devlearn.edu.vn\">cskh@devlearn.edu.vn</a>) để được hỗ trợ xử lý kịp thời.</p>"
+                            + "<p>3. Học viên được miễn trừ cảnh báo tiến độ do có lý do cá nhân chính đáng (đã được phê duyệt bảo lưu) vui lòng chủ động liên hệ Giảng viên để được hỗ trợ mở lại bài tập và bài kiểm tra theo đúng quy định khi quay trở lại.</p>"
+                            + "<p>Ngoài ra, học viên cần chú ý thời gian kết thúc quyền truy cập khóa học. Hệ thống sẽ tự động khóa truy cập nếu khóa học hết hạn hoặc nếu tiến độ của bạn vượt quá ngưỡng rủi ro cho phép (fail attendance). Bạn hãy nhanh chóng quay lại học tập để duy trì tiến độ nhé.</p>"
+                            + "<p style=\"font-style: italic; color: #555; font-size: 0.9em; border-top: 1px solid #eee; padding-top: 10px;\">Lưu ý: Đây là email tự động từ Hệ thống AI Giám sát Học tập. Mọi thắc mắc cần được hỗ trợ, học viên vui lòng email phòng Chăm sóc Học viên hoặc gọi số điện thoại hotline (giờ làm việc). Email: <a href=\"mailto:cskh@devlearn.edu.vn\">cskh@devlearn.edu.vn</a></p>"
+                            + "<p>Thân mến,<br><strong>Phòng Chăm sóc Học viên DevLearn</strong></p>"
+                            + "</div>";
 
                     try {
                         emailService.send(user.getEmail(), subject, content);
-                        System.out.println("📧 [Email Sent] Successfully delivered to: " + user.getEmail());
+                        System.out.println("📧 [Email Sent] Successfully delivered HTML email to: " + user.getEmail());
                     } catch (Exception e) {
                         System.out.println("❌ [Error] Email delivery failed: " + e.getMessage());
                     }
@@ -371,7 +395,9 @@ public class EnrollmentServiceImp implements IEnrollmentService {
         }
     }
 
-    // Method 2: Batch scan all active students
+    // =========================================================
+    // HÀM 2: QUÉT TOÀN BỘ HỌC VIÊN ĐANG ACTIVE
+    // =========================================================
     public void checkAllActiveStudentsRisk() {
         EntityManager em = JPAUtil.getEntityManager();
         try {

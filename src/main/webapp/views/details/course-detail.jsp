@@ -564,13 +564,15 @@
                                             </c:forEach>
 
                                             <!-- Add Section Button -->
-                                            <div class="edit-only mt-6 flex justify-center">
-                                                <button type="button" id="addSectionBtn" onclick="addSection()"
-                                                    class="text-base font-bold text-white bg-emerald-500 hover:bg-emerald-600 px-6 py-3 rounded-xl transition-all shadow-lg flex items-center gap-2">
-                                                    <span class="material-symbols-outlined">add_circle</span> Add New
-                                                    Section
-                                                </button>
-                                            </div>
+                                            <c:if test="${isEditAllowed}">
+                                                <div class="edit-only mt-6 flex justify-center">
+                                                    <button type="button" id="addSectionBtn" onclick="addSection()"
+                                                        class="text-base font-bold text-white bg-emerald-500 hover:bg-emerald-600 px-6 py-3 rounded-xl transition-all shadow-lg flex items-center gap-2">
+                                                        <span class="material-symbols-outlined">add_circle</span> Add New
+                                                        Section
+                                                    </button>
+                                                </div>
+                                            </c:if>
                                         </div>
                                     </section>
                                 </div>

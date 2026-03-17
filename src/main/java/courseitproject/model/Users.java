@@ -34,17 +34,17 @@ import java.util.Date;
 @Table(name = "Users")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Users.findAll", query = "SELECT u FROM Users u"),
-    @NamedQuery(name = "Users.findByUserId", query = "SELECT u FROM Users u WHERE u.userId = :userId"),
-    @NamedQuery(name = "Users.findByUsername", query = "SELECT u FROM Users u WHERE u.username = :username"),
-    @NamedQuery(name = "Users.findByEmail", query = "SELECT u FROM Users u WHERE u.email = :email"),
-    @NamedQuery(name = "Users.findByPassword", query = "SELECT u FROM Users u WHERE u.password = :password"),
-    @NamedQuery(name = "Users.findByFullName", query = "SELECT u FROM Users u WHERE u.fullName = :fullName"),
-    @NamedQuery(name = "Users.findByStatus", query = "SELECT u FROM Users u WHERE u.status = :status"),
-    @NamedQuery(name = "Users.findByCreatedAt", query = "SELECT u FROM Users u WHERE u.createdAt = :createdAt"),
-    @NamedQuery(name = "Users.findByProvider", query = "SELECT u FROM Users u WHERE u.provider = :provider"),
-    @NamedQuery(name = "Users.findByProviderId", query = "SELECT u FROM Users u WHERE u.providerId = :providerId"),
-    @NamedQuery(name = "Users.findByEmailVerified", query = "SELECT u FROM Users u WHERE u.emailVerified = :emailVerified")})
+        @NamedQuery(name = "Users.findAll", query = "SELECT u FROM Users u"),
+        @NamedQuery(name = "Users.findByUserId", query = "SELECT u FROM Users u WHERE u.userId = :userId"),
+        @NamedQuery(name = "Users.findByUsername", query = "SELECT u FROM Users u WHERE u.username = :username"),
+        @NamedQuery(name = "Users.findByEmail", query = "SELECT u FROM Users u WHERE u.email = :email"),
+        @NamedQuery(name = "Users.findByPassword", query = "SELECT u FROM Users u WHERE u.password = :password"),
+        @NamedQuery(name = "Users.findByFullName", query = "SELECT u FROM Users u WHERE u.fullName = :fullName"),
+        @NamedQuery(name = "Users.findByStatus", query = "SELECT u FROM Users u WHERE u.status = :status"),
+        @NamedQuery(name = "Users.findByCreatedAt", query = "SELECT u FROM Users u WHERE u.createdAt = :createdAt"),
+        @NamedQuery(name = "Users.findByProvider", query = "SELECT u FROM Users u WHERE u.provider = :provider"),
+        @NamedQuery(name = "Users.findByProviderId", query = "SELECT u FROM Users u WHERE u.providerId = :providerId"),
+        @NamedQuery(name = "Users.findByEmailVerified", query = "SELECT u FROM Users u WHERE u.emailVerified = :emailVerified") })
 public class Users implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -56,7 +56,9 @@ public class Users implements Serializable {
     @Size(max = 255)
     @Column(name = "username")
     private String username;
-    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
+    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?",
+    // message="Invalid email")//if the field contains email address consider using
+    // this annotation to enforce field validation
     @Size(max = 255)
     @Column(name = "email")
     private String email;
@@ -228,6 +230,17 @@ public class Users implements Serializable {
         this.userRoleCollection = userRoleCollection;
     }
 
+    public String getRole() {
+        if (this.userRoleCollection != null) {
+            for (UserRole ur : this.userRoleCollection) {
+                if (ur.getRoleId() != null && "ADMIN".equalsIgnoreCase(ur.getRoleId().getRoleName())) {
+                    return "ADMIN";
+                }
+            }
+        }
+        return "STUDENT";
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -242,7 +255,8 @@ public class Users implements Serializable {
             return false;
         }
         Users other = (Users) object;
-        if ((this.userId == null && other.userId != null) || (this.userId != null && !this.userId.equals(other.userId))) {
+        if ((this.userId == null && other.userId != null)
+                || (this.userId != null && !this.userId.equals(other.userId))) {
             return false;
         }
         return true;
@@ -252,5 +266,5 @@ public class Users implements Serializable {
     public String toString() {
         return "courseitproject.model.Users[ userId=" + userId + " ]";
     }
-    
+
 }
