@@ -772,6 +772,7 @@
                                                             <span class="text-xs font-bold text-gray-500">4.8
                                                                 (1.2k)</span>
                                                         </div>
+ 
                                                         <div
                                                             class="flex mt-auto items-center justify-between pt-2 border-t border-slate-100">
                                                             <span
@@ -823,6 +824,7 @@
                                                                 </c:otherwise>
                                                             </c:choose>
                                                         </div>
+ 
                                                     </div>
                                                 </div>
                                             </c:forEach>
@@ -1929,7 +1931,7 @@
                             });
                         };
                     </script>
-
+ <jsp:include page="../common/footer.jsp" />
                     <jsp:include page="../common/userbuttom.jsp" />
 
                 </body>

@@ -409,6 +409,9 @@
                              onerror="this.onerror=null;this.src='https://res.cloudinary.com/dssmrnzag/raw/upload/v1773506805/cv/ewimwcimeutpn11nio05';"
                              alt="DevLearn event 6"/>
                     </div>
+                    <div class="marquee-item">
+                        <img src="${pageContext.request.contextPath}/anh/lenhat.jpg" alt="DevLearn event 7"/>
+                    </div>
                     <!-- Set B (duplicate for seamless loop) -->
                     <div class="marquee-item">
                         <img src="https://res.cloudinary.com/dssmrnzag/image/upload/v1773505656/cv/ljevjwzdmgyc1doj79vm"
@@ -439,6 +442,9 @@
                         <img src="https://res.cloudinary.com/dssmrnzag/image/upload/v1773506805/cv/ewimwcimeutpn11nio05"
                              onerror="this.onerror=null;this.src='https://res.cloudinary.com/dssmrnzag/raw/upload/v1773506805/cv/ewimwcimeutpn11nio05';"
                              alt="DevLearn event 6"/>
+                    </div>
+                    <div class="marquee-item">
+                        <img src="${pageContext.request.contextPath}/anh/lenhat.jpg" alt="DevLearn event 7"/>
                     </div>
                 </div>
             </div>
@@ -681,5 +687,6 @@
             });
         }
     </script>
+    <jsp:include page="../common/footer.jsp" />
 </body>
 </html>

@@ -1,4 +1,4 @@
-package courseitproject.controller.cart;
+package courseitproject.controller.details;
 
 import courseitproject.model.Course;
 import courseitproject.service.CourseServiceImp;
@@ -22,12 +22,13 @@ public class CartServlet extends HttpServlet {
             throws ServletException, IOException {
         
         try {
-           List<Course> suggestedCourses = courseService.findAll();
-
-// Cắt lấy 14 khóa học đầu tiên
-if (suggestedCourses != null && suggestedCourses.size() > 14) {
-    suggestedCourses = suggestedCourses.subList(0, 14);
-         
+            // SỬ DỤNG HÀM getAllCourses(1) ĐỂ LẤY DATA THAY VÌ findAll()
+            // Hàm này sẽ lấy an toàn 10 khóa học mới nhất có status là ACTIVE
+            List<Course> suggestedCourses = courseService.getAllCourses(1);
+            
+            // In ra console để theo dõi xem lấy được bao nhiêu khóa học
+            if (suggestedCourses != null) {
+                System.out.println("Đã lấy thành công " + suggestedCourses.size() + " khóa học gợi ý!");
             }
             
             // Gửi danh sách gợi ý này sang file JSP
@@ -35,6 +36,7 @@ if (suggestedCourses != null && suggestedCourses.size() > 14) {
             
         } catch (Exception e) {
             System.out.println("Lỗi load khóa học gợi ý: " + e.getMessage());
+            e.printStackTrace();
         }
 
         // Chuyển hướng sang giao diện Giỏ hàng
