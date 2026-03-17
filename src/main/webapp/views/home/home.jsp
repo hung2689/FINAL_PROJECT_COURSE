@@ -108,17 +108,20 @@
                                 </h1>
 
                                 <!-- Primary CTA -->
-                                <div
-                                    class="flex flex-col sm:flex-row items-center gap-6 justify-center w-full relative z-20">
-                                    <button
-                                        class="relative w-full sm:w-auto h-[4.5rem] px-12 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-xl font-bold rounded-full shadow-[0_0_40px_rgba(16,185,129,0.4)] hover:shadow-[0_0_60px_rgba(16,185,129,0.6)] hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3 group">
-                                        <span class="relative z-10 flex items-center gap-3">
-                                            Explore Learning Paths
-                                            <span
-                                                class="material-symbols-outlined font-bold transform transition-transform group-hover:translate-x-2">arrow_forward</span>
-                                        </span>
-                                    </button>
-                                </div>
+                              <div class="flex flex-col sm:flex-row items-center gap-6 justify-center w-full relative z-20">
+    <a href="${pageContext.request.contextPath}/learningpaths" 
+       class="relative w-full sm:w-auto h-[4.5rem] px-12 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-xl font-bold rounded-full shadow-[0_0_40px_rgba(16,185,129,0.4)] hover:shadow-[0_0_60px_rgba(16,185,129,0.6)] hover:scale-105 transition-all duration-300 flex items-center justify-center group"
+       style="text-decoration: none;">
+       
+        <span class="relative z-10 flex items-center gap-3">
+            Explore Learning Paths
+            <span class="material-symbols-outlined font-bold transform transition-transform group-hover:translate-x-2">
+                arrow_forward
+            </span>
+        </span>
+        
+    </a>
+</div>
                             </div>
                         </section>
 
