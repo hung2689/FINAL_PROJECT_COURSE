@@ -44,7 +44,7 @@
     <properties>
       <!-- Kết nối SQL Server -->
       <property name="jakarta.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
-      <property name="jakarta.persistence.jdbc.url" value="jdbc:sqlserver://localhost:1433;databaseName=Course_Final_Project;encrypt=true;trustServerCertificate=true"/>
+      <property name="jakarta.persistence.jdbc.url" value="jdbc:sqlserver://localhost:1433;databaseName=Course_Final_Project;encrypt=true;trustServerCertificate=true;sendStringParametersAsUnicode=true"/>
       <property name="jakarta.persistence.jdbc.user" value="sa"/>
       <property name="jakarta.persistence.jdbc.password" value="123"/>
       <!-- Hibernate Config -->
@@ -52,6 +52,10 @@
       <property name="hibernate.hbm2ddl.auto" value="update"/>
       <property name="hibernate.show_sql" value="true"/>
       <property name="hibernate.format_sql" value="true"/>
+      <!-- Unicode / UTF-8 Encoding -->
+      <property name="hibernate.connection.characterEncoding" value="UTF-8"/>
+      <property name="hibernate.connection.useUnicode" value="true"/>
+      <property name="hibernate.connection.charSet" value="UTF-8"/>
     </properties>
   </persistence-unit>
 </persistence>

@@ -323,26 +323,50 @@
                                                                     </c:otherwise>
                                                                 </c:choose>
                                                             </span>
-                                                            <%-- Add to Cart: logged-in → real action | guest →
-                                                                redirect to login --%>
+                                                            <%-- Action Button: Add to Cart (non-free) or Join/Enrolled (free) --%>
                                                             <c:choose>
-                                                                <c:when test="${sessionScope.USER != null}">
-                                                                    <a href="${pageContext.request.contextPath}/addToCart?id=${c.courseId}"
-                                                                       onclick="event.stopPropagation()"
-                                                                       title="Add to Cart"
-                                                                       class="group/cart p-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 transition-all duration-300 hover:bg-emerald-500/20 hover:border-emerald-400 active:scale-90 flex items-center justify-center">
-                                                                        <span
-                                                                            class="material-symbols-outlined text-primary text-lg">shopping_cart</span>
-                                                                    </a>
+                                                                <c:when test="${c.price eq 0}">
+                                                                    <button type="button"
+                                                                            onclick="event.stopPropagation(); handleEnrollment(this, ${c.courseId}, ${sessionScope.USER != null})"
+                                                                            class="free-course-btn hidden px-4 py-2.5 font-bold text-sm bg-emerald-500 text-white rounded-xl hover:bg-emerald-600 transition-all shadow-md shadow-emerald-500/20 active:scale-95"
+                                                                            data-course-id="${c.courseId}">
+                                                                        Join
+                                                                    </button>
+                                                                    <button type="button" disabled
+                                                                            onclick="event.stopPropagation()"
+                                                                            class="free-course-enrolled-btn hidden px-4 py-2.5 font-bold text-sm bg-emerald-100 text-emerald-700 rounded-xl cursor-not-allowed transition-all"
+                                                                            data-course-id="${c.courseId}">
+                                                                        Enrolled
+                                                                    </button>
+                                                                    <c:if test="${sessionScope.USER == null}">
+                                                                        <button type="button"
+                                                                                onclick="event.stopPropagation(); window.location.href='${pageContext.request.contextPath}/login'"
+                                                                                class="px-4 py-2.5 font-bold text-sm bg-emerald-500 text-white rounded-xl hover:bg-emerald-600 transition-all shadow-md shadow-emerald-500/20 active:scale-95">
+                                                                            Join
+                                                                        </button>
+                                                                    </c:if>
                                                                 </c:when>
                                                                 <c:otherwise>
-                                                                    <a onclick="event.stopPropagation()"
-                                                                       href="${pageContext.request.contextPath}/login"
-                                                                       title="Please login to use cart feature"
-                                                                       class="group/cart p-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 transition-all duration-300 hover:bg-emerald-500/20 hover:border-emerald-400 active:scale-90 flex items-center justify-center">
-                                                                        <span
-                                                                            class="material-symbols-outlined text-primary text-lg">shopping_cart</span>
-                                                                    </a>
+                                                                    <c:choose>
+                                                                        <c:when test="${sessionScope.USER != null}">
+                                                                            <a href="${pageContext.request.contextPath}/addToCart?id=${c.courseId}"
+                                                                               onclick="event.stopPropagation()"
+                                                                               title="Add to Cart"
+                                                                               class="group/cart p-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 transition-all duration-300 hover:bg-emerald-500/20 hover:border-emerald-400 active:scale-90 flex items-center justify-center">
+                                                                                <span
+                                                                                    class="material-symbols-outlined text-primary text-lg">shopping_cart</span>
+                                                                            </a>
+                                                                        </c:when>
+                                                                        <c:otherwise>
+                                                                            <a onclick="event.stopPropagation()"
+                                                                               href="${pageContext.request.contextPath}/login"
+                                                                               title="Please login to use cart feature"
+                                                                               class="group/cart p-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 transition-all duration-300 hover:bg-emerald-500/20 hover:border-emerald-400 active:scale-90 flex items-center justify-center">
+                                                                                <span
+                                                                                    class="material-symbols-outlined text-primary text-lg">shopping_cart</span>
+                                                                            </a>
+                                                                        </c:otherwise>
+                                                                    </c:choose>
                                                                 </c:otherwise>
                                                             </c:choose>
                                                         </div>
@@ -609,6 +633,78 @@
                     p.set('sort', v);
                     p.set('page', '1');
                     window.location.search = p.toString();
+                };
+
+                /* ── Enrollment Logic ── */
+                const isLoggedIn = ${sessionScope.USER != null};
+                if (isLoggedIn) {
+                    const freeCourseBtns = document.querySelectorAll('.free-course-btn');
+                    freeCourseBtns.forEach(btn => {
+                        const courseId = btn.getAttribute('data-course-id');
+                        fetch(`${pageContext.request.contextPath}/api/courses/${courseId}/enrollment-status`)
+                            .then(r => r.json())
+                            .then(data => {
+                                if (data.enrolled) {
+                                    // Switch to Enrolled button
+                                    const enrolledBtn = btn.parentElement.querySelector('.free-course-enrolled-btn');
+                                    btn.classList.add('hidden');
+                                    enrolledBtn.classList.remove('hidden');
+                                } else {
+                                    btn.classList.remove('hidden');
+                                }
+                            })
+                            .catch(e => {
+                                console.error('Status check error:', e);
+                                btn.classList.remove('hidden');
+                            });
+                    });
+                }
+
+                window.handleEnrollment = function(btn, courseId, isLogged) {
+                    if (!isLogged) {
+                        window.location.href = '${pageContext.request.contextPath}/login';
+                        return;
+                    }
+
+                    // Loading state
+                    const originalText = btn.innerHTML;
+                    btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-sm">progress_activity</span>';
+                    btn.disabled = true;
+
+                    fetch(`${pageContext.request.contextPath}/api/courses/${courseId}/enroll`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then(r => {
+                        if (r.ok || r.status === 401) {
+                            return r.json();
+                        } else {
+                            throw new Error('API failed');
+                        }
+                    })
+                    .then(data => {
+                        if (data.error && data.error === 'User not logged in') {
+                            window.location.href = '${pageContext.request.contextPath}/login';
+                            return;
+                        }
+                        if (data.enrolled) {
+                            const enrolledBtn = btn.parentElement.querySelector('.free-course-enrolled-btn');
+                            btn.classList.add('hidden');
+                            enrolledBtn.classList.remove('hidden');
+                        } else {
+                            btn.innerHTML = originalText;
+                            btn.disabled = false;
+                            alert('Enrollment failed');
+                        }
+                    })
+                    .catch(e => {
+                        console.error('Enroll error:', e);
+                        btn.innerHTML = originalText;
+                        btn.disabled = false;
+                        alert('Something went wrong during enrollment');
+                    });
                 };
             })();
         </script>

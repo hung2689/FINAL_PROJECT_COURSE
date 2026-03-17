@@ -609,22 +609,35 @@
                                                 45% OFF • 2 days left at this price
                                             </p>
                                             <div class="space-y-3 mb-8">
-                                                <c:choose>
-                                                    <c:when test="${courseDetail.enrolled}">
-                                                        <button
-                                                            class="w-full bg-slate-800 text-white hover:bg-slate-900 text-lg font-black py-4 rounded-xl transition-all shadow-lg flex items-center justify-center gap-2">
-                                                            <span class="material-symbols-outlined">play_circle</span>
-                                                            Continue Learning
-                                                        </button>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <a href="${pageContext.request.contextPath}/addToCart?id=${courseDetail.course.courseId}"
-                                                            class="w-full bg-emerald-500 text-white hover:bg-emerald-600 font-black py-4 rounded-xl transition-all duration-300 hover:scale-105 shadow-md flex items-center justify-center gap-2">
-                                                            <span class="material-symbols-outlined">shopping_cart</span>
-                                                            Add to Cart
-                                                        </a>
-                                                    </c:otherwise>
-                                                </c:choose>
+                                                    <c:choose>
+                                                        <c:when test="${courseDetail.enrolled}">
+                                                            <button
+                                                                class="w-full bg-slate-800 text-white hover:bg-slate-900 text-lg font-black py-4 rounded-xl transition-all shadow-lg flex items-center justify-center gap-2">
+                                                                <span class="material-symbols-outlined">play_circle</span>
+                                                                Continue Learning
+                                                            </button>
+                                                        </c:when>
+                                                        <c:when test="${courseDetail.course.price == 0}">
+                                                            <button type="button"
+                                                                    onclick="handleEnrollment(this, ${courseDetail.course.courseId}, ${sessionScope.USER != null})"
+                                                                    class="free-course-btn w-full bg-emerald-500 text-white hover:bg-emerald-600 font-black py-4 rounded-xl transition-all duration-300 hover:scale-105 shadow-md flex items-center justify-center gap-2"
+                                                                    data-course-id="${courseDetail.course.courseId}">
+                                                                Join
+                                                            </button>
+                                                            <button type="button" disabled
+                                                                    class="free-course-enrolled-btn hidden w-full bg-slate-800 text-white hover:bg-slate-900 text-lg font-black py-4 rounded-xl transition-all shadow-lg flex items-center justify-center gap-2"
+                                                                    data-course-id="${courseDetail.course.courseId}">
+                                                                <span class="material-symbols-outlined">play_circle</span> Continue Learning
+                                                            </button>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <a href="${pageContext.request.contextPath}/addToCart?id=${courseDetail.course.courseId}"
+                                                                class="w-full bg-emerald-500 text-white hover:bg-emerald-600 font-black py-4 rounded-xl transition-all duration-300 hover:scale-105 shadow-md flex items-center justify-center gap-2">
+                                                                <span class="material-symbols-outlined">shopping_cart</span>
+                                                                Add to Cart
+                                                            </a>
+                                                        </c:otherwise>
+                                                    </c:choose>
                                             </div>
                                             <div class="space-y-5">
                                                 <h4
@@ -762,11 +775,47 @@
                                                                     <c:otherwise>$<fmt:formatNumber value="${c.price}" maxFractionDigits="2" /></c:otherwise>
                                                                 </c:choose>
                                                             </span>
-                                                            <button onclick="event.stopPropagation();"
-                                                                class="group/cart p-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 transition-all duration-300 hover:bg-emerald-500/20 hover:border-emerald-400 active:scale-90">
-                                                                <span
-                                                                    class="material-symbols-outlined text-[#10B981] text-xl transition-all duration-300">shopping_cart</span>
-                                                            </button>
+                                                            <c:choose>
+                                                                <c:when test="${c.price == 0}">
+                                                                    <button type="button"
+                                                                            onclick="event.stopPropagation(); handleEnrollment(this, ${c.courseId}, ${sessionScope.USER != null})"
+                                                                            class="free-course-btn hidden px-4 py-2 font-bold text-sm bg-emerald-500 text-white rounded-xl hover:bg-emerald-600 transition-all shadow-md shadow-emerald-500/20 active:scale-95"
+                                                                            data-course-id="${c.courseId}">
+                                                                        Join
+                                                                    </button>
+                                                                    <button type="button" disabled
+                                                                            onclick="event.stopPropagation()"
+                                                                            class="free-course-enrolled-btn hidden px-4 py-2 font-bold text-sm bg-emerald-100 text-emerald-700 rounded-xl cursor-not-allowed transition-all"
+                                                                            data-course-id="${c.courseId}">
+                                                                        Enrolled
+                                                                    </button>
+                                                                    <c:if test="${sessionScope.USER == null}">
+                                                                        <button type="button"
+                                                                                onclick="event.stopPropagation(); window.location.href='${pageContext.request.contextPath}/login'"
+                                                                                class="px-4 py-2 font-bold text-sm bg-emerald-500 text-white rounded-xl hover:bg-emerald-600 transition-all shadow-md shadow-emerald-500/20 active:scale-95">
+                                                                        Join
+                                                                        </button>
+                                                                    </c:if>
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <c:choose>
+                                                                        <c:when test="${sessionScope.USER != null}">
+                                                                            <a href="${pageContext.request.contextPath}/addToCart?id=${c.courseId}"
+                                                                               onclick="event.stopPropagation()"
+                                                                               class="group/cart p-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 transition-all duration-300 hover:bg-emerald-500/20 hover:border-emerald-400 active:scale-90 inline-block">
+                                                                                <span class="material-symbols-outlined text-[#10B981] text-xl transition-all duration-300 align-middle">shopping_cart</span>
+                                                                            </a>
+                                                                        </c:when>
+                                                                        <c:otherwise>
+                                                                            <a href="${pageContext.request.contextPath}/login"
+                                                                               onclick="event.stopPropagation()"
+                                                                               class="group/cart p-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 transition-all duration-300 hover:bg-emerald-500/20 hover:border-emerald-400 active:scale-90 inline-block">
+                                                                                <span class="material-symbols-outlined text-[#10B981] text-xl transition-all duration-300 align-middle">shopping_cart</span>
+                                                                            </a>
+                                                                        </c:otherwise>
+                                                                    </c:choose>
+                                                                </c:otherwise>
+                                                            </c:choose>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1782,6 +1831,82 @@
                                 });
                             });
                         });
+                        
+                        /* ── Enrollment Logic ── */
+                        document.addEventListener("DOMContentLoaded", function() {
+                            const isLoggedIn = ${sessionScope.USER != null};
+                            if (isLoggedIn) {
+                                const freeCourseBtns = document.querySelectorAll('.free-course-btn');
+                                freeCourseBtns.forEach(btn => {
+                                    const courseId = btn.getAttribute('data-course-id');
+                                    fetch(`${pageContext.request.contextPath}/api/courses/${courseId}/enrollment-status`)
+                                        .then(r => r.json())
+                                        .then(data => {
+                                            if (data.enrolled) {
+                                                const enrolledBtn = btn.parentElement.querySelector('.free-course-enrolled-btn');
+                                                btn.classList.add('hidden');
+                                                enrolledBtn.classList.remove('hidden');
+                                            } else {
+                                                btn.classList.remove('hidden');
+                                            }
+                                        })
+                                        .catch(e => {
+                                            console.error('Status check error:', e);
+                                            btn.classList.remove('hidden');
+                                        });
+                                });
+                            }
+                        });
+
+                        window.handleEnrollment = function(btn, courseId, isLogged) {
+                            if (!isLogged) {
+                                window.location.href = '${pageContext.request.contextPath}/login';
+                                return;
+                            }
+
+                            const originalText = btn.innerHTML;
+                            btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-sm align-middle">progress_activity</span> Processing...';
+                            btn.disabled = true;
+
+                            fetch(`${pageContext.request.contextPath}/api/courses/${courseId}/enroll`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                }
+                            })
+                            .then(r => {
+                                if (r.ok || r.status === 401) {
+                                    return r.json();
+                                } else {
+                                    throw new Error('API failed');
+                                }
+                            })
+                            .then(data => {
+                                if (data.error && data.error === 'User not logged in') {
+                                    window.location.href = '${pageContext.request.contextPath}/login';
+                                    return;
+                                }
+                                if (data.enrolled) {
+                                    const enrolledBtn = btn.parentElement.querySelector('.free-course-enrolled-btn');
+                                    btn.classList.add('hidden');
+                                    enrolledBtn.classList.remove('hidden');
+                                    // if it's the main enroll button, it might need page reload to unlock content
+                                    if (btn.classList.contains('w-full')) {
+                                        setTimeout(() => window.location.reload(), 1000);
+                                    }
+                                } else {
+                                    btn.innerHTML = originalText;
+                                    btn.disabled = false;
+                                    alert('Enrollment failed');
+                                }
+                            })
+                            .catch(e => {
+                                console.error('Enroll error:', e);
+                                btn.innerHTML = originalText;
+                                btn.disabled = false;
+                                alert('Something went wrong during enrollment');
+                            });
+                        };
                     </script>
 
                     <jsp:include page="../common/userbuttom.jsp" />

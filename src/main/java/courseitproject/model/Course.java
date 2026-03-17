@@ -54,10 +54,10 @@ public class Course implements Serializable {
     @Column(name = "course_id")
     private Integer courseId;
     @Size(max = 255)
-    @Column(name = "title")
+    @Column(name = "title", columnDefinition = "NVARCHAR(255)")
     private String title;
     @Size(max = 255)
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition = "NVARCHAR(MAX)")
     private String description;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "price")
