@@ -123,7 +123,7 @@
                                     </h3>
                                     
                                     <p class="text-[13px] text-slate-500 mb-4">
-                                        Enrolled: ${not empty e.formattedEnrollmentDate ? e.formattedEnrollmentDate : 'Chưa xác định'}
+                                        Enrolled: <c:choose><c:when test="${not empty e.enrollmentDate}"><fmt:formatDate value="${e.enrollmentDate}" pattern="dd/MM/yyyy HH:mm" /></c:when><c:otherwise>Chưa xác định</c:otherwise></c:choose>
                                     </p>
                                     
                                     <div class="mb-3 max-w-sm">

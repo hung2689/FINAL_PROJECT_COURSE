@@ -352,10 +352,17 @@
                                                                             <a href="${pageContext.request.contextPath}/addToCart?id=${c.courseId}"
                                                                                onclick="event.stopPropagation()"
                                                                                title="Add to Cart"
-                                                                               class="group/cart p-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 transition-all duration-300 hover:bg-emerald-500/20 hover:border-emerald-400 active:scale-90 flex items-center justify-center">
+                                                                               class="paid-course-cart-btn group/cart p-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 transition-all duration-300 hover:bg-emerald-500/20 hover:border-emerald-400 active:scale-90 flex items-center justify-center"
+                                                                               data-course-id="${c.courseId}">
                                                                                 <span
                                                                                     class="material-symbols-outlined text-primary text-lg">shopping_cart</span>
                                                                             </a>
+                                                                            <button type="button" disabled
+                                                                                    onclick="event.stopPropagation()"
+                                                                                    class="paid-course-enrolled-btn hidden px-4 py-2.5 font-bold text-sm bg-emerald-100 text-emerald-700 rounded-xl cursor-not-allowed transition-all"
+                                                                                    data-course-id="${c.courseId}">
+                                                                                Enrolled
+                                                                            </button>
                                                                         </c:when>
                                                                         <c:otherwise>
                                                                             <a onclick="event.stopPropagation()"
@@ -638,14 +645,14 @@
                 /* ── Enrollment Logic ── */
                 const isLoggedIn = ${sessionScope.USER != null};
                 if (isLoggedIn) {
+                    // Check enrollment for FREE courses
                     const freeCourseBtns = document.querySelectorAll('.free-course-btn');
                     freeCourseBtns.forEach(btn => {
                         const courseId = btn.getAttribute('data-course-id');
-                        fetch(`${pageContext.request.contextPath}/api/courses/${courseId}/enrollment-status`)
+                        fetch('${pageContext.request.contextPath}/api/courses/' + courseId + '/enrollment-status')
                             .then(r => r.json())
                             .then(data => {
                                 if (data.enrolled) {
-                                    // Switch to Enrolled button
                                     const enrolledBtn = btn.parentElement.querySelector('.free-course-enrolled-btn');
                                     btn.classList.add('hidden');
                                     enrolledBtn.classList.remove('hidden');
@@ -657,6 +664,22 @@
                                 console.error('Status check error:', e);
                                 btn.classList.remove('hidden');
                             });
+                    });
+
+                    // Check enrollment for PAID courses
+                    const paidCartBtns = document.querySelectorAll('.paid-course-cart-btn');
+                    paidCartBtns.forEach(btn => {
+                        const courseId = btn.getAttribute('data-course-id');
+                        fetch('${pageContext.request.contextPath}/api/courses/' + courseId + '/enrollment-status')
+                            .then(r => r.json())
+                            .then(data => {
+                                if (data.enrolled) {
+                                    const enrolledBtn = btn.parentElement.querySelector('.paid-course-enrolled-btn');
+                                    btn.classList.add('hidden');
+                                    enrolledBtn.classList.remove('hidden');
+                                }
+                            })
+                            .catch(e => console.error('Paid status check error:', e));
                     });
                 }
 
@@ -671,7 +694,7 @@
                     btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-sm">progress_activity</span>';
                     btn.disabled = true;
 
-                    fetch(`${pageContext.request.contextPath}/api/courses/${courseId}/enroll`, {
+                    fetch('${pageContext.request.contextPath}/api/courses/' + courseId + '/enroll', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'

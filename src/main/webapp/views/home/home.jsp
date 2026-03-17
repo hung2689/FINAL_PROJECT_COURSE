@@ -1,6 +1,8 @@
 <%-- Document : home Created on : Feb 11, 2026, 2:11:15 PM Author : ASUS --%>
     <%@page contentType="text/html" pageEncoding="UTF-8" %>
         <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+            <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+            <fmt:setLocale value="en_US" />
             <!DOCTYPE html>
             <html lang="en">
 
@@ -128,18 +130,22 @@
                                 </h1>
 
                                 <!-- Primary CTA -->
-                                <div
-                                    class="flex flex-col sm:flex-row items-center gap-6 justify-center w-full relative z-20 animate-fade-up delay-3">
-                                    <button
-                                        class="relative w-full sm:w-auto h-[4.5rem] px-12 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-xl font-bold rounded-full shadow-[0_0_40px_rgba(16,185,129,0.4)] hover:shadow-[0_0_60px_rgba(16,185,129,0.6)] hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3 group">
-                                        <span class="relative z-10 flex items-center gap-3">
-                                            Explore Learning Paths
-                                            <span
-                                                class="material-symbols-outlined font-bold transform transition-transform group-hover:translate-x-2">arrow_forward</span>
-                                        </span>
-                                    </button>
-                                </div>
-                            </div>
+ 
+                              <div class="flex flex-col sm:flex-row items-center gap-6 justify-center w-full relative z-20">
+    <a href="${pageContext.request.contextPath}/learningpaths" 
+       class="relative w-full sm:w-auto h-[4.5rem] px-12 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-xl font-bold rounded-full shadow-[0_0_40px_rgba(16,185,129,0.4)] hover:shadow-[0_0_60px_rgba(16,185,129,0.6)] hover:scale-105 transition-all duration-300 flex items-center justify-center group"
+       style="text-decoration: none;">
+       
+        <span class="relative z-10 flex items-center gap-3">
+            Explore Learning Paths
+            <span class="material-symbols-outlined font-bold transform transition-transform group-hover:translate-x-2">
+                arrow_forward
+            </span>
+        </span>
+        
+    </a>
+</div>
+                             </div>
                         </section>
 
                         <!-- Stats Section -->
@@ -242,13 +248,60 @@
                                                         </div>
                                                         <div
                                                             class="flex mt-auto items-center justify-between pt-2 border-t border-slate-100">
-                                                            <span
-                                                                class="text-xl font-black text-emerald-400">$${c.price}</span>
-                                                            <button onclick="event.stopPropagation();"
-                                                                class="group/cart p-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 transition-all duration-300 hover:bg-emerald-500/20 hover:border-emerald-400 active:scale-90">
-                                                                <span
-                                                                    class="material-symbols-outlined text-primary text-xl transition-all duration-300">shopping_cart</span>
-                                                            </button>
+                                                            <span class="text-xl font-black text-emerald-400">
+                                                                <c:choose>
+                                                                    <c:when test="${c.price == null || c.price <= 0}">Free</c:when>
+                                                                    <c:otherwise>$<fmt:formatNumber value="${c.price}" minFractionDigits="2" maxFractionDigits="2" /></c:otherwise>
+                                                                </c:choose>
+                                                            </span>
+                                                            <c:choose>
+                                                                <c:when test="${c.price == null || c.price <= 0}">
+                                                                    <button type="button"
+                                                                            onclick="event.stopPropagation(); handleEnrollment(this, ${c.courseId}, ${sessionScope.USER != null})"
+                                                                            class="free-course-btn hidden px-4 py-2 font-bold text-sm bg-emerald-500 text-white rounded-xl hover:bg-emerald-600 transition-all shadow-md shadow-emerald-500/20 active:scale-95"
+                                                                            data-course-id="${c.courseId}">
+                                                                        Join
+                                                                    </button>
+                                                                    <button type="button" disabled
+                                                                            onclick="event.stopPropagation()"
+                                                                            class="free-course-enrolled-btn hidden px-4 py-2 font-bold text-sm bg-emerald-100 text-emerald-700 rounded-xl cursor-not-allowed transition-all"
+                                                                            data-course-id="${c.courseId}">
+                                                                        Enrolled
+                                                                    </button>
+                                                                    <c:if test="${sessionScope.USER == null}">
+                                                                        <button type="button"
+                                                                                onclick="event.stopPropagation(); window.location.href='${pageContext.request.contextPath}/login'"
+                                                                                class="px-4 py-2 font-bold text-sm bg-emerald-500 text-white rounded-xl hover:bg-emerald-600 transition-all shadow-md shadow-emerald-500/20 active:scale-95">
+                                                                            Join
+                                                                        </button>
+                                                                    </c:if>
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <c:choose>
+                                                                        <c:when test="${sessionScope.USER != null}">
+                                                                            <a href="${pageContext.request.contextPath}/addToCart?id=${c.courseId}"
+                                                                               onclick="event.stopPropagation()"
+                                                                               class="paid-course-cart-btn group/cart p-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 transition-all duration-300 hover:bg-emerald-500/20 hover:border-emerald-400 active:scale-90"
+                                                                               data-course-id="${c.courseId}">
+                                                                                <span class="material-symbols-outlined text-primary text-xl transition-all duration-300">shopping_cart</span>
+                                                                            </a>
+                                                                            <button type="button" disabled
+                                                                                    onclick="event.stopPropagation()"
+                                                                                    class="paid-course-enrolled-btn hidden px-4 py-2 font-bold text-sm bg-emerald-100 text-emerald-700 rounded-xl cursor-not-allowed transition-all"
+                                                                                    data-course-id="${c.courseId}">
+                                                                                Enrolled
+                                                                            </button>
+                                                                        </c:when>
+                                                                        <c:otherwise>
+                                                                            <a onclick="event.stopPropagation()"
+                                                                               href="${pageContext.request.contextPath}/login"
+                                                                               class="group/cart p-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 transition-all duration-300 hover:bg-emerald-500/20 hover:border-emerald-400 active:scale-90">
+                                                                                <span class="material-symbols-outlined text-primary text-xl transition-all duration-300">shopping_cart</span>
+                                                                            </a>
+                                                                        </c:otherwise>
+                                                                    </c:choose>
+                                                                </c:otherwise>
+                                                            </c:choose>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -325,13 +378,60 @@
                                                         </div>
                                                         <div
                                                             class="flex mt-auto items-center justify-between pt-2 border-t border-slate-100">
-                                                            <span
-                                                                class="text-xl font-black text-emerald-400">$${c.price}</span>
-                                                            <button onclick="event.stopPropagation();"
-                                                                class="group/cart p-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 transition-all duration-300 hover:bg-emerald-500/20 hover:border-emerald-400 active:scale-90">
-                                                                <span
-                                                                    class="material-symbols-outlined text-primary text-xl transition-all duration-300">shopping_cart</span>
-                                                            </button>
+                                                            <span class="text-xl font-black text-emerald-400">
+                                                                <c:choose>
+                                                                    <c:when test="${c.price == null || c.price <= 0}">Free</c:when>
+                                                                    <c:otherwise>$<fmt:formatNumber value="${c.price}" minFractionDigits="2" maxFractionDigits="2" /></c:otherwise>
+                                                                </c:choose>
+                                                            </span>
+                                                            <c:choose>
+                                                                <c:when test="${c.price == null || c.price <= 0}">
+                                                                    <button type="button"
+                                                                            onclick="event.stopPropagation(); handleEnrollment(this, ${c.courseId}, ${sessionScope.USER != null})"
+                                                                            class="free-course-btn hidden px-4 py-2 font-bold text-sm bg-emerald-500 text-white rounded-xl hover:bg-emerald-600 transition-all shadow-md shadow-emerald-500/20 active:scale-95"
+                                                                            data-course-id="${c.courseId}">
+                                                                        Join
+                                                                    </button>
+                                                                    <button type="button" disabled
+                                                                            onclick="event.stopPropagation()"
+                                                                            class="free-course-enrolled-btn hidden px-4 py-2 font-bold text-sm bg-emerald-100 text-emerald-700 rounded-xl cursor-not-allowed transition-all"
+                                                                            data-course-id="${c.courseId}">
+                                                                        Enrolled
+                                                                    </button>
+                                                                    <c:if test="${sessionScope.USER == null}">
+                                                                        <button type="button"
+                                                                                onclick="event.stopPropagation(); window.location.href='${pageContext.request.contextPath}/login'"
+                                                                                class="px-4 py-2 font-bold text-sm bg-emerald-500 text-white rounded-xl hover:bg-emerald-600 transition-all shadow-md shadow-emerald-500/20 active:scale-95">
+                                                                            Join
+                                                                        </button>
+                                                                    </c:if>
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <c:choose>
+                                                                        <c:when test="${sessionScope.USER != null}">
+                                                                            <a href="${pageContext.request.contextPath}/addToCart?id=${c.courseId}"
+                                                                               onclick="event.stopPropagation()"
+                                                                               class="paid-course-cart-btn group/cart p-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 transition-all duration-300 hover:bg-emerald-500/20 hover:border-emerald-400 active:scale-90"
+                                                                               data-course-id="${c.courseId}">
+                                                                                <span class="material-symbols-outlined text-primary text-xl transition-all duration-300">shopping_cart</span>
+                                                                            </a>
+                                                                            <button type="button" disabled
+                                                                                    onclick="event.stopPropagation()"
+                                                                                    class="paid-course-enrolled-btn hidden px-4 py-2 font-bold text-sm bg-emerald-100 text-emerald-700 rounded-xl cursor-not-allowed transition-all"
+                                                                                    data-course-id="${c.courseId}">
+                                                                                Enrolled
+                                                                            </button>
+                                                                        </c:when>
+                                                                        <c:otherwise>
+                                                                            <a onclick="event.stopPropagation()"
+                                                                               href="${pageContext.request.contextPath}/login"
+                                                                               class="group/cart p-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 transition-all duration-300 hover:bg-emerald-500/20 hover:border-emerald-400 active:scale-90">
+                                                                                <span class="material-symbols-outlined text-primary text-xl transition-all duration-300">shopping_cart</span>
+                                                                            </a>
+                                                                        </c:otherwise>
+                                                                    </c:choose>
+                                                                </c:otherwise>
+                                                            </c:choose>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -408,13 +508,60 @@
                                                         </div>
                                                         <div
                                                             class="flex mt-auto items-center justify-between pt-2 border-t border-slate-100">
-                                                            <span
-                                                                class="text-xl font-black text-emerald-400">$${c.price}</span>
-                                                            <button onclick="event.stopPropagation();"
-                                                                class="group/cart p-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 transition-all duration-300 hover:bg-emerald-500/20 hover:border-emerald-400 active:scale-90">
-                                                                <span
-                                                                    class="material-symbols-outlined text-primary text-xl transition-all duration-300">shopping_cart</span>
-                                                            </button>
+                                                            <span class="text-xl font-black text-emerald-400">
+                                                                <c:choose>
+                                                                    <c:when test="${c.price == null || c.price <= 0}">Free</c:when>
+                                                                    <c:otherwise>$<fmt:formatNumber value="${c.price}" minFractionDigits="2" maxFractionDigits="2" /></c:otherwise>
+                                                                </c:choose>
+                                                            </span>
+                                                            <c:choose>
+                                                                <c:when test="${c.price == null || c.price <= 0}">
+                                                                    <button type="button"
+                                                                            onclick="event.stopPropagation(); handleEnrollment(this, ${c.courseId}, ${sessionScope.USER != null})"
+                                                                            class="free-course-btn hidden px-4 py-2 font-bold text-sm bg-emerald-500 text-white rounded-xl hover:bg-emerald-600 transition-all shadow-md shadow-emerald-500/20 active:scale-95"
+                                                                            data-course-id="${c.courseId}">
+                                                                        Join
+                                                                    </button>
+                                                                    <button type="button" disabled
+                                                                            onclick="event.stopPropagation()"
+                                                                            class="free-course-enrolled-btn hidden px-4 py-2 font-bold text-sm bg-emerald-100 text-emerald-700 rounded-xl cursor-not-allowed transition-all"
+                                                                            data-course-id="${c.courseId}">
+                                                                        Enrolled
+                                                                    </button>
+                                                                    <c:if test="${sessionScope.USER == null}">
+                                                                        <button type="button"
+                                                                                onclick="event.stopPropagation(); window.location.href='${pageContext.request.contextPath}/login'"
+                                                                                class="px-4 py-2 font-bold text-sm bg-emerald-500 text-white rounded-xl hover:bg-emerald-600 transition-all shadow-md shadow-emerald-500/20 active:scale-95">
+                                                                            Join
+                                                                        </button>
+                                                                    </c:if>
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <c:choose>
+                                                                        <c:when test="${sessionScope.USER != null}">
+                                                                            <a href="${pageContext.request.contextPath}/addToCart?id=${c.courseId}"
+                                                                               onclick="event.stopPropagation()"
+                                                                               class="paid-course-cart-btn group/cart p-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 transition-all duration-300 hover:bg-emerald-500/20 hover:border-emerald-400 active:scale-90"
+                                                                               data-course-id="${c.courseId}">
+                                                                                <span class="material-symbols-outlined text-primary text-xl transition-all duration-300">shopping_cart</span>
+                                                                            </a>
+                                                                            <button type="button" disabled
+                                                                                    onclick="event.stopPropagation()"
+                                                                                    class="paid-course-enrolled-btn hidden px-4 py-2 font-bold text-sm bg-emerald-100 text-emerald-700 rounded-xl cursor-not-allowed transition-all"
+                                                                                    data-course-id="${c.courseId}">
+                                                                                Enrolled
+                                                                            </button>
+                                                                        </c:when>
+                                                                        <c:otherwise>
+                                                                            <a onclick="event.stopPropagation()"
+                                                                               href="${pageContext.request.contextPath}/login"
+                                                                               class="group/cart p-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 transition-all duration-300 hover:bg-emerald-500/20 hover:border-emerald-400 active:scale-90">
+                                                                                <span class="material-symbols-outlined text-primary text-xl transition-all duration-300">shopping_cart</span>
+                                                                            </a>
+                                                                        </c:otherwise>
+                                                                    </c:choose>
+                                                                </c:otherwise>
+                                                            </c:choose>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -491,13 +638,60 @@
                                                         </div>
                                                         <div
                                                             class="flex mt-auto items-center justify-between pt-2 border-t border-slate-100">
-                                                            <span
-                                                                class="text-xl font-black text-emerald-400">$${c.price}</span>
-                                                            <button onclick="event.stopPropagation();"
-                                                                class="group/cart p-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 transition-all duration-300 hover:bg-emerald-500/20 hover:border-emerald-400 active:scale-90">
-                                                                <span
-                                                                    class="material-symbols-outlined text-primary text-xl transition-all duration-300">shopping_cart</span>
-                                                            </button>
+                                                            <span class="text-xl font-black text-emerald-400">
+                                                                <c:choose>
+                                                                    <c:when test="${c.price == null || c.price <= 0}">Free</c:when>
+                                                                    <c:otherwise>$<fmt:formatNumber value="${c.price}" minFractionDigits="2" maxFractionDigits="2" /></c:otherwise>
+                                                                </c:choose>
+                                                            </span>
+                                                            <c:choose>
+                                                                <c:when test="${c.price == null || c.price <= 0}">
+                                                                    <button type="button"
+                                                                            onclick="event.stopPropagation(); handleEnrollment(this, ${c.courseId}, ${sessionScope.USER != null})"
+                                                                            class="free-course-btn hidden px-4 py-2 font-bold text-sm bg-emerald-500 text-white rounded-xl hover:bg-emerald-600 transition-all shadow-md shadow-emerald-500/20 active:scale-95"
+                                                                            data-course-id="${c.courseId}">
+                                                                        Join
+                                                                    </button>
+                                                                    <button type="button" disabled
+                                                                            onclick="event.stopPropagation()"
+                                                                            class="free-course-enrolled-btn hidden px-4 py-2 font-bold text-sm bg-emerald-100 text-emerald-700 rounded-xl cursor-not-allowed transition-all"
+                                                                            data-course-id="${c.courseId}">
+                                                                        Enrolled
+                                                                    </button>
+                                                                    <c:if test="${sessionScope.USER == null}">
+                                                                        <button type="button"
+                                                                                onclick="event.stopPropagation(); window.location.href='${pageContext.request.contextPath}/login'"
+                                                                                class="px-4 py-2 font-bold text-sm bg-emerald-500 text-white rounded-xl hover:bg-emerald-600 transition-all shadow-md shadow-emerald-500/20 active:scale-95">
+                                                                            Join
+                                                                        </button>
+                                                                    </c:if>
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <c:choose>
+                                                                        <c:when test="${sessionScope.USER != null}">
+                                                                            <a href="${pageContext.request.contextPath}/addToCart?id=${c.courseId}"
+                                                                               onclick="event.stopPropagation()"
+                                                                               class="paid-course-cart-btn group/cart p-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 transition-all duration-300 hover:bg-emerald-500/20 hover:border-emerald-400 active:scale-90"
+                                                                               data-course-id="${c.courseId}">
+                                                                                <span class="material-symbols-outlined text-primary text-xl transition-all duration-300">shopping_cart</span>
+                                                                            </a>
+                                                                            <button type="button" disabled
+                                                                                    onclick="event.stopPropagation()"
+                                                                                    class="paid-course-enrolled-btn hidden px-4 py-2 font-bold text-sm bg-emerald-100 text-emerald-700 rounded-xl cursor-not-allowed transition-all"
+                                                                                    data-course-id="${c.courseId}">
+                                                                                Enrolled
+                                                                            </button>
+                                                                        </c:when>
+                                                                        <c:otherwise>
+                                                                            <a onclick="event.stopPropagation()"
+                                                                               href="${pageContext.request.contextPath}/login"
+                                                                               class="group/cart p-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 transition-all duration-300 hover:bg-emerald-500/20 hover:border-emerald-400 active:scale-90">
+                                                                                <span class="material-symbols-outlined text-primary text-xl transition-all duration-300">shopping_cart</span>
+                                                                            </a>
+                                                                        </c:otherwise>
+                                                                    </c:choose>
+                                                                </c:otherwise>
+                                                            </c:choose>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -711,6 +905,97 @@
                             });
                         });
                     });
+                </script>
+
+                <script>
+                    /* ── Enrollment Logic ── */
+                    (function() {
+                        const isLoggedIn = ${sessionScope.USER != null};
+                        if (isLoggedIn) {
+                            // Check enrollment for FREE courses
+                            const freeCourseBtns = document.querySelectorAll('.free-course-btn');
+                            freeCourseBtns.forEach(btn => {
+                                const courseId = btn.getAttribute('data-course-id');
+                                fetch('${pageContext.request.contextPath}/api/courses/' + courseId + '/enrollment-status')
+                                    .then(r => r.json())
+                                    .then(data => {
+                                        if (data.enrolled) {
+                                            const enrolledBtn = btn.parentElement.querySelector('.free-course-enrolled-btn');
+                                            btn.classList.add('hidden');
+                                            enrolledBtn.classList.remove('hidden');
+                                        } else {
+                                            btn.classList.remove('hidden');
+                                        }
+                                    })
+                                    .catch(e => {
+                                        console.error('Status check error:', e);
+                                        btn.classList.remove('hidden');
+                                    });
+                            });
+
+                            // Check enrollment for PAID courses
+                            const paidCartBtns = document.querySelectorAll('.paid-course-cart-btn');
+                            paidCartBtns.forEach(btn => {
+                                const courseId = btn.getAttribute('data-course-id');
+                                fetch('${pageContext.request.contextPath}/api/courses/' + courseId + '/enrollment-status')
+                                    .then(r => r.json())
+                                    .then(data => {
+                                        if (data.enrolled) {
+                                            const enrolledBtn = btn.parentElement.querySelector('.paid-course-enrolled-btn');
+                                            btn.classList.add('hidden');
+                                            enrolledBtn.classList.remove('hidden');
+                                        }
+                                    })
+                                    .catch(e => console.error('Paid status check error:', e));
+                            });
+                        }
+
+                        window.handleEnrollment = function(btn, courseId, isLogged) {
+                            if (!isLogged) {
+                                window.location.href = '${pageContext.request.contextPath}/login';
+                                return;
+                            }
+
+                            const originalText = btn.innerHTML;
+                            btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-sm">progress_activity</span>';
+                            btn.disabled = true;
+
+                            fetch('${pageContext.request.contextPath}/api/courses/' + courseId + '/enroll', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                }
+                            })
+                            .then(r => {
+                                if (r.ok || r.status === 401) {
+                                    return r.json();
+                                } else {
+                                    throw new Error('API failed');
+                                }
+                            })
+                            .then(data => {
+                                if (data.error && data.error === 'User not logged in') {
+                                    window.location.href = '${pageContext.request.contextPath}/login';
+                                    return;
+                                }
+                                if (data.enrolled) {
+                                    const enrolledBtn = btn.parentElement.querySelector('.free-course-enrolled-btn');
+                                    btn.classList.add('hidden');
+                                    enrolledBtn.classList.remove('hidden');
+                                } else {
+                                    btn.innerHTML = originalText;
+                                    btn.disabled = false;
+                                    alert('Enrollment failed');
+                                }
+                            })
+                            .catch(e => {
+                                console.error('Enroll error:', e);
+                                btn.innerHTML = originalText;
+                                btn.disabled = false;
+                                alert('Something went wrong during enrollment');
+                            });
+                        };
+                    })();
                 </script>
             </body>
 

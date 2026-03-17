@@ -18,12 +18,13 @@
 <header class="fixed top-0 left-0 w-full z-50 glass-header-nav">
     <div class="max-w-[1200px] w-full mx-auto px-6 lg:px-12 py-4 flex items-center justify-between">
 
-        <div class="flex items-center gap-12">
+         <div class="flex items-center gap-12">
             <a href="${pageContext.request.contextPath}/home"
                class="flex items-center gap-2 group cursor-pointer" style="text-decoration: none;">
                 <div class="w-10 h-10 rounded-xl flex items-center justify-center text-[#101b0d] transition-transform group-hover:scale-105 duration-300"
                      style="background: #10B981; box-shadow: 0 4px 20px rgba(16, 185, 129, 0.25);">
                     <span class="material-symbols-outlined text-2xl font-bold">terminal</span>
+ 
                 </div>
                 <h2 class="text-2xl font-black tracking-tight text-white m-0">DevLearn</h2>
             </a>
@@ -34,7 +35,7 @@
                 <a class="text-[15px] font-medium text-white/80 hover:text-[#10B981] transition-colors duration-300"
                    href="${pageContext.request.contextPath}/shop">Courses</a>
                 <a class="text-[15px] font-medium text-white/80 hover:text-[#10B981] transition-colors duration-300"
-                   href="#">Learning Paths</a>
+                   href="${pageContext.request.contextPath}/learningpaths">Learning Paths</a>
                 <a class="text-[15px] font-medium text-white/80 hover:text-[#10B981] transition-colors duration-300"
                    href="#">Community</a>
                 <div class="relative group">

@@ -10,7 +10,7 @@
     <class>courseitproject.model.CourseCategory</class>
     <class>courseitproject.model.Course</class>
     <class>courseitproject.model.CourseTeacher</class>
-    <class>courseitproject.model.Section</class>
+     <class>courseitproject.model.Section</class>
     <class>courseitproject.model.Quiz</class>
     <class>courseitproject.model.Question</class>
     <class>courseitproject.model.Answer</class>
@@ -37,7 +37,8 @@
     <class>courseitproject.model.Assignment</class>
     <class>courseitproject.model.AssignmentCriteria</class>
     <class>courseitproject.model.TeacherJob</class>
-    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+     <class>courseitproject.model.RoadmapNode</class>
+     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <!-- Provider JPA (EclipseLink hoặc Hibernate) -->
     <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
     <!-- Thông tin Database -->
