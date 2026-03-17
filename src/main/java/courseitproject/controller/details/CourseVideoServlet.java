@@ -1,15 +1,12 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package courseitproject.controller.details;
 
 import courseitproject.dto.CourseDetailDTO;
 import courseitproject.model.LessonResource;
-import courseitproject.model.UserRole;
 import courseitproject.model.Users;
 import courseitproject.service.ICourseDetailService;
 import courseitproject.service.CourseDetailServiceImpl;
+import courseitproject.utils.JPAUtil; // Nhớ import cái này
+import jakarta.persistence.EntityManager;
 
 import java.io.IOException;
 import jakarta.servlet.ServletException;
@@ -19,10 +16,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-/**
- *
- * @author ASUS
- */
 @WebServlet(name = "CourseVideoServlet", urlPatterns = { "/courseVideo" })
 public class CourseVideoServlet extends HttpServlet {
 
@@ -96,6 +89,30 @@ public class CourseVideoServlet extends HttpServlet {
                 return;
             }
         }
+
+        // =====================================================================
+        // 🛠️ PHẦN BỔ SUNG: KIỂM TRA TRẠNG THÁI HOÀN THÀNH TỪ DATABASE
+        // =====================================================================
+        boolean isCompleted = false;
+        if (studentId != null) {
+            EntityManager em = JPAUtil.getEntityManager();
+            try {
+                // Truy vấn tìm lesson_id tương ứng với resource hiện tại và kiểm tra trong LearningProgress
+                String checkSql = "SELECT COUNT(*) FROM LearningProgress lp " +
+                                  "JOIN LessonResource lr ON lp.lesson_id = lr.lesson_id " +
+                                  "WHERE lp.student_id = :sid AND lr.resource_id = :rid";
+                
+                long count = ((Number) em.createNativeQuery(checkSql)
+                                         .setParameter("sid", studentId)
+                                         .setParameter("rid", resourceId)
+                                         .getSingleResult()).longValue();
+                isCompleted = (count > 0);
+            } finally {
+                em.close();
+            }
+        }
+        request.setAttribute("isCompleted", isCompleted); 
+        // =====================================================================
 
         CourseDetailDTO dto = courseDetailService.getCourseDetail(courseId, studentId);
 

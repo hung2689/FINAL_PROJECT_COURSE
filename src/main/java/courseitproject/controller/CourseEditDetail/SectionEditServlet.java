@@ -13,7 +13,11 @@ import java.io.PrintWriter;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
-@WebServlet(name = "SectionAdminServlet", urlPatterns = {"/sectionAdmin"})
+import courseitproject.service.IUserService;
+import courseitproject.service.UserServiceImp;
+import courseitproject.model.Role;
+
+@WebServlet(name = "SectionAdminServlet", urlPatterns = { "/sectionAdmin" })
 public class SectionEditServlet extends HttpServlet {
 
     private SectionEditService sectionDAO;
@@ -23,6 +27,12 @@ public class SectionEditServlet extends HttpServlet {
     public void init() throws ServletException {
         sectionDAO = new SectionEditService();
         roleDAO = new courseitproject.service.RoleEditService();
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.sendError(HttpServletResponse.SC_FORBIDDEN, "GET method is not allowed for this endpoint.");
     }
 
     @Override
@@ -40,6 +50,23 @@ public class SectionEditServlet extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             jsonResponse.addProperty("status", "error");
             jsonResponse.addProperty("message", "Unauthorized access.");
+            out.print(gson.toJson(jsonResponse));
+            return;
+        }
+
+        IUserService userService = new UserServiceImp();
+        boolean isAdmin = false;
+        for (Role r : userService.findRolesByUserId(user.getUserId())) {
+            if ("ADMIN".equals(r.getRoleName())) {
+                isAdmin = true;
+                break;
+            }
+        }
+
+        if (!isAdmin) {
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            jsonResponse.addProperty("status", "error");
+            jsonResponse.addProperty("message", "Forbidden access. Only ADMIN can perform this action.");
             out.print(gson.toJson(jsonResponse));
             return;
         }
