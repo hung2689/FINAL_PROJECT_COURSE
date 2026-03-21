@@ -30,7 +30,6 @@
         }
     </style>
 
-    <!-- Fixed User Pill -->
     <div class="fixed bottom-6 left-6 z-50">
         <c:choose>
             <c:when test="${sessionScope.USER == null}">
@@ -92,8 +91,8 @@
                             <span class="material-symbols-outlined text-[20px]">payments</span>
                             Billing
                         </a>
-                       
-                    </div>
+        
+                        </div>
 
                     <div class="py-2 border-t border-gray-200">
                         <a href="${pageContext.request.contextPath}/logout"

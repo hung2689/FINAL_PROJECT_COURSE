@@ -48,6 +48,16 @@
             scrollbar-width: none;
         }
     </style>
+    <style>
+                        .toggle-checkbox:checked {
+                            right: 0;
+                            border-color: #10B981;
+                            transform: translateX(100%);
+                        }
+                        .toggle-checkbox:checked + .toggle-label {
+                            background-color: #10B981;
+                        }
+                    </style>
 </head>
 
 <body class="text-slate-800 flex flex-col min-h-screen">
@@ -143,43 +153,45 @@
                     </c:choose>
                 </div>
 
-                <div class="lg:col-span-1">
-                    <div class="sticky top-[120px] bg-white p-6 rounded-2xl border border-emerald-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
-                        <div class="flex justify-between items-end mb-6 pb-6 border-b border-slate-100">
-                            <span class="text-lg font-bold text-slate-700">Total:</span>
-                            <span class="text-2xl font-black text-slate-900">
-                                $<fmt:formatNumber value="${totalPrice}" minFractionDigits="2" maxFractionDigits="2" />
-                            </span>
-                        </div>
-
-                        <div class="mb-6">
-                            <label class="block text-[13px] font-bold text-slate-700 mb-2">Promo Code</label>
-                            <div class="flex gap-2">
-                                <input type="text" placeholder="Enter promo code"
-                                    class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all">
-                                <button class="bg-slate-800 text-white px-5 py-2.5 rounded-lg text-sm font-bold hover:bg-slate-700 whitespace-nowrap transition-colors">Apply</button>
+              <div class="lg:col-span-1">
+                        <div class="sticky top-[120px] bg-white p-6 rounded-2xl border border-emerald-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+                            <div class="flex justify-between items-end mb-6 pb-6 border-b border-slate-100">
+                                <span class="text-lg font-bold text-slate-700">Total:</span>
+                                <span class="text-2xl font-black text-slate-900">
+                                    $<fmt:formatNumber value="${totalPrice}" minFractionDigits="2" maxFractionDigits="2" />
+                                </span>
                             </div>
-                        </div>
 
-                        <div class="flex items-center justify-between mb-8 pb-6 border-b border-slate-100">
-                            <div>
-                                <p class="text-[13px] font-bold text-slate-700">Use Reward Points: 0</p>
-                                <p class="text-[11px] text-slate-400 mt-0.5">Total: 0 pts <span class="ml-1">(100 pts = $1.00)</span></p>
+                            <div class="mb-6">
+                                <label class="block text-[13px] font-bold text-slate-700 mb-2">Promo Code</label>
+                                <div class="flex gap-2">
+                                    <input type="text" placeholder="Enter promo code"
+                                        class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all">
+                                    <button class="bg-slate-800 text-white px-5 py-2.5 rounded-lg text-sm font-bold hover:bg-slate-700 whitespace-nowrap transition-colors">Apply</button>
+                                </div>
                             </div>
-                            <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
-                                <input type="checkbox" name="toggle" id="toggle"
-                                    class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer transition-transform duration-200 ease-in-out z-10 top-0 left-0 border-slate-300" />
-                                <label for="toggle" class="toggle-label block overflow-hidden h-5 rounded-full bg-slate-300 cursor-pointer transition-colors duration-200 ease-in-out"></label>
-                            </div>
-                        </div>
 
-                        <a href="${pageContext.request.contextPath}/checkout" 
-                           class="w-full flex justify-center items-center gap-2 py-3.5 bg-primary text-white text-[15px] font-bold rounded-xl hover:bg-emerald-600 hover:shadow-lg hover:shadow-primary/30 transition-all duration-300"
-                           style="text-decoration: none;">
-                            Checkout $<fmt:formatNumber value="${totalPrice}" minFractionDigits="2" maxFractionDigits="2"/>
-                        </a>
+                            <div class="flex items-center justify-between mb-8 pb-6 border-b border-slate-100">
+                                <div>
+                                    <p class="text-[13px] font-bold text-slate-700">Use Reward Points: <span id="userPointsValue">${sessionScope.USER != null ? sessionScope.USER.rewardPoints : 0}</span></p>
+                                    <p class="text-[11px] text-slate-400 mt-0.5">Discount: <span id="discountDisplay" class="font-bold text-emerald-500">$0.00</span> <span class="ml-1">(10 pts = $1.00)</span></p>
+                                </div>
+                                <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+                                    <input type="checkbox" name="toggle" id="toggle" onchange="handlePointsToggle()"
+                                        class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer transition-transform duration-200 ease-in-out z-10 top-0 left-0 border-slate-300" />
+                                    <label for="toggle" class="toggle-label block overflow-hidden h-5 rounded-full bg-slate-300 cursor-pointer transition-colors duration-200 ease-in-out"></label>
+                                </div>
+                            </div>
+
+                            <a href="${pageContext.request.contextPath}/checkout" id="checkoutBtn"
+                               data-original-price="${totalPrice}"
+                               data-base-url="${pageContext.request.contextPath}/checkout"
+                               class="w-full flex justify-center items-center gap-2 py-3.5 bg-primary text-white text-[15px] font-bold rounded-xl hover:bg-emerald-600 hover:shadow-lg hover:shadow-primary/30 transition-all duration-300"
+                               style="text-decoration: none;">
+                                Checkout $<fmt:formatNumber value="${totalPrice}" minFractionDigits="2" maxFractionDigits="2"/>
+                            </a>
+                        </div>
                     </div>
-                </div>
 
             </div>
 
@@ -353,6 +365,40 @@
             }
         });
     </script>
+    <script>
+                        function handlePointsToggle() {
+                            const toggle = document.getElementById("toggle");
+                            const checkoutBtn = document.getElementById("checkoutBtn");
+                            const discountDisplay = document.getElementById("discountDisplay");
+                            
+                            // Lấy giá trị gốc từ HTML attribute
+                            const originalPrice = parseFloat(checkoutBtn.getAttribute("data-original-price")) || 0;
+                            const userPoints = parseInt(document.getElementById("userPointsValue").innerText) || 0;
+                            const baseUrl = checkoutBtn.getAttribute("data-base-url");
+
+                            let finalPrice = originalPrice;
+                            let discountAmount = 0;
+
+                            if (toggle.checked && userPoints > 0) {
+                                // Quy đổi: 10 điểm = $1 -> Chia cho 10
+                                let maxDiscount = userPoints / 10.0; 
+                                
+                                // Tiền giảm không được vượt quá tiền khóa học
+                                discountAmount = maxDiscount > originalPrice ? originalPrice : maxDiscount;
+                                finalPrice = originalPrice - discountAmount;
+                                
+                                // Gắn cờ usePoints=true vào URL để gửi lên Server
+                                checkoutBtn.href = baseUrl + "?usePoints=true";
+                            } else {
+                                // Khôi phục URL gốc
+                                checkoutBtn.href = baseUrl;
+                            }
+
+                            // Cập nhật giao diện
+                            discountDisplay.innerText = "-$" + discountAmount.toFixed(2);
+                            checkoutBtn.innerHTML = "Checkout $" + finalPrice.toFixed(2);
+                        }
+                    </script>
      <jsp:include page="../common/footer.jsp" />
 </body>
 </html>

@@ -455,78 +455,9 @@
             </section>
         </main>
 
-        <footer class="bg-white border-t border-emerald-100 pt-24 pb-12">
-            <div class="max-w-canvas mx-auto px-8 lg:px-12">
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-16 mb-24">
-                    <div class="lg:col-span-2">
-                        <div class="flex items-center gap-2 mb-8">
-                            <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-[#101b0d]">
-                                <span class="material-symbols-outlined text-xl font-bold">terminal</span>
-                            </div>
-                            <h2 class="text-xl font-black tracking-tight">IT-LEARN</h2>
-                        </div>
-                        <p class="text-gray-500 dark:text-gray-400 text-base leading-relaxed mb-8 max-w-sm">
-                            Accompanying thousands of students on their journey to becoming professional
-                            software engineers with practical curriculum.
-                        </p>
-                        <div class="flex gap-4">
-                            <a class="w-10 h-10 rounded-full border border-gray-200 dark:border-white/10 flex items-center justify-center text-gray-400 hover:bg-primary hover:border-primary hover:text-[#101b0d] transition-all" href="#">
-                                <span class="material-symbols-outlined text-xl">social_leaderboard</span>
-                            </a>
-                            <a class="w-10 h-10 rounded-full border border-gray-200 dark:border-white/10 flex items-center justify-center text-gray-400 hover:bg-primary hover:border-primary hover:text-[#101b0d] transition-all" href="#">
-                                <span class="material-symbols-outlined text-xl">terminal</span>
-                            </a>
-                            <a class="w-10 h-10 rounded-full border border-gray-200 dark:border-white/10 flex items-center justify-center text-gray-400 hover:bg-primary hover:border-primary hover:text-[#101b0d] transition-all" href="#">
-                                <span class="material-symbols-outlined text-xl">smart_display</span>
-                            </a>
-                        </div>
-                    </div>
-                    <div>
-                        <h4 class="font-bold text-sm uppercase tracking-widest mb-8">Courses</h4>
-                        <ul class="space-y-4">
-                            <li><a class="text-gray-500 hover:text-primary transition-colors text-[15px]" href="#">Frontend Development</a></li>
-                            <li><a class="text-gray-500 hover:text-primary transition-colors text-[15px]" href="#">Backend Development</a></li>
-                            <li><a class="text-gray-500 hover:text-primary transition-colors text-[15px]" href="#">Mobile Development</a></li>
-                            <li><a class="text-gray-500 hover:text-primary transition-colors text-[15px]" href="#">Data Science &amp; AI</a></li>
-                            <li><a class="text-gray-500 hover:text-primary transition-colors text-[15px]" href="#">DevOps &amp; Cloud</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 class="font-bold text-sm uppercase tracking-widest mb-8">Resources</h4>
-                        <ul class="space-y-4">
-                            <li><a class="text-gray-500 hover:text-primary transition-colors text-[15px]" href="#">Tech Blog</a></li>
-                            <li><a class="text-gray-500 hover:text-primary transition-colors text-[15px]" href="#">Learning Community</a></li>
-                            <li><a class="text-gray-500 hover:text-primary transition-colors text-[15px]" href="#">Free Materials</a></li>
-                            <li><a class="text-gray-500 hover:text-primary transition-colors text-[15px]" href="#">YouTube Channel</a></li>
-                            <li><a class="text-gray-500 hover:text-primary transition-colors text-[15px]" href="#">IT Podcast</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 class="font-bold text-sm uppercase tracking-widest mb-8">Quick Links</h4>
-                        <ul class="space-y-4">
-                            <li><a class="text-gray-500 hover:text-primary transition-colors text-[15px]" href="#">About Us</a></li>
-                            <li><a class="text-gray-500 hover:text-primary transition-colors text-[15px]" href="#">Careers</a></li>
-                            <li><a class="text-gray-500 hover:text-primary transition-colors text-[15px]" href="#">Terms of Service</a></li>
-                            <li><a class="text-gray-500 hover:text-primary transition-colors text-[15px]" href="#">Privacy Policy</a></li>
-                            <li><a class="text-gray-500 hover:text-primary transition-colors text-[15px]" href="#">Contact</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="pt-12 border-t border-gray-100 dark:border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-                    <p class="text-sm text-gray-500">© 2024 DevLearn Academy. Built for the tech community.</p>
-                    <div class="flex items-center gap-8">
-                        <span class="text-sm text-gray-500 flex items-center gap-2">
-                            <span class="material-symbols-outlined text-lg">language</span> English
-                        </span>
-                        <span class="text-sm text-gray-500 flex items-center gap-2">
-                            <span class="material-symbols-outlined text-lg">support_agent</span> 1900 1234
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </footer>
+  
     </div>
-
+<jsp:include page="../common/footer.jsp" />
     <jsp:include page="../common/userbuttom.jsp" />
 
     <script>

@@ -41,6 +41,12 @@
                 <span class="material-icons text-xl">assessment</span>
                 <span class="font-medium">Reports</span>
             </a>
+   <a href="${pageContext.request.contextPath}/admin-support" 
+   class="flex items-center gap-3 px-4 py-3 rounded-lg ${activeMenu == 'support' ? 'bg-primary/10 text-primary' : 'hover:bg-slate-800'} transition-colors"
+   style="text-decoration: none;">
+    <span class="material-icons text-xl">bug_report</span>
+    <span class="font-medium">Support Requests</span>
+</a>
         </nav>
         <div class="p-4 border-t border-slate-800">
             <a class="flex items-center gap-3 px-4 py-3 rounded-lg ${activeMenu == 'settings' ? 'bg-primary/10 text-primary' : 'hover:bg-slate-800'} transition-colors"
