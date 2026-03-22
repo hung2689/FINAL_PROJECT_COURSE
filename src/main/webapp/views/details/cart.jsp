@@ -1,5 +1,4 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
- 
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
         <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
             <fmt:setLocale value="en_US" />
@@ -31,7 +30,7 @@
                         font-family: "Inter", sans-serif;
                         background: #f8fffc;
                     }
- 
+
                     .toggle-checkbox:checked {
                         right: 0;
                         border-color: #10B981;
@@ -202,7 +201,6 @@
                                         </div>
                                     </div>
 
- 
                                     <div class="flex items-center justify-between mb-8 pb-6 border-b border-slate-100">
                                         <div>
                                             <p class="text-[13px] font-bold text-slate-700">Use Reward Points: 0</p>
@@ -308,7 +306,7 @@
                                                                     </c:otherwise>
                                                                 </c:choose>
                                                         </div>
-                                                     </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </c:forEach>
@@ -330,7 +328,6 @@
                         const popup = document.getElementById(popupId);
                         if (popup) popup.classList.toggle('hidden');
                     }
- 
                     document.addEventListener('click', function (e) { if (!e.target.closest('.delete-container')) { document.querySelectorAll('[id^="popup-"]').forEach(p => p.classList.add('hidden')); } });
                     document.addEventListener('DOMContentLoaded', function () {
                         const slider = document.getElementById('suggestedSlider');
@@ -352,4 +349,3 @@
             </body>
 
             </html>
- 

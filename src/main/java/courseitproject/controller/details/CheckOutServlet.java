@@ -41,17 +41,17 @@ public class CheckOutServlet extends HttpServlet {
             return;
         }
 
-        
+        // 1. Calculate Total in VND
         double totalUSD = 0;
         for (Course c : cart.values()) {
             totalUSD += c.getPrice().doubleValue();
         }
         long totalVND = (long) (totalUSD * 25000);
 
-       
+        // ALWAYS Set finalTotal early so the JSP never loses it
         request.setAttribute("finalTotal", totalVND);
 
-    
+        // 2. Prepare Order
         CourseOrderService orderService = new CourseOrderService();
         CourseOrder newOrder = new CourseOrder();
 
@@ -65,13 +65,13 @@ public class CheckOutServlet extends HttpServlet {
             newOrder.setStudentId(currentStudent);
         }
 
-     
+        // Save order
         int generatedOrderId = orderService.save(newOrder);
 
-        
+        // ALWAYS Set orderId so the JSP form is properly populated
         request.setAttribute("orderId", generatedOrderId);
 
-      
+        // Only proceed with cart items if order generated successfully
         if (generatedOrderId != -1) {
             EntityManager em = JPAUtil.getEntityManager();
             try {
@@ -96,7 +96,8 @@ public class CheckOutServlet extends HttpServlet {
                 em.close();
             }
         } else {
-          
+            // Optional: send error message but still allow the forward so the design
+            // remains visible
             request.setAttribute("errorMessage", "Error generating order ID. It returned -1");
         }
 
