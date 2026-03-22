@@ -12,14 +12,14 @@
         </div>
         <nav class="flex-1 px-4 space-y-1 mt-4">
             <a class="flex items-center gap-3 px-4 py-3 rounded-lg ${activeMenu == 'dashboard' ? 'bg-primary/10 text-primary' : 'hover:bg-slate-800'} transition-colors"
-                href="${pageContext.request.contextPath}/home">
+                href="${pageContext.request.contextPath}/adminDashboard">
                 <span class="material-icons text-xl">dashboard</span>
                 <span class="font-medium">Dashboard</span>
             </a>
             <a class="flex items-center gap-3 px-4 py-3 rounded-lg ${activeMenu == 'courses' ? 'bg-primary/10 text-primary' : 'hover:bg-slate-800'} transition-colors"
                 href="${pageContext.request.contextPath}/courseAdmin">
                 <span class="material-icons text-xl">library_books</span>
-                <span class="font-medium">Course Management</span>
+                <span class="font-medium">Course</span>
             </a>
             <a class="flex items-center gap-3 px-4 py-3 rounded-lg ${activeMenu == 'users' ? 'bg-primary/10 text-primary' : 'hover:bg-slate-800'} transition-colors"
                 href="${pageContext.request.contextPath}/userAdmin">
@@ -30,6 +30,11 @@
                 href="${pageContext.request.contextPath}/candidatesAdmin">
                 <span class="material-icons text-xl">category</span>
                 <span class="font-medium">Candidates</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 rounded-lg ${activeMenu == 'jobs' ? 'bg-primary/10 text-primary' : 'hover:bg-slate-800'} transition-colors"
+                href="${pageContext.request.contextPath}/jobAdmin">
+                <span class="material-icons text-xl">work</span>
+                <span class="font-medium">Teacher Jobs</span>
             </a>
             <a class="flex items-center gap-3 px-4 py-3 rounded-lg ${activeMenu == 'transactions' ? 'bg-primary/10 text-primary' : 'hover:bg-slate-800'} transition-colors"
                 href="${pageContext.request.contextPath}/transactionAdmin">
@@ -49,16 +54,9 @@
 </a>
         </nav>
         <div class="p-4 border-t border-slate-800">
-            <a class="flex items-center gap-3 px-4 py-3 rounded-lg ${activeMenu == 'settings' ? 'bg-primary/10 text-primary' : 'hover:bg-slate-800'} transition-colors"
-                href="#">
-                <span class="material-icons text-xl">settings</span>
-                <span class="font-medium">Settings</span>
-            </a>
-            <a class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-500/10 text-red-400 transition-colors"
-                href="#">
-                <span class="material-icons text-xl">logout</span>
-                <span class="font-medium">Logout</span>
-            </a>
+            <jsp:include page="/views/common/userbuttom.jsp">
+                <jsp:param name="isSidebar" value="true" />
+            </jsp:include>
         </div>
     </aside>
 

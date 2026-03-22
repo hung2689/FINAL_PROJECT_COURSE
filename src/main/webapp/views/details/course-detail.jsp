@@ -564,13 +564,15 @@
                                             </c:forEach>
 
                                             <!-- Add Section Button -->
-                                            <div class="edit-only mt-6 flex justify-center">
-                                                <button type="button" id="addSectionBtn" onclick="addSection()"
-                                                    class="text-base font-bold text-white bg-emerald-500 hover:bg-emerald-600 px-6 py-3 rounded-xl transition-all shadow-lg flex items-center gap-2">
-                                                    <span class="material-symbols-outlined">add_circle</span> Add New
-                                                    Section
-                                                </button>
-                                            </div>
+                                            <c:if test="${isEditAllowed}">
+                                                <div class="edit-only mt-6 flex justify-center">
+                                                    <button type="button" id="addSectionBtn" onclick="addSection()"
+                                                        class="text-base font-bold text-white bg-emerald-500 hover:bg-emerald-600 px-6 py-3 rounded-xl transition-all shadow-lg flex items-center gap-2">
+                                                        <span class="material-symbols-outlined">add_circle</span> Add New
+                                                        Section
+                                                    </button>
+                                                </div>
+                                            </c:if>
                                         </div>
                                     </section>
                                 </div>
@@ -609,22 +611,41 @@
                                                 45% OFF • 2 days left at this price
                                             </p>
                                             <div class="space-y-3 mb-8">
-                                                <c:choose>
-                                                    <c:when test="${courseDetail.enrolled}">
-                                                        <button
-                                                            class="w-full bg-slate-800 text-white hover:bg-slate-900 text-lg font-black py-4 rounded-xl transition-all shadow-lg flex items-center justify-center gap-2">
-                                                            <span class="material-symbols-outlined">play_circle</span>
-                                                            Continue Learning
-                                                        </button>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <a href="${pageContext.request.contextPath}/addToCart?id=${courseDetail.course.courseId}"
-                                                            class="w-full bg-emerald-500 text-white hover:bg-emerald-600 font-black py-4 rounded-xl transition-all duration-300 hover:scale-105 shadow-md flex items-center justify-center gap-2">
-                                                            <span class="material-symbols-outlined">shopping_cart</span>
-                                                            Add to Cart
-                                                        </a>
-                                                    </c:otherwise>
-                                                </c:choose>
+                                                    <c:choose>
+                                                        <c:when test="${courseDetail.enrolled}">
+                                                            <button
+                                                                class="w-full bg-slate-800 text-white hover:bg-slate-900 text-lg font-black py-4 rounded-xl transition-all shadow-lg flex items-center justify-center gap-2">
+                                                                <span class="material-symbols-outlined">play_circle</span>
+                                                                Continue Learning
+                                                            </button>
+                                                        </c:when>
+                                                        <c:when test="${courseDetail.course.price == 0}">
+                                                            <button type="button"
+                                                                    onclick="handleEnrollment(this, ${courseDetail.course.courseId}, ${sessionScope.USER != null})"
+                                                                    class="free-course-btn w-full bg-emerald-500 text-white hover:bg-emerald-600 font-black py-4 rounded-xl transition-all duration-300 hover:scale-105 shadow-md flex items-center justify-center gap-2"
+                                                                    data-course-id="${courseDetail.course.courseId}">
+                                                                Join
+                                                            </button>
+                                                            <button type="button" disabled
+                                                                    class="free-course-enrolled-btn hidden w-full bg-slate-800 text-white hover:bg-slate-900 text-lg font-black py-4 rounded-xl transition-all shadow-lg flex items-center justify-center gap-2"
+                                                                    data-course-id="${courseDetail.course.courseId}">
+                                                                <span class="material-symbols-outlined">play_circle</span> Continue Learning
+                                                            </button>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <a href="${pageContext.request.contextPath}/addToCart?id=${courseDetail.course.courseId}"
+                                                                class="paid-course-cart-btn w-full bg-emerald-500 text-white hover:bg-emerald-600 font-black py-4 rounded-xl transition-all duration-300 hover:scale-105 shadow-md flex items-center justify-center gap-2"
+                                                                data-course-id="${courseDetail.course.courseId}">
+                                                                <span class="material-symbols-outlined">shopping_cart</span>
+                                                                Add to Cart
+                                                            </a>
+                                                            <button type="button" disabled
+                                                                    class="paid-course-enrolled-btn hidden w-full bg-slate-800 text-white hover:bg-slate-900 text-lg font-black py-4 rounded-xl transition-all shadow-lg flex items-center justify-center gap-2"
+                                                                    data-course-id="${courseDetail.course.courseId}">
+                                                                <span class="material-symbols-outlined">play_circle</span> Continue Learning
+                                                            </button>
+                                                        </c:otherwise>
+                                                    </c:choose>
                                             </div>
                                             <div class="space-y-5">
                                                 <h4
@@ -753,34 +774,59 @@
                                                             <span class="text-xs font-bold text-gray-500">4.8
                                                                 (1.2k)</span>
                                                         </div>
-                                                    <div class="flex mt-auto items-center justify-between pt-3 border-t border-slate-100">
-    <span class="text-xl font-black text-emerald-400">
-        <c:choose>
-            <c:when test="${c.price <= 0.20}">Free</c:when>
-            <c:otherwise>$<fmt:formatNumber value="${c.price}" minFractionDigits="2" maxFractionDigits="2" /></c:otherwise>
-        </c:choose>
-    </span>
-    
-    <c:choose>
-        <%-- Nếu là khóa Free (<= 0.20) -> Hiện nút Join --%>
-        <c:when test="${c.price <= 0.20 || empty c.price}">
-            <button type="button" onclick="enrollFreeCourseAjax(event, this, ${c.courseId});"
-                class="group/cart px-4 py-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 transition-all duration-300 hover:bg-emerald-500/20 hover:border-emerald-400 active:scale-90 font-bold text-primary">
-                Join
-            </button>
-        </c:when>
-        
-        <%-- Nếu là khóa có phí -> Hiện nút Giỏ hàng --%>
-        <c:otherwise>
-            <button type="button" onclick="addToCartAjax(event, this, ${c.courseId});"
-                class="group/cart p-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 transition-all duration-300 hover:bg-emerald-500/20 hover:border-emerald-400 active:scale-90 flex items-center justify-center">
-                <span class="material-symbols-outlined text-primary text-lg">shopping_cart</span>
-            </button>
-        </c:otherwise>
-    </c:choose>
-</div>
-                                                        
-                                                        
+ 
+                                                        <div
+                                                            class="flex mt-auto items-center justify-between pt-2 border-t border-slate-100">
+                                                            <span
+                                                                class="text-xl font-black text-emerald-400">
+                                                                <c:choose>
+                                                                    <c:when test="${c.price == 0}">Free</c:when>
+                                                                    <c:otherwise>$<fmt:formatNumber value="${c.price}" maxFractionDigits="2" /></c:otherwise>
+                                                                </c:choose>
+                                                            </span>
+                                                            <c:choose>
+                                                                <c:when test="${c.price == 0}">
+                                                                    <button type="button"
+                                                                            onclick="event.stopPropagation(); handleEnrollment(this, ${c.courseId}, ${sessionScope.USER != null})"
+                                                                            class="free-course-btn hidden px-4 py-2 font-bold text-sm bg-emerald-500 text-white rounded-xl hover:bg-emerald-600 transition-all shadow-md shadow-emerald-500/20 active:scale-95"
+                                                                            data-course-id="${c.courseId}">
+                                                                        Join
+                                                                    </button>
+                                                                    <button type="button" disabled
+                                                                            onclick="event.stopPropagation()"
+                                                                            class="free-course-enrolled-btn hidden px-4 py-2 font-bold text-sm bg-emerald-100 text-emerald-700 rounded-xl cursor-not-allowed transition-all"
+                                                                            data-course-id="${c.courseId}">
+                                                                        Enrolled
+                                                                    </button>
+                                                                    <c:if test="${sessionScope.USER == null}">
+                                                                        <button type="button"
+                                                                                onclick="event.stopPropagation(); window.location.href='${pageContext.request.contextPath}/login'"
+                                                                                class="px-4 py-2 font-bold text-sm bg-emerald-500 text-white rounded-xl hover:bg-emerald-600 transition-all shadow-md shadow-emerald-500/20 active:scale-95">
+                                                                        Join
+                                                                        </button>
+                                                                    </c:if>
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <c:choose>
+                                                                        <c:when test="${sessionScope.USER != null}">
+                                                                            <a href="${pageContext.request.contextPath}/addToCart?id=${c.courseId}"
+                                                                               onclick="event.stopPropagation()"
+                                                                               class="group/cart p-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 transition-all duration-300 hover:bg-emerald-500/20 hover:border-emerald-400 active:scale-90 inline-block">
+                                                                                <span class="material-symbols-outlined text-[#10B981] text-xl transition-all duration-300 align-middle">shopping_cart</span>
+                                                                            </a>
+                                                                        </c:when>
+                                                                        <c:otherwise>
+                                                                            <a href="${pageContext.request.contextPath}/login"
+                                                                               onclick="event.stopPropagation()"
+                                                                               class="group/cart p-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 transition-all duration-300 hover:bg-emerald-500/20 hover:border-emerald-400 active:scale-90 inline-block">
+                                                                                <span class="material-symbols-outlined text-[#10B981] text-xl transition-all duration-300 align-middle">shopping_cart</span>
+                                                                            </a>
+                                                                        </c:otherwise>
+                                                                    </c:choose>
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                        </div>
+ 
                                                     </div>
                                                 </div>
                                             </c:forEach>
@@ -1795,6 +1841,97 @@
                                 });
                             });
                         });
+                        
+                        /* ── Enrollment Logic ── */
+                        document.addEventListener("DOMContentLoaded", function() {
+                            const isLoggedIn = ${sessionScope.USER != null};
+                            if (isLoggedIn) {
+                                freeCourseBtns.forEach(btn => {
+                                    const courseId = btn.getAttribute('data-course-id');
+                                    fetch('${pageContext.request.contextPath}/api/courses/' + courseId + '/enrollment-status')
+                                        .then(r => r.json())
+                                        .then(data => {
+                                            if (data.enrolled) {
+                                                const enrolledBtn = btn.parentElement.querySelector('.free-course-enrolled-btn');
+                                                btn.classList.add('hidden');
+                                                enrolledBtn.classList.remove('hidden');
+                                            } else {
+                                                btn.classList.remove('hidden');
+                                            }
+                                        })
+                                        .catch(e => {
+                                            console.error('Status check error:', e);
+                                            btn.classList.remove('hidden');
+                                        });
+                                });
+
+                                // Check enrollment for PAID courses
+                                const paidCartBtns = document.querySelectorAll('.paid-course-cart-btn');
+                                paidCartBtns.forEach(btn => {
+                                    const courseId = btn.getAttribute('data-course-id');
+                                    fetch('${pageContext.request.contextPath}/api/courses/' + courseId + '/enrollment-status')
+                                        .then(r => r.json())
+                                        .then(data => {
+                                            if (data.enrolled) {
+                                                const enrolledBtn = btn.parentElement.querySelector('.paid-course-enrolled-btn');
+                                                btn.classList.add('hidden');
+                                                enrolledBtn.classList.remove('hidden');
+                                            }
+                                        })
+                                        .catch(e => console.error('Paid status check error:', e));
+                                });
+                            }
+                        });
+
+                        window.handleEnrollment = function(btn, courseId, isLogged) {
+                            if (!isLogged) {
+                                window.location.href = '${pageContext.request.contextPath}/login';
+                                return;
+                            }
+
+                            const originalText = btn.innerHTML;
+                            btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-sm align-middle">progress_activity</span> Processing...';
+                            btn.disabled = true;
+
+                            fetch('${pageContext.request.contextPath}/api/courses/' + courseId + '/enroll', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                }
+                            })
+                            .then(r => {
+                                if (r.ok || r.status === 401) {
+                                    return r.json();
+                                } else {
+                                    throw new Error('API failed');
+                                }
+                            })
+                            .then(data => {
+                                if (data.error && data.error === 'User not logged in') {
+                                    window.location.href = '${pageContext.request.contextPath}/login';
+                                    return;
+                                }
+                                if (data.enrolled) {
+                                    const enrolledBtn = btn.parentElement.querySelector('.free-course-enrolled-btn');
+                                    btn.classList.add('hidden');
+                                    enrolledBtn.classList.remove('hidden');
+                                    // if it's the main enroll button, it might need page reload to unlock content
+                                    if (btn.classList.contains('w-full')) {
+                                        setTimeout(() => window.location.reload(), 1000);
+                                    }
+                                } else {
+                                    btn.innerHTML = originalText;
+                                    btn.disabled = false;
+                                    alert('Enrollment failed');
+                                }
+                            })
+                            .catch(e => {
+                                console.error('Enroll error:', e);
+                                btn.innerHTML = originalText;
+                                btn.disabled = false;
+                                alert('Something went wrong during enrollment');
+                            });
+                        };
                     </script>
  <jsp:include page="../common/footer.jsp" />
                     <jsp:include page="../common/userbuttom.jsp" />

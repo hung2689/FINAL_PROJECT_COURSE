@@ -5,7 +5,7 @@
 package courseitproject.controller.auther;
 
 import courseitproject.model.Role;
-import courseitproject.model.UserRole;
+import courseitproject.model.RoleName;
 import courseitproject.model.Users;
 import courseitproject.service.IUserService;
 import courseitproject.service.UserServiceImp;
@@ -284,7 +284,7 @@ public class AutherServlet extends HttpServlet {
         session.removeAttribute("REG_PASSWORD");
         try {
             // Mặc định tất cả tài khoản mới là STUDENT
-            userService.register(user, "STUDENT");
+            userService.register(user, RoleName.STUDENT.name());
             request.setAttribute("registerSuccess", "true");
             request.getRequestDispatcher("/views/auth/registerOtp.jsp").forward(request, response);
         } catch (Exception e) {
@@ -351,8 +351,21 @@ public class AutherServlet extends HttpServlet {
         
         // 6. Login thành công
         HttpSession session = request.getSession();
+        
+        java.time.LocalDate today = java.time.LocalDate.now();
+        boolean isFirstLoginToday = false;
+        if (user.getLastLoginDate() == null || !new java.sql.Date(user.getLastLoginDate().getTime()).toLocalDate().isEqual(today)) {
+            int currentCoins = user.getStudyCoins() != null ? user.getStudyCoins() : 0;
+            user.setStudyCoins(currentCoins + 20);
+            user.setLastLoginDate(java.sql.Date.valueOf(today));
+            isFirstLoginToday = true;
+            userService.updateStudyCoins(user.getUserId(), user.getStudyCoins(), user.getLastLoginDate());
+        }
          
         session.setAttribute("USER", user);
+        if (isFirstLoginToday) {
+            session.setAttribute("toastMessage", "Chúc mừng! Bạn được +20 xu nhờ đăng nhập hôm nay!");
+        }
 
         // 7. Remember me
         if (remember != null) {
@@ -377,21 +390,32 @@ public class AutherServlet extends HttpServlet {
         List<Role> roleList = userService.findRolesByUserId(user.getUserId());
         boolean isStudent = false;
         boolean isAdmin = false;
+        boolean isTeacher = false;
 
         for (Role r : roleList) {
-            if ("STUDENT".equalsIgnoreCase(r.getRoleName())) {
+            if (RoleName.STUDENT.matches(r.getRoleName())) {
                 isStudent = true;
             }
-            if ("ADMIN".equalsIgnoreCase(r.getRoleName())) {
+            if (RoleName.ADMIN.matches(r.getRoleName())) {
                 isAdmin = true;
+            }
+            if (RoleName.TEACHER.matches(r.getRoleName())) {
+                isTeacher = true;
             }
         }
 
         if (isAdmin) {
+            request.getSession().setAttribute("ROLE", RoleName.ADMIN.name());
             response.sendRedirect(request.getContextPath() + "/courseAdmin");
+        } else if (isTeacher) {
+            request.getSession().setAttribute("ROLE", RoleName.TEACHER.name());
+            response.sendRedirect(request.getContextPath() + "/teacherDashboard");
         } else if (isStudent) {
+            request.getSession().setAttribute("ROLE", RoleName.STUDENT.name());
+            new courseitproject.dao.DashboardStatsDAO().recordStudentLogin(user.getUserId());
             response.sendRedirect(request.getContextPath() + "/home");
         } else {
+            request.getSession().setAttribute("ROLE", "OTHER");
             response.sendRedirect(request.getContextPath() + "/shop");
         }
     }

@@ -9,7 +9,7 @@
     <class>courseitproject.model.CourseCategory</class>
     <class>courseitproject.model.Course</class>
     <class>courseitproject.model.CourseTeacher</class>
-    <class>courseitproject.model.Section</class>
+     <class>courseitproject.model.Section</class>
     <class>courseitproject.model.Quiz</class>
     <class>courseitproject.model.Question</class>
     <class>courseitproject.model.Answer</class>
@@ -18,7 +18,6 @@
     <class>courseitproject.model.LessonResource</class>
     <class>courseitproject.model.LearningProgress</class>
     <class>courseitproject.model.SubscriptionPlan</class>
-    <class>courseitproject.model.Sysdiagrams</class>
     <class>courseitproject.model.AIPrediction</class>
     <class>courseitproject.model.StudyLog</class>
     <class>courseitproject.model.Recommendation</class>
@@ -36,23 +35,32 @@
     <class>courseitproject.model.Assignment</class>
     <class>courseitproject.model.AssignmentCriteria</class>
     <class>courseitproject.model.TeacherJob</class>
-    <class>courseitproject.model.Users</class>
+     <class>courseitproject.model.Users</class>
     <class>courseitproject.model.Errorreports</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
-    <!-- Provider JPA (EclipseLink hoặc Hibernate) -->
+      <class>courseitproject.model.RoadmapNode</class>
+     <class>courseitproject.model.MockExam</class>
+     <class>courseitproject.model.MockQuestion</class>
+     <class>courseitproject.model.MockAttempt</class>
+     <exclude-unlisted-classes>false</exclude-unlisted-classes>
+     <!-- Provider JPA (EclipseLink hoặc Hibernate) -->
     <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
     <!-- Thông tin Database -->
     <properties>
       <!-- Kết nối SQL Server -->
       <property name="jakarta.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
-      <property name="jakarta.persistence.jdbc.url" value="jdbc:sqlserver://localhost:1433;databaseName=Course_Final_Project;encrypt=true;trustServerCertificate=true"/>
+      <property name="jakarta.persistence.jdbc.url" value="jdbc:sqlserver://localhost:1433;databaseName=Course_Final_Project;encrypt=true;trustServerCertificate=true;sendStringParametersAsUnicode=true"/>
       <property name="jakarta.persistence.jdbc.user" value="sa"/>
-      <property name="jakarta.persistence.jdbc.password" value="123456"/>
+      <property name="jakarta.persistence.jdbc.password" value="123"/>
       <!-- Hibernate Config -->
       <property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect"/>
       <property name="hibernate.hbm2ddl.auto" value="update"/>
       <property name="hibernate.show_sql" value="true"/>
       <property name="hibernate.format_sql" value="true"/>
+      <!-- Unicode / UTF-8 Encoding -->
+      <property name="hibernate.connection.characterEncoding" value="UTF-8"/>
+      <property name="hibernate.connection.useUnicode" value="true"/>
+      <property name="hibernate.connection.charSet" value="UTF-8"/>
     </properties>
   </persistence-unit>
 </persistence>

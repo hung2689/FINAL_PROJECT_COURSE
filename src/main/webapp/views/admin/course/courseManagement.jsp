@@ -64,11 +64,12 @@
                     <div class="flex items-center gap-8">
                         <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Course Management</h1>
                         <div class="relative w-96">
-                            <span
-                                class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+                            <span class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
                             <input
-                                class="w-full pl-10 pr-4 py-2 bg-background-light dark:bg-slate-800 border-none rounded-lg focus:ring-2 focus:ring-primary/50 text-sm"
-                                placeholder="Search courses, teachers, or IDs..." type="text" />
+                                id="globalSearchInput"
+                                oninput="filterCourses()"   
+                                class="w-full pl-10 pr-4 py-2 bg-background-light dark:bg-slate-800 border-none rounded-lg ring-1 ring-slate-200 dark:ring-slate-700 focus:ring-2 focus:ring-primary/50 text-sm transition-all shadow-sm"
+                                placeholder="Search courses, teachers, or IDs..." type="text" autocomplete="off" />
                         </div>
                     </div>
                     <div class="flex items-center gap-4">
@@ -83,16 +84,7 @@
                             <span class="material-icons">add</span>
                             Add New Course
                         </button>
-                        <div class="h-8 w-[1px] bg-slate-200 dark:bg-slate-800 mx-2"></div>
-                        <div class="flex items-center gap-3">
-                            <img class="w-10 h-10 rounded-full object-cover border-2 border-primary/20"
-                                 data-alt="Admin user avatar"
-                                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3fr4TV71PEV9sNYTnWVWnR7SFkKNCP2tOJ3uTs7_134rEVjBQFJH_1TZv4PVE7-oihzRX-tgoP57g8KmcdbXZprDHAErYLIExmsgNUM3McmNYrzKm2iqzA3IF_JI_3dybUgk1kLagPSA4IxAI88M2-hbR_SNvLDVV9brN8WLVtQ5tJyF-ThF1ajLFnn_BDKoOK_XLZI68wABBdqinG1IIYP4gVTXlzN3NGob2goNK-zcTPi9O2dawgzY5HtsEjf7uojzNKEW_8DQ" />
-                            <div class="hidden lg:block">
-                                <p class="text-sm font-semibold text-slate-900 dark:text-white">Alex Rivera</p>
-                                <p class="text-xs text-slate-500">Super Admin</p>
-                            </div>
-                        </div>
+
                     </div>
                 </header>
                 <!-- Table Section -->
@@ -183,7 +175,8 @@
                                     <!-- Row 1 -->
                                     <c:forEach var="c" items="${list}">
                                         <tr  onclick="goToCourseDetail(${c.courseId})"
-                                             class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors cursor-pointer">
+                                             class="course-row hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors cursor-pointer"
+                                             data-search="${c.courseId} ${c.title.toLowerCase()} ${c.categoryId.name.toLowerCase()} ${c.level.toLowerCase()} ${teacherMap[c.courseId] != null ? teacherMap[c.courseId].toLowerCase() : ''}">
                                             <td class="px-6 py-4">
                                                 <img class="w-12 h-12 rounded-lg object-cover"
                                                      data-alt="Coding course thumbnail preview"
@@ -261,43 +254,17 @@
                         </div>
                         <!-- Pagination -->
                         <div
-                            class="px-6 py-4 flex items-center justify-between border-t border-slate-200 dark:border-slate-800 bg-background-light dark:bg-slate-900/50">
-                            <div class="text-sm text-slate-500">
-                                Showing
-                                <span class="font-medium">${(currentPage - 1) * 10 + 1}</span>
-                                to
-                                <span class="font-medium">
-                                    ${currentPage * 10 > totalCourses ? totalCourses : currentPage * 10}
-                                </span>
-                                of
-                                <span class="font-medium">${totalCourses}</span> courses
+                            class="px-6 py-4 flex flex-col sm:flex-row items-center justify-between border-t border-slate-200 dark:border-slate-800 bg-background-light dark:bg-slate-900/50 relative">
+                            <div class="text-sm text-slate-500 mb-4 sm:mb-0">
+                                Showing <span id="visibleRange" class="font-medium">0 - 0</span> 
+                                of <span id="visibleCount" class="font-medium">${totalCourses}</span> courses
                             </div>
-                            <div class="flex items-center gap-2">
-                                <a
-                                    class="p-2 border border-slate-200 dark:border-slate-700 rounded hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400">
-                                    <c:if test="${currentPage > 1}">
-                                        <a href="?page=${currentPage - 1}"
-                                           class="p-2 border border-slate-200 dark:border-slate-700 rounded hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400">
-                                            <span class="material-icons text-sm">chevron_left</span>
-                                        </a>
-                                    </c:if>
-                                </a>
-                                <c:forEach begin="1" end="${totalPages}" var="i">
-                                    <a href="?page=${i}"
-                                       class="w-8 h-8 rounded flex items-center justify-center text-sm
-                                       ${i == currentPage ? 'bg-primary text-background-dark font-bold' : 'hover:bg-slate-100 dark:hover:bg-slate-800'}">
-                                        ${i}
-                                    </a>
-                                </c:forEach>
-                                <a
-                                    class="p-2 border border-slate-200 dark:border-slate-700 rounded hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400">
-                                    <c:if test="${currentPage < totalPages}">
-                                        <a href="?page=${currentPage + 1}"
-                                           class="p-2 border border-slate-200 dark:border-slate-700 rounded hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400">
-                                            <span class="material-icons text-sm">chevron_right</span>
-                                        </a>
-                                    </c:if>
-                                </a>
+                            <div id="paginationControls" class="flex items-center gap-2">
+                                <!-- JS will dynamically populate pagination here -->
+                            </div>
+                            <div id="noCourseFound" style="display: none;" class="w-full text-center py-4 absolute inset-x-0 bottom-16 left-0 right-0">
+                                <span class="material-icons text-4xl text-slate-300">search_off</span>
+                                <h3 class="text-lg font-bold text-slate-700 mt-2">No results found</h3>
                             </div>
                         </div>
                     </div>
@@ -335,6 +302,87 @@
 
 
         <script src="${pageContext.request.contextPath}/assets/js/course-management.js"></script>
+        <script>
+            let currentPage = 1;
+            const PAGE_SIZE = 10;
+            let filteredRows = [];
+
+            function changePage(page) {
+                const totalPages = Math.ceil(filteredRows.length / PAGE_SIZE);
+                if (page < 1 || page > totalPages) return;
+                currentPage = page;
+                renderTable();
+            }
+
+            function renderTable() {
+                document.querySelectorAll('.course-row').forEach(row => row.style.display = 'none');
+                
+                const startIdx = (currentPage - 1) * PAGE_SIZE;
+                const endIdx = startIdx + PAGE_SIZE;
+                
+                for (let i = startIdx; i < endIdx && i < filteredRows.length; i++) {
+                    filteredRows[i].style.display = '';
+                }
+                
+                const totalPages = Math.ceil(filteredRows.length / PAGE_SIZE);
+                const startCount = filteredRows.length === 0 ? 0 : startIdx + 1;
+                const endCount = Math.min(startIdx + PAGE_SIZE, filteredRows.length);
+                
+                document.getElementById('visibleRange').textContent = startCount + ' - ' + endCount;
+                document.getElementById('visibleCount').textContent = filteredRows.length;
+                
+                const pagContainer = document.getElementById('paginationControls');
+                if (totalPages <= 1) {
+                    pagContainer.innerHTML = '';
+                    return;
+                }
+                
+                let html = '<a href="javascript:void(0)" onclick="changePage(' + (currentPage - 1) + ')" class="p-2 border border-slate-200 dark:border-slate-700 rounded hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 ' + (currentPage === 1 ? 'opacity-50 pointer-events-none' : '') + '"><span class="material-icons text-sm">chevron_left</span></a>';
+                
+                let startPage = 1;
+                let endPage = totalPages;
+                
+                if (totalPages > 15) {
+                    startPage = Math.max(1, currentPage - 5);
+                    endPage = Math.min(totalPages, currentPage + 5);
+                }
+                
+                for (let i = startPage; i <= endPage; i++) {
+                    const activeClass = i === currentPage ? 'bg-primary text-background-dark font-bold' : 'hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500';
+                    html += '<a href="javascript:void(0)" onclick="changePage(' + i + ')" class="w-8 h-8 rounded flex items-center justify-center text-sm ' + activeClass + '">' + i + '</a>';
+                }
+                
+                html += '<a href="javascript:void(0)" onclick="changePage(' + (currentPage + 1) + ')" class="p-2 border border-slate-200 dark:border-slate-700 rounded hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 ' + (currentPage === totalPages ? 'opacity-50 pointer-events-none' : '') + '"><span class="material-icons text-sm">chevron_right</span></a>';
+                
+                pagContainer.innerHTML = html;
+            }
+
+            function filterCourses() {
+                const searchBox = document.getElementById('globalSearchInput');
+                const query = searchBox.value.toLowerCase().trim();
+                const rows = document.querySelectorAll('.course-row');
+                
+                filteredRows = [];
+                rows.forEach(row => {
+                    const searchableText = row.getAttribute('data-search') || '';
+                    if (searchableText.includes(query)) {
+                        filteredRows.push(row);
+                    }
+                });
+                
+                currentPage = 1;
+                renderTable();
+                
+                const noCourseFound = document.getElementById('noCourseFound');
+                if (noCourseFound) {
+                    noCourseFound.style.display = (filteredRows.length === 0 && rows.length > 0) ? 'block' : 'none';
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', () => {
+                filterCourses(); 
+            });
+        </script>
     </body>
     <script>
                 document.addEventListener("DOMContentLoaded", function () {

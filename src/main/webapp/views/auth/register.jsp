@@ -129,7 +129,7 @@
 
                         <!-- Social Buttons -->
                         <div class="mb-8">
-                            <a href="https://accounts.google.com/o/oauth2/v2/auth?client_id=392403100271-apt84m1lcgr7l581fhpkfbginiak48jv.apps.googleusercontent.com&redirect_uri=http://localhost:8080/CourseITProject/login-google&response_type=code&scope=openid%20email%20profile&prompt=select_account"
+                            <a href="https://accounts.google.com/o/oauth2/v2/auth?client_id=392403100271-apt84m1lcgr7l581fhpkfbginiak48jv.apps.googleusercontent.com&redirect_uri=http://localhost:9999/CourseITProject/login-google&response_type=code&scope=openid%20email%20profile&prompt=select_account"
                                 class="flex items-center justify-center gap-3 w-full py-3 px-6 bg-white text-zinc-800 rounded-full font-medium shadow-md hover:shadow-lg hover:scale-[1.02] transition-all duration-300">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"
                                     class="w-5 h-5 flex-shrink-0">

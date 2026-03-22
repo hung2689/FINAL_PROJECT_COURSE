@@ -61,6 +61,13 @@ public interface IUserService {
 
     // ===== NEW METHODS ADDED FOR CRUD =====
 
+    courseitproject.search.utils.SearchResult<Users> searchUsers(
+            courseitproject.search.criteria.UserSearchCriteria criteria, 
+            int page, 
+            int pageSize, 
+            java.util.Comparator<Users> comparator
+    );
+
     List<Users> getAllUsers();
 
     Users getUserById(int id);
@@ -72,4 +79,6 @@ public interface IUserService {
     Users getUserByUsername(String username);
 
     boolean existsByEmail(String email);
+
+    boolean updateStudyCoins(int userId, int coins, java.util.Date lastLoginDate);
 }

@@ -36,6 +36,8 @@ public interface ICourseService {
 
         void assignTeacherToCourse(int courseId, int teacherId);
 
+        List<Course> findCoursesByTeacherId(int teacherId);
+
         Teacher getTeacherByCourseId(int courseId);
 
         void hardDeleteCourse(int id);

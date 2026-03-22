@@ -48,6 +48,24 @@ public class LessonEditServlet extends HttpServlet {
             return;
         }
 
+        // ── Role check: only ADMIN can manage lessons ──
+        String cachedRole = (String) request.getSession().getAttribute("ROLE");
+        boolean isAdmin = "ADMIN".equalsIgnoreCase(cachedRole);
+
+        // Fallback to DB if session has no ROLE
+        if (!isAdmin) {
+            courseitproject.model.Role role = userService.findOneRoleByUserId(user.getUserId());
+            isAdmin = role != null && "ADMIN".equalsIgnoreCase(role.getRoleName());
+        }
+
+        if (!isAdmin) {
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            jsonResponse.addProperty("status", "error");
+            jsonResponse.addProperty("message", "Forbidden: Only ADMIN can perform this action.");
+            out.print(gson.toJson(jsonResponse));
+            return;
+        }
+
         String action = request.getParameter("action");
 
         try {

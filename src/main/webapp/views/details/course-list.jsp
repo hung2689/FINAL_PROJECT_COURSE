@@ -236,40 +236,20 @@
                                                         </div>
                                                         
                                                         <div class="flex mt-auto items-center justify-between pt-3 border-t border-slate-100">
-                                                            <span class="text-xl font-black text-emerald-400">
-                                                                <c:choose>
-                                                                    <c:when test="${c.price <= 0.20}">Free</c:when>
-                                                                    <c:otherwise>$<fmt:formatNumber value="${c.price}" minFractionDigits="2" maxFractionDigits="2" /></c:otherwise>
-                                                                </c:choose>
-                                                            </span>
-                                                            
                                                             <c:choose>
-                                                                <%-- Khóa Free (<= 0.20) -> Dùng nút Join --%>
                                                                 <c:when test="${c.price <= 0.20 || empty c.price}">
+                                                                    <span class="text-xl font-black text-emerald-400">Free</span>
                                                                     <button type="button" onclick="enrollFreeCourseAjax(event, this, ${c.courseId});"
                                                                         class="group/cart px-4 py-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 transition-all duration-300 hover:bg-emerald-500/20 hover:border-emerald-400 active:scale-90 font-bold text-primary">
                                                                         Join
                                                                     </button>
                                                                 </c:when>
-                                                                
-                                                                <%-- Khóa có phí -> Dùng Giỏ hàng --%>
                                                                 <c:otherwise>
-                                                                    <c:choose>
-                                                                        <c:when test="${sessionScope.USER != null}">
-                                                                            <button type="button" onclick="addToCartAjax(event, this, ${c.courseId});"
-                                                                                title="Add to Cart"
-                                                                                class="group/cart p-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 transition-all duration-300 hover:bg-emerald-500/20 hover:border-emerald-400 active:scale-90 flex items-center justify-center">
-                                                                                <span class="material-symbols-outlined text-primary text-lg">shopping_cart</span>
-                                                                            </button>
-                                                                        </c:when>
-                                                                        <c:otherwise>
-                                                                            <a onclick="event.stopPropagation()" href="${pageContext.request.contextPath}/login"
-                                                                               title="Please login to use cart feature"
-                                                                               class="group/cart p-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 transition-all duration-300 hover:bg-emerald-500/20 hover:border-emerald-400 active:scale-90 flex items-center justify-center">
-                                                                                <span class="material-symbols-outlined text-primary text-lg">shopping_cart</span>
-                                                                            </a>
-                                                                        </c:otherwise>
-                                                                    </c:choose>
+                                                                    <span class="text-xl font-black text-emerald-400">$<fmt:formatNumber value="${c.price}" minFractionDigits="2" maxFractionDigits="2" /></span>
+                                                                    <button type="button" onclick="addToCartAjax(event, this, ${c.courseId});"
+                                                                        class="group/cart p-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 transition-all duration-300 hover:bg-emerald-500/20 hover:border-emerald-400 active:scale-90">
+                                                                        <span class="material-symbols-outlined text-primary text-xl transition-all duration-300">shopping_cart</span>
+                                                                    </button>
                                                                 </c:otherwise>
                                                             </c:choose>
                                                         </div>
@@ -383,17 +363,41 @@
 
                 window.enrollFreeCourseAjax = function(event, btnElement, courseId) {
                     event.preventDefault(); event.stopPropagation();
-                    fetch('${pageContext.request.contextPath}/enroll?id=' + courseId + '&ajax=true')
-                        .then(r => r.json())
-                        .then(data => {
-                            if(data.status === 'success') {
-                                btnElement.innerText = 'Enrolled';
-                                btnElement.classList.remove('text-primary', 'bg-emerald-500/10', 'border-emerald-500/30');
-                                btnElement.classList.add('text-slate-500', 'bg-slate-100', 'border-slate-300', 'cursor-not-allowed');
-                                btnElement.disabled = true;
-                                showDynamicToast('success', 'Enroll successful!');
-                            } else { showDynamicToast('error', data.message); }
-                        });
+
+                    // Check if user is logged in
+                    const isLoggedIn = '${sessionScope.USER != null}' === 'true';
+                    if (!isLoggedIn) {
+                        window.location.href = '${pageContext.request.contextPath}/login';
+                        return;
+                    }
+
+                    fetch('${pageContext.request.contextPath}/api/courses/' + courseId + '/enroll', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' }
+                    })
+                    .then(response => {
+                        if (!response.ok && response.status !== 401) throw new Error("Lỗi kết nối Server");
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.error && data.error === 'User not logged in') {
+                            window.location.href = '${pageContext.request.contextPath}/login';
+                            return;
+                        }
+
+                        if(data.enrolled) {
+                            btnElement.innerText = 'Enrolled';
+                            btnElement.className = 'group/cart px-4 py-1.5 rounded-lg border border-slate-300 bg-slate-100 text-slate-500 font-bold cursor-not-allowed';
+                            btnElement.disabled = true;
+                            showDynamicToast('success', 'Enroll successful!');
+                        } else {
+                            showDynamicToast('error', data.error || 'Enrollment failed!');
+                        }
+                    })
+                    .catch(e => {
+                        console.error('Enroll error:', e);
+                        showDynamicToast('error', 'Đã có lỗi xảy ra!');
+                    });
                 };
 
                 function showDynamicToast(type, message) {
@@ -417,6 +421,51 @@
                     p.set('sort', v); p.set('page', '1');
                     window.location.search = p.toString();
                 };
+
+                // Kiểm tra trạng thái Enrollment khi load trang
+                document.addEventListener("DOMContentLoaded", function() {
+                    const isLoggedIn = '${sessionScope.USER != null}' === 'true';
+                    if (!isLoggedIn) return;
+
+                    // Xử lý nút Join (Khóa Free)
+                    const freeBtns = document.querySelectorAll('button[onclick^="enrollFreeCourseAjax"]');
+                    freeBtns.forEach(btn => {
+                        const match = btn.getAttribute('onclick').match(/enrollFreeCourseAjax\(.*,\s*(\d+)\)/);
+                        if (match) {
+                            const courseId = match[1];
+                            fetch('${pageContext.request.contextPath}/api/courses/' + courseId + '/enrollment-status')
+                                .then(r => r.json())
+                                .then(data => {
+                                    if (data.enrolled) {
+                                        btn.innerText = 'Enrolled';
+                                        btn.className = 'group/cart px-4 py-1.5 rounded-lg border border-slate-300 bg-slate-100 text-slate-500 font-bold cursor-not-allowed';
+                                        btn.disabled = true;
+                                    }
+                                })
+                                .catch(e => console.error('Error tracking free courses:', e));
+                        }
+                    });
+
+                    // Xử lý nút Add to Cart (Khóa Paid) -> đổi qua Enrolled
+                    const paidBtns = document.querySelectorAll('button[onclick^="addToCartAjax"]');
+                    paidBtns.forEach(btn => {
+                        const match = btn.getAttribute('onclick').match(/addToCartAjax\(.*,\s*(\d+)\)/);
+                        if (match) {
+                            const courseId = match[1];
+                            fetch('${pageContext.request.contextPath}/api/courses/' + courseId + '/enrollment-status')
+                                .then(r => r.json())
+                                .then(data => {
+                                    if (data.enrolled) {
+                                        btn.innerText = 'Enrolled';
+                                        btn.className = 'group/cart px-4 py-1.5 rounded-lg border border-slate-300 bg-slate-100 text-slate-500 font-bold cursor-not-allowed';
+                                        btn.onclick = null;
+                                        btn.disabled = true;
+                                    }
+                                })
+                                .catch(e => console.error('Error tracking paid courses:', e));
+                        }
+                    });
+                });
             })();
         </script>
     </body>

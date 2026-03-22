@@ -98,9 +98,13 @@ public class Role implements Serializable {
         return true;
     }
 
+    public RoleName getRoleEnum() {
+        return RoleName.fromString(this.roleName);
+    }
+
     @Override
     public String toString() {
         return "courseitproject.model.Role[ roleId=" + roleId + " ]";
     }
-    
+
 }

@@ -50,6 +50,7 @@ function openUpdateUserModal(id) {
             document.getElementById("updatePassword").value = ""; // Don't pre-fill password
             document.getElementById("updateRole").value = data.role;
             document.getElementById("updateStatus").value = data.status;
+            document.getElementById("updateStudyCoins").value = data.studyCoins != null ? data.studyCoins : 0;
 
             const modal = document.getElementById("updateUserModal");
             modal.classList.remove("hidden");

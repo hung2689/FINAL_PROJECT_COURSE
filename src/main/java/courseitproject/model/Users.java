@@ -23,19 +23,19 @@ import java.util.Date;
 @Table(name = "Users")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Users.findAll", query = "SELECT u FROM Users u"),
-    @NamedQuery(name = "Users.findByUserId", query = "SELECT u FROM Users u WHERE u.userId = :userId"),
-    @NamedQuery(name = "Users.findByUsername", query = "SELECT u FROM Users u WHERE u.username = :username"),
-    @NamedQuery(name = "Users.findByEmail", query = "SELECT u FROM Users u WHERE u.email = :email"),
-    @NamedQuery(name = "Users.findByPassword", query = "SELECT u FROM Users u WHERE u.password = :password"),
-    @NamedQuery(name = "Users.findByFullName", query = "SELECT u FROM Users u WHERE u.fullName = :fullName"),
-    @NamedQuery(name = "Users.findByStatus", query = "SELECT u FROM Users u WHERE u.status = :status"),
-    @NamedQuery(name = "Users.findByCreatedAt", query = "SELECT u FROM Users u WHERE u.createdAt = :createdAt"),
-    @NamedQuery(name = "Users.findByProvider", query = "SELECT u FROM Users u WHERE u.provider = :provider"),
-    @NamedQuery(name = "Users.findByProviderId", query = "SELECT u FROM Users u WHERE u.providerId = :providerId"),
-    @NamedQuery(name = "Users.findByEmailVerified", query = "SELECT u FROM Users u WHERE u.emailVerified = :emailVerified"),
-    @NamedQuery(name = "Users.findByRewardPoints", query = "SELECT u FROM Users u WHERE u.rewardPoints = :rewardPoints")})
-public class Users implements Serializable {
+ 
+        @NamedQuery(name = "Users.findAll", query = "SELECT u FROM Users u"),
+        @NamedQuery(name = "Users.findByUserId", query = "SELECT u FROM Users u WHERE u.userId = :userId"),
+        @NamedQuery(name = "Users.findByUsername", query = "SELECT u FROM Users u WHERE u.username = :username"),
+        @NamedQuery(name = "Users.findByEmail", query = "SELECT u FROM Users u WHERE u.email = :email"),
+        @NamedQuery(name = "Users.findByPassword", query = "SELECT u FROM Users u WHERE u.password = :password"),
+        @NamedQuery(name = "Users.findByFullName", query = "SELECT u FROM Users u WHERE u.fullName = :fullName"),
+        @NamedQuery(name = "Users.findByStatus", query = "SELECT u FROM Users u WHERE u.status = :status"),
+        @NamedQuery(name = "Users.findByCreatedAt", query = "SELECT u FROM Users u WHERE u.createdAt = :createdAt"),
+        @NamedQuery(name = "Users.findByProvider", query = "SELECT u FROM Users u WHERE u.provider = :provider"),
+        @NamedQuery(name = "Users.findByProviderId", query = "SELECT u FROM Users u WHERE u.providerId = :providerId"),
+        @NamedQuery(name = "Users.findByEmailVerified", query = "SELECT u FROM Users u WHERE u.emailVerified = :emailVerified") })
+ public class Users implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -46,7 +46,9 @@ public class Users implements Serializable {
     @Size(max = 255)
     @Column(name = "username")
     private String username;
-    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
+    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?",
+    // message="Invalid email")//if the field contains email address consider using
+    // this annotation to enforce field validation
     @Size(max = 255)
     @Column(name = "email")
     private String email;
@@ -54,7 +56,7 @@ public class Users implements Serializable {
     @Column(name = "password")
     private String password;
     @Size(max = 255)
-    @Column(name = "full_name")
+    @Column(name = "full_name", columnDefinition = "NVARCHAR(255)")
     private String fullName;
     @Size(max = 255)
     @Column(name = "status")
@@ -72,11 +74,25 @@ public class Users implements Serializable {
     @NotNull
     @Column(name = "email_verified")
     private boolean emailVerified;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "reward_points")
-    private int rewardPoints;
+ 
+    
+    @Column(name = "study_coins", columnDefinition = "integer default 0")
+    private Integer studyCoins = 0;
 
+    @Column(name = "last_login_date")
+    @Temporal(TemporalType.DATE)
+    private Date lastLoginDate;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
+    private Collection<Notification> notificationCollection;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "users")
+    private Teacher teacher;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "users")
+    private Student student;
+    @OneToMany(mappedBy = "userId")
+    private Collection<Candidates> candidatesCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
+    private Collection<UserRole> userRoleCollection;
+ 
     public Users() {
     }
 
@@ -170,12 +186,45 @@ public class Users implements Serializable {
         this.emailVerified = emailVerified;
     }
 
-    public int getRewardPoints() {
-        return rewardPoints;
+ 
+    public Integer getStudyCoins() {
+        return studyCoins == null ? 0 : studyCoins;
     }
+
+    public void setStudyCoins(Integer studyCoins) {
+        this.studyCoins = studyCoins;
+    }
+
+    public Date getLastLoginDate() {
+        return lastLoginDate;
+    }
+
+    public void setLastLoginDate(Date lastLoginDate) {
+        this.lastLoginDate = lastLoginDate;
+    }
+
+    @XmlTransient
+    public Collection<Notification> getNotificationCollection() {
+        return notificationCollection;
+    }
+
+    public void setNotificationCollection(Collection<Notification> notificationCollection) {
+        this.notificationCollection = notificationCollection;
+     }
 
     public void setRewardPoints(int rewardPoints) {
         this.rewardPoints = rewardPoints;
+    }
+
+    public String getRole() {
+        if (this.userRoleCollection != null) {
+            for (UserRole ur : this.userRoleCollection) {
+                if (ur.getRoleId() != null && "ADMIN".equalsIgnoreCase(ur.getRoleId().getRoleName())) {
+                    return "ADMIN";
+                }
+            }
+        }
+        return "STUDENT";
     }
 
     @Override
@@ -192,7 +241,8 @@ public class Users implements Serializable {
             return false;
         }
         Users other = (Users) object;
-        if ((this.userId == null && other.userId != null) || (this.userId != null && !this.userId.equals(other.userId))) {
+        if ((this.userId == null && other.userId != null)
+                || (this.userId != null && !this.userId.equals(other.userId))) {
             return false;
         }
         return true;

@@ -121,7 +121,23 @@
                             allowfullscreen>
                     </iframe>
                 </div>
-
+                <div class="px-6 md:px-8 py-4 border-b border-gray-100 bg-emerald-50/30 flex justify-end">
+                    <c:choose>
+                        <c:when test="${isCompleted}">
+                            <button disabled class="flex items-center gap-2 bg-gray-200 text-emerald-800 font-bold py-2.5 px-6 rounded-xl cursor-not-allowed border border-emerald-100 shadow-inner">
+                                <span class="material-symbols-outlined filled">task_alt</span>
+                                Lesson Completed
+                            </button>
+                        </c:when>
+                        <c:otherwise>
+                            <button id="markCompleteBtn" onclick="markLessonCompleted()"
+                                    class="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-6 rounded-xl transition-all shadow-sm hover:shadow-md">
+                                <span class="material-symbols-outlined">check_circle</span>
+                                Mark as Completed
+                            </button>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
                 <!-- Comment Section -->
                 <div class="p-6 md:p-8 flex-1 w-full max-w-5xl">
                     <h3 class="text-xl font-bold mb-6 flex items-center gap-2 text-slate-800">
@@ -433,7 +449,53 @@
         </main>
 
         <jsp:include page="../common/userbuttom.jsp" />
+        <script>
+     const currentStudentId = "${sessionScope.USER.userId}";
+     const currentResourceId = "${param.resourceId}";
 
+     // 1. AI Heartbeat (StudyLog)
+     if (currentStudentId) {
+         setInterval(() => {
+             fetch('${pageContext.request.contextPath}/api/track-study-time', {
+                 method: 'POST',
+                 headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                 body: 'studentId=' + currentStudentId
+             });
+         }, 60000);
+     }
+
+     // 2. Completion Logic
+     function markLessonCompleted() {
+         if (!currentStudentId) {
+             alert("Please login to save progress!");
+             return;
+         }
+
+         const btn = document.getElementById("markCompleteBtn");
+         btn.innerHTML = 'Saving...';
+         btn.disabled = true;
+
+         fetch('${pageContext.request.contextPath}/api/complete-lesson', {
+             method: 'POST',
+             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+             body: 'studentId=' + currentStudentId + '&resourceId=' + currentResourceId
+         })
+                 .then(response => {
+                     if (response.ok) {
+                         btn.classList.add('bg-gray-200', 'text-emerald-800', 'cursor-not-allowed');
+                         btn.classList.remove('bg-emerald-600', 'hover:bg-emerald-700');
+                         btn.innerHTML = '<span class="material-symbols-outlined filled">task_alt</span> Completed';
+                     } else {
+                         throw new Error();
+                     }
+                 })
+                 .catch(() => {
+                     btn.disabled = false;
+                     btn.innerHTML = 'Mark as Completed';
+                     alert("Error saving progress!");
+                 });
+     }
+        </script>
     </body>
 
 </html>

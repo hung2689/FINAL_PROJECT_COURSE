@@ -100,7 +100,8 @@
                 <c:otherwise>
                     <div class="space-y-4">
                         <c:forEach var="e" items="${enrollments}">
-                            <div class="course-card animate-card bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex gap-6 items-start">
+                            <div class="course-card animate-card bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex gap-6 items-start cursor-pointer"
+                                 onclick="window.location.href='${pageContext.request.contextPath}/course-detail?id=${e.courseId.courseId}'">
                                 
                                 <%-- THUMBNAIL (Cột trái - vuông vắn giống mẫu) --%>
                                 <div class="w-32 h-32 bg-slate-100 rounded-xl overflow-hidden flex-shrink-0 border border-slate-100">
@@ -123,7 +124,7 @@
                                     </h3>
                                     
                                     <p class="text-[13px] text-slate-500 mb-4">
-                                        Enrolled: ${not empty e.formattedEnrollmentDate ? e.formattedEnrollmentDate : 'Chưa xác định'}
+                                        Enrolled: <c:choose><c:when test="${not empty e.enrollmentDate}"><fmt:formatDate value="${e.enrollmentDate}" pattern="dd/MM/yyyy HH:mm" /></c:when><c:otherwise>Chưa xác định</c:otherwise></c:choose>
                                     </p>
                                     
                                     <div class="mb-3 max-w-sm">
@@ -150,15 +151,13 @@
                                             ${not empty e.courseId.level ? e.courseId.level : 'BEGINNER'}
                                         </span>
                                         <span class="text-lg font-black text-slate-800">
-                                            <fmt:formatNumber value="${e.courseId.price * 25000}" pattern="#,###"/> đ
+                                            $<fmt:formatNumber value="${e.courseId.price}" pattern="#,##0.##"/>
                                         </span>
                                     </div>
 
-                                    <a href="${pageContext.request.contextPath}/learn?id=${e.courseId.courseId}" 
-                                       class="px-5 py-1.5 mt-auto bg-slate-100 text-slate-500 font-bold rounded-full text-xs border border-slate-200 hover:bg-emerald-500 hover:text-white hover:border-emerald-500 transition-all shadow-sm" 
-                                       style="text-decoration: none;">
+                                    <span class="px-5 py-1.5 mt-auto bg-slate-100 text-slate-500 font-bold rounded-full text-xs border border-slate-200 shadow-sm">
                                         Active
-                                    </a>
+                                    </span>
                                 </div>
                                 
                             </div>

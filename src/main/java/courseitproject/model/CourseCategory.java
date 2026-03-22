@@ -40,7 +40,7 @@ public class CourseCategory implements Serializable {
     @Column(name = "category_id")
     private Integer categoryId;
     @Size(max = 255)
-    @Column(name = "name")
+    @Column(name = "name", columnDefinition = "NVARCHAR(255)")
     private String name;
     @OneToMany(mappedBy = "categoryId")
     private Collection<Course> courseCollection;

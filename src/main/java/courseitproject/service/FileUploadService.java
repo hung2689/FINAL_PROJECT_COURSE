@@ -29,8 +29,8 @@ public class FileUploadService {
         Map res = cloudinary.uploader().upload(
             data,
             ObjectUtils.asMap(
-                "resource_type", "raw",
-                "folder", "cv"
+                "resource_type", "image",   
+            "folder", "cv"
             )
         );
 

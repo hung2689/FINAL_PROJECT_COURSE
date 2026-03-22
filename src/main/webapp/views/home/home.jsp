@@ -567,7 +567,7 @@
                                    class="flex gap-4 p-4 border-b border-slate-50 hover:bg-emerald-50/50 transition-colors block"
                                    style="text-decoration: none;">
                                     <div class="w-16 h-16 rounded-xl overflow-hidden bg-slate-100 flex-shrink-0 border border-slate-200/60">
-                                        <img src="` + finalImageSrc + `" class="w-full h-full object-cover" alt="Course">
+                                        <img src=" + finalImageSrc + " class="w-full h-full object-cover" alt="Course">
                                     </div>
                                     <div class="flex-1 min-w-0 flex flex-col justify-center">
                                         <h4 class="text-[14px] font-bold text-slate-800 truncate mb-1">` + title + `</h4>
@@ -594,36 +594,50 @@
         function enrollFreeCourseAjax(event, btnElement, courseId) {
             event.preventDefault();
             event.stopPropagation();
+            
+            // Check if user is logged in first via session variable (simplistic approach, the endpoint also checks)
+            const isLoggedIn = '${sessionScope.USER != null}' === 'true';
+            if (!isLoggedIn) {
+                window.location.href = '${pageContext.request.contextPath}/login';
+                return;
+            }
 
-            // LƯU Ý: Hiện tại mình đang gọi tạm vào "/enroll" (bạn cần có Servlet xử lý đường dẫn này).
-            // Nếu bạn dùng đường dẫn khác để lưu data đăng ký thì nhớ sửa url nhé.
-            fetch('${pageContext.request.contextPath}/enroll?id=' + courseId + '&ajax=true')
-                .then(response => {
-                    if (!response.ok) throw new Error("Lỗi kết nối Server");
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.status === 'success') {
-                        // Đổi chữ nút thành Enrolled
-                        btnElement.innerText = 'Enrolled';
-                        
-                        // Đổi màu sắc để báo hiệu đã Enroll (gỡ class cũ, đắp class mới)
-                        btnElement.classList.remove('text-primary', 'hover:bg-emerald-500/20', 'hover:border-emerald-400', 'active:scale-90', 'bg-emerald-500/10', 'border-emerald-500/30');
-                        btnElement.classList.add('text-slate-500', 'bg-slate-100', 'border-slate-300', 'cursor-not-allowed');
-                        
-                        // Vô hiệu hóa nút để không bấm lại được nữa
-                        btnElement.disabled = true;
+            fetch('${pageContext.request.contextPath}/api/courses/' + courseId + '/enroll', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (!response.ok && response.status !== 401) throw new Error("Lỗi kết nối Server");
+                return response.json();
+            })
+            .then(data => {
+                if (data.error && data.error === 'User not logged in') {
+                    window.location.href = '${pageContext.request.contextPath}/login';
+                    return;
+                }
+                
+                if (data.enrolled) {
+                    // Đổi chữ nút thành Enrolled
+                    btnElement.innerText = 'Enrolled';
+                    
+                    // Uniform enrolled button style
+                    btnElement.className = 'group/cart px-4 py-1.5 rounded-lg border border-slate-300 bg-slate-100 text-slate-500 font-bold cursor-not-allowed';
+                    
+                    // Vô hiệu hóa nút để không bấm lại được nữa
+                    btnElement.disabled = true;
 
-                        showDynamicToast('success', 'Successfully enrolled in course!');
-                    } else {
-                        // Nếu backend báo lỗi
-                        showDynamicToast('error', data.message || 'Enrollment failed!');
-                    }
-                })
-                .catch(err => {
-                    console.error('Lỗi khi enroll khóa học free:', err);
-                    showDynamicToast('error', 'Không thể đăng ký. Hãy check Console (F12) hoặc xem Backend đã có API /enroll chưa nhé!');
-                });
+                    showDynamicToast('success', 'Successfully enrolled in course!');
+                } else {
+                    // Nếu backend báo lỗi
+                    showDynamicToast('error', data.error || 'Enrollment failed!');
+                }
+            })
+            .catch(err => {
+                console.error('Lỗi khi enroll khóa học free:', err);
+                showDynamicToast('error', 'Đã có lỗi xảy ra!');
+            });
         }
 
         // 5. Hàm vẽ UI thông báo (Toast)
@@ -663,6 +677,51 @@
                 }
             }, 3000);
         }
+
+        // 6. Kiểm tra trạng thái Enrollment khi load trang
+        document.addEventListener("DOMContentLoaded", function() {
+            const isLoggedIn = '${sessionScope.USER != null}' === 'true';
+            if (!isLoggedIn) return;
+
+            // Xử lý nút Join (Khóa Free)
+            const freeBtns = document.querySelectorAll('button[onclick^="enrollFreeCourseAjax"]');
+            freeBtns.forEach(btn => {
+                const match = btn.getAttribute('onclick').match(/enrollFreeCourseAjax\(.*,\s*(\d+)\)/);
+                if (match) {
+                    const courseId = match[1];
+                    fetch('${pageContext.request.contextPath}/api/courses/' + courseId + '/enrollment-status')
+                        .then(r => r.json())
+                        .then(data => {
+                            if (data.enrolled) {
+                                btn.innerText = 'Enrolled';
+                                btn.className = 'group/cart px-4 py-1.5 rounded-lg border border-slate-300 bg-slate-100 text-slate-500 font-bold cursor-not-allowed';
+                                btn.disabled = true;
+                            }
+                        })
+                        .catch(e => console.error('Error tracking free courses:', e));
+                }
+            });
+
+            // Xử lý nút Add to Cart (Khóa Paid) -> đổi qua Enrolled
+            const paidBtns = document.querySelectorAll('button[onclick^="addToCartAjax"]');
+            paidBtns.forEach(btn => {
+                const match = btn.getAttribute('onclick').match(/addToCartAjax\(.*,\s*(\d+)\)/);
+                if (match) {
+                    const courseId = match[1];
+                    fetch('${pageContext.request.contextPath}/api/courses/' + courseId + '/enrollment-status')
+                        .then(r => r.json())
+                        .then(data => {
+                            if (data.enrolled) {
+                                btn.innerText = 'Enrolled';
+                                btn.className = 'group/cart px-4 py-1.5 rounded-lg border border-slate-300 bg-slate-100 text-slate-500 font-bold cursor-not-allowed';
+                                btn.onclick = null;
+                                btn.disabled = true;
+                            }
+                        })
+                        .catch(e => console.error('Error tracking paid courses:', e));
+                }
+            });
+        });
     </script>
 </body>
 

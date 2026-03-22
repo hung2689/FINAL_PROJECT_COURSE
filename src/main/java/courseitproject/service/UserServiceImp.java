@@ -8,7 +8,9 @@ import courseitproject.utils.OtpUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 
+import courseitproject.model.RoleName;
 import java.util.List;
+import java.util.Set;
 
 public class UserServiceImp implements IUserService {
 
@@ -41,7 +43,7 @@ public class UserServiceImp implements IUserService {
             ur.setRoleId(role);
             userRoleDAO.save(em, ur);
 
-            if ("STUDENT".equalsIgnoreCase(roleName)) {
+            if (RoleName.STUDENT.matches(roleName)) {
                 Student st = new Student();
                 st.setStudentId(user.getUserId());
                 st.setUsers(user);
@@ -49,7 +51,7 @@ public class UserServiceImp implements IUserService {
                 studentDAO.save(em, st);
             }
 
-            if ("TEACHER".equalsIgnoreCase(roleName)) {
+            if (RoleName.TEACHER.matches(roleName)) {
                 Teacher t = new Teacher();
                 t.setTeacherId(user.getUserId());
                 t.setUsers(user);
@@ -218,7 +220,7 @@ public class UserServiceImp implements IUserService {
             ur.setRoleId(role);
             userRoleDAO.save(em, ur);
 
-            if ("STUDENT".equalsIgnoreCase(roleName)) {
+            if (RoleName.STUDENT.matches(roleName)) {
                 Student st = new Student();
                 st.setStudentId(userId);
                 st.setUsers(user);
@@ -226,7 +228,7 @@ public class UserServiceImp implements IUserService {
                 studentDAO.save(em, st);
             }
 
-            if ("TEACHER".equalsIgnoreCase(roleName)) {
+            if (RoleName.TEACHER.matches(roleName)) {
                 Teacher t = new Teacher();
                 t.setTeacherId(userId);
                 t.setUsers(user);
@@ -438,7 +440,7 @@ public class UserServiceImp implements IUserService {
             for (Object[] row : results) {
                 Integer uid = (Integer) row[0];
                 String rName = (String) row[1];
-                if (!roleMap.containsKey(uid) || "ADMIN".equals(rName)) {
+                if (!roleMap.containsKey(uid) || RoleName.ADMIN.matches(rName)) {
                     roleMap.put(uid, rName);
                 }
             }
@@ -524,6 +526,33 @@ public class UserServiceImp implements IUserService {
     // ==========================================
     // ===== FULL CRUD IMPLEMENTATION ==========
     // ==========================================
+    
+    @Override
+    public courseitproject.search.utils.SearchResult<Users> searchUsers(
+            courseitproject.search.criteria.UserSearchCriteria criteria, 
+            int page, 
+            int pageSize, 
+            java.util.Comparator<Users> comparator) {
+        
+        List<Users> allUsers = getAllUsers();
+        
+        courseitproject.search.predicate.UserPredicate builder = 
+                new courseitproject.search.predicate.UserPredicate(criteria);
+                
+        java.util.function.Predicate<Users> predicate = builder.build();
+        
+        List<Users> filtered = allUsers.stream()
+                .filter(predicate)
+                .collect(java.util.stream.Collectors.toList());
+                
+        long totalItems = filtered.size();
+        
+        List<Users> pageData = courseitproject.search.utils.SearchUtils.paginateAndSort(
+                filtered, page, pageSize, comparator);
+                
+        return new courseitproject.search.utils.SearchResult<>(pageData, totalItems);
+    }
+    
     private boolean validateUser(Users user, String roleName) {
         if (user == null) {
             System.err.println("Validation Error: User object is null.");
@@ -537,13 +566,12 @@ public class UserServiceImp implements IUserService {
             System.err.println("Validation Error: Invalid email format -> " + user.getEmail());
             return false;
         }
-        if (roleName == null || (!roleName.equals("USER") && !roleName.equals("TEACHER") && !roleName.equals("ADMIN")
-                && !roleName.equals("STUDENT"))) {
+        if (RoleName.fromString(roleName) == null) {
             System.err.println("Validation Error: Invalid role -> " + roleName);
             return false;
         }
-        if (user.getStatus() == null || (!user.getStatus().equals("ACTIVE") && !user.getStatus().equals("PENDING")
-                && !user.getStatus().equals("INACTIVE"))) {
+        Set<String> validStatuses = Set.of("ACTIVE", "PENDING", "INACTIVE");
+        if (user.getStatus() == null || !validStatuses.contains(user.getStatus())) {
             System.err.println("Validation Error: Invalid status -> " + user.getStatus());
             return false;
         }
@@ -610,13 +638,13 @@ public class UserServiceImp implements IUserService {
             ur.setRoleId(role);
             userRoleDAO.save(em, ur);
 
-            if ("STUDENT".equalsIgnoreCase(roleName)) {
+            if (RoleName.STUDENT.matches(roleName)) {
                 Student st = new Student();
                 st.setStudentId(user.getUserId());
                 st.setUsers(user);
                 st.setLevel("BEGINNER");
                 studentDAO.save(em, st);
-            } else if ("TEACHER".equalsIgnoreCase(roleName)) {
+            } else if (RoleName.TEACHER.matches(roleName)) {
                 Teacher t = new Teacher();
                 t.setTeacherId(user.getUserId());
                 t.setUsers(user);
@@ -666,6 +694,10 @@ public class UserServiceImp implements IUserService {
                 existingUser.setPassword(user.getPassword());
             }
 
+            if (user.getStudyCoins() != null) {
+                existingUser.setStudyCoins(user.getStudyCoins());
+            }
+
             // Validate state after updates
             if (!validateUser(existingUser, roleName)) {
                 tx.rollback();
@@ -696,7 +728,7 @@ public class UserServiceImp implements IUserService {
                 newUr.setRoleId(role);
                 em.persist(newUr);
 
-                if ("STUDENT".equalsIgnoreCase(roleName)) {
+                if (RoleName.STUDENT.matches(roleName)) {
                     Student existingSt = em.find(Student.class, existingUser.getUserId());
                     if (existingSt == null) {
                         Student st = new Student();
@@ -705,7 +737,7 @@ public class UserServiceImp implements IUserService {
                         st.setLevel("BEGINNER");
                         em.persist(st);
                     }
-                } else if ("TEACHER".equalsIgnoreCase(roleName)) {
+                } else if (RoleName.TEACHER.matches(roleName)) {
                     Teacher existingTeacher = em.find(Teacher.class, existingUser.getUserId());
                     if (existingTeacher == null) {
                         Teacher t = new Teacher();
@@ -760,6 +792,31 @@ public class UserServiceImp implements IUserService {
             return u != null;
         } catch (Exception e) {
             System.err.println("Error checking if email exists: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
+    public boolean updateStudyCoins(int userId, int coins, java.util.Date lastLoginDate) {
+        EntityManager em = JPAUtil.getEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        try {
+            tx.begin();
+            int updated = em.createQuery(
+                    "UPDATE Users u SET u.studyCoins = :coins, u.lastLoginDate = :lld WHERE u.userId = :id")
+                    .setParameter("coins", coins)
+                    .setParameter("lld", lastLoginDate)
+                    .setParameter("id", userId)
+                    .executeUpdate();
+            tx.commit();
+            return updated > 0;
+        } catch (Exception e) {
+            if (tx.isActive()) {
+                tx.rollback();
+            }
             e.printStackTrace();
             return false;
         } finally {
