@@ -35,8 +35,8 @@ public class StudyTimeTrackingServlet extends HttpServlet {
             em.getTransaction().begin();
             
             // Dùng SQL thuần để update hoặc insert cho an toàn
-            String updateSql = "UPDATE StudyLog SET study_time = study_time + 1, access_time = GETDATE() " +
-                               "WHERE student_id = :sid AND CAST(access_time AS DATE) = CAST(GETDATE() AS DATE)";
+            String updateSql = "UPDATE StudyLog SET study_time = study_time + 1, access_time = CURRENT_TIMESTAMP() " +
+                               "WHERE student_id = :sid AND DATE(access_time) = CURRENT_DATE()";
             
             int updatedCount = em.createNativeQuery(updateSql)
                                  .setParameter("sid", studentId)
@@ -44,7 +44,7 @@ public class StudyTimeTrackingServlet extends HttpServlet {
             
             // Nếu hôm nay chưa có phút học nào -> Bắt đầu tạo mới (1 phút)
             if (updatedCount == 0) {
-                String insertSql = "INSERT INTO StudyLog (student_id, study_time, access_time) VALUES (:sid, 1, GETDATE())";
+                String insertSql = "INSERT INTO StudyLog (student_id, study_time, access_time) VALUES (:sid, 1, CURRENT_TIMESTAMP())";
                 em.createNativeQuery(insertSql)
                   .setParameter("sid", studentId)
                   .executeUpdate();

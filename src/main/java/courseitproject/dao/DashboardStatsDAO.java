@@ -48,7 +48,7 @@ public class DashboardStatsDAO {
                 // Group by hour
                 String sql = "SELECT DATEPART(HOUR, access_time) AS hr, COUNT(*) AS total " +
                              "FROM StudyLog " +
-                             "WHERE CAST(access_time AS DATE) = CAST(GETDATE() AS DATE) " +
+                             "WHERE DATE(access_time) = CURRENT_DATE() " +
                              "GROUP BY DATEPART(HOUR, access_time) " +
                              "ORDER BY hr";
                 @SuppressWarnings("unchecked")
@@ -67,10 +67,10 @@ public class DashboardStatsDAO {
 
             } else if ("30days".equals(filter)) {
                 // Approximate 4 weeks
-                String sql = "SELECT DATEDIFF(WEEK, access_time, GETDATE()) AS weeks_ago, COUNT(*) AS total " +
+                String sql = "SELECT FLOOR(DATEDIFF(CURRENT_TIMESTAMP(), access_time) / 7) AS weeks_ago, COUNT(*) AS total " +
                              "FROM StudyLog " +
-                             "WHERE access_time >= DATEADD(day, -28, GETDATE()) " +
-                             "GROUP BY DATEDIFF(WEEK, access_time, GETDATE()) " +
+                             "WHERE access_time >= DATE_SUB(CURRENT_TIMESTAMP(), INTERVAL 28 DAY) " +
+                             "GROUP BY FLOOR(DATEDIFF(CURRENT_TIMESTAMP(), access_time) / 7) " +
                              "ORDER BY weeks_ago DESC";
                 @SuppressWarnings("unchecked")
             List<Object[]> rows = em.createNativeQuery(sql).getResultList();
@@ -88,10 +88,10 @@ public class DashboardStatsDAO {
 
             } else {
                 // 7 days (default)
-                String sql = "SELECT CAST(access_time AS DATE) AS d, COUNT(*) AS total " +
+                String sql = "SELECT DATE(access_time) AS d, COUNT(*) AS total " +
                              "FROM StudyLog " +
-                             "WHERE access_time >= DATEADD(day, -6, CAST(GETDATE() AS DATE)) " +
-                             "GROUP BY CAST(access_time AS DATE) " +
+                             "WHERE access_time >= DATE_SUB(CURRENT_DATE(), INTERVAL 6 DAY) " +
+                             "GROUP BY DATE(access_time) " +
                              "ORDER BY d ASC";
                 @SuppressWarnings("unchecked")
             List<Object[]> rows = em.createNativeQuery(sql).getResultList();
@@ -142,17 +142,17 @@ public class DashboardStatsDAO {
         try {
             em.getTransaction().begin();
             // Check if there's already a log for today
-            String checkSql = "SELECT log_id FROM StudyLog WHERE student_id = :sid AND CAST(access_time AS DATE) = CAST(GETDATE() AS DATE)";
+            String checkSql = "SELECT log_id FROM StudyLog WHERE student_id = :sid AND DATE(access_time) = CURRENT_DATE()";
             java.util.List<?> existing = em.createNativeQuery(checkSql)
                                          .setParameter("sid", studentId)
                                          .getResultList();
             if (existing == null || existing.isEmpty()) {
-                String insertSql = "INSERT INTO StudyLog (student_id, study_time, access_time) VALUES (:sid, 0, GETDATE())";
+                String insertSql = "INSERT INTO StudyLog (student_id, study_time, access_time) VALUES (:sid, 0, CURRENT_TIMESTAMP())";
                 em.createNativeQuery(insertSql)
                   .setParameter("sid", studentId)
                   .executeUpdate();
             } else {
-                String updateSql = "UPDATE StudyLog SET access_time = GETDATE() WHERE log_id = :lid";
+                String updateSql = "UPDATE StudyLog SET access_time = CURRENT_TIMESTAMP() WHERE log_id = :lid";
                 int logId = ((Number) existing.get(0)).intValue();
                 em.createNativeQuery(updateSql)
                   .setParameter("lid", logId)

@@ -24,7 +24,7 @@ public class AIPredictionDAO {
             // Build a subquery that picks only the LATEST prediction per student
             String dateFilter = "";
             if (days > 0) {
-                dateFilter = " AND created_at >= DATEADD(day, -" + days + ", GETDATE()) ";
+                dateFilter = " AND created_at >= DATE_SUB(CURRENT_TIMESTAMP(), INTERVAL " + days + " DAY) ";
             }
 
             String sql =
@@ -82,7 +82,7 @@ public class AIPredictionDAO {
         try {
             String dateFilter = "";
             if (days > 0) {
-                dateFilter = " AND created_at >= DATEADD(day, -" + days + ", GETDATE()) ";
+                dateFilter = " AND created_at >= DATE_SUB(CURRENT_TIMESTAMP(), INTERVAL " + days + " DAY) ";
             }
 
             String sql =

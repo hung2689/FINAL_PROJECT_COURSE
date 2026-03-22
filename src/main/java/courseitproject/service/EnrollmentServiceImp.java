@@ -249,15 +249,15 @@ public class EnrollmentServiceImp implements IEnrollmentService {
             // count_access & active_days: Từ bảng StudyLog
             int countAccess = ((Number) em.createNativeQuery("SELECT COUNT(*) FROM StudyLog WHERE student_id = :sid")
                     .setParameter("sid", studentId).getSingleResult()).intValue();
-            int activeDays = ((Number) em.createNativeQuery("SELECT COUNT(DISTINCT CAST(access_time AS DATE)) FROM StudyLog WHERE student_id = :sid")
+            int activeDays = ((Number) em.createNativeQuery("SELECT COUNT(DISTINCT DATE(access_time)) FROM StudyLog WHERE student_id = :sid")
                     .setParameter("sid", studentId).getSingleResult()).intValue();
 
             // === CÁC CHỈ SỐ THỜI GIAN (TIME FEATURES) ===
             String timeFeatureSql
                     = "SELECT "
-                    + "   ISNULL(DATEDIFF(day, MAX(access_time), GETDATE()), 999) AS days_since_last_login, "
-                    + "   ISNULL(SUM(CASE WHEN access_time >= DATEADD(day, -7, GETDATE()) THEN study_time ELSE 0 END), 0) AS study_time_last_7_days, "
-                    + "   ISNULL(SUM(CASE WHEN access_time >= DATEADD(day, -14, GETDATE()) AND access_time < DATEADD(day, -7, GETDATE()) THEN study_time ELSE 0 END), 0) AS study_time_prev_7_days "
+                    + "   IFNULL(DATEDIFF(CURRENT_TIMESTAMP(), MAX(access_time)), 999) AS days_since_last_login, "
+                    + "   IFNULL(SUM(CASE WHEN access_time >= DATE_SUB(CURRENT_TIMESTAMP(), INTERVAL 7 DAY) THEN study_time ELSE 0 END), 0) AS study_time_last_7_days, "
+                    + "   IFNULL(SUM(CASE WHEN access_time >= DATE_SUB(CURRENT_TIMESTAMP(), INTERVAL 14 DAY) AND access_time < DATE_SUB(CURRENT_TIMESTAMP(), INTERVAL 7 DAY) THEN study_time ELSE 0 END), 0) AS study_time_prev_7_days "
                     + "FROM StudyLog WHERE student_id = :sid";
 
             Object[] timeFeatures = (Object[]) em.createNativeQuery(timeFeatureSql)
@@ -320,7 +320,7 @@ public class EnrollmentServiceImp implements IEnrollmentService {
                         Object prevWarnObj = em.createNativeQuery(prevWarnSql).setParameter("sid", studentId).setParameter("lastLow", lastLowObj).getSingleResult();
 
                         if (prevWarnObj != null) {
-                            String checkTimeSql = "SELECT DATEDIFF(day, :prevWarnDate, GETDATE())";
+                            String checkTimeSql = "SELECT DATEDIFF(CURRENT_TIMESTAMP(), :prevWarnDate)";
                             int daysSinceLastWarn = ((Number) em.createNativeQuery(checkTimeSql).setParameter("prevWarnDate", prevWarnObj).getSingleResult()).intValue();
 
                             if (daysSinceLastWarn >= 7) {

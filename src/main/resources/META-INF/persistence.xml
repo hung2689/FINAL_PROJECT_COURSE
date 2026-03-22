@@ -47,13 +47,13 @@
     <!-- Thông tin Database -->
     <properties>
       <!-- Kết nối SQL Server -->
-      <property name="jakarta.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
-      <property name="jakarta.persistence.jdbc.url" value="jdbc:sqlserver://localhost:1433;databaseName=Course_Final_Project;encrypt=true;trustServerCertificate=true;sendStringParametersAsUnicode=true"/>
-      <property name="jakarta.persistence.jdbc.user" value="sa"/>
-      <property name="jakarta.persistence.jdbc.password" value="123"/>
+      <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+      <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://centerbeam.proxy.rlwy.net:32618/railway?useSSL=false&amp;serverTimezone=UTC"/>
+      <property name="jakarta.persistence.jdbc.user" value="root"/>
+      <property name="jakarta.persistence.jdbc.password" value="vRufVUaSodkaOacAFnuaTidZCzkASDsC"/>
       <!-- Hibernate Config -->
-      <property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect"/>
-      <property name="hibernate.hbm2ddl.auto" value="update"/>
+      <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
+      <property name="hibernate.hbm2ddl.auto" value="none"/>
       <property name="hibernate.show_sql" value="true"/>
       <property name="hibernate.format_sql" value="true"/>
       <!-- Unicode / UTF-8 Encoding -->

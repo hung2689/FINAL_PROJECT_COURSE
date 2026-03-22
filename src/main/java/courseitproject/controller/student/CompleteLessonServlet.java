@@ -52,7 +52,7 @@ public class CompleteLessonServlet extends HttpServlet {
                 
                 // 3. Lưu dữ liệu
                 if (count == 0) {
-                    String insertSql = "INSERT INTO LearningProgress (student_id, lesson_id, last_access) VALUES (:sid, :lid, GETDATE())";
+                    String insertSql = "INSERT INTO LearningProgress (student_id, lesson_id, last_access) VALUES (:sid, :lid, CURRENT_TIMESTAMP())";
                     em.createNativeQuery(insertSql)
                       .setParameter("sid", studentId)
                       .setParameter("lid", lessonId)

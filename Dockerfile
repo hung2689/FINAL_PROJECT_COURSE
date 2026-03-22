@@ -12,11 +12,13 @@ RUN mvn clean package -DskipTests
 # Stage 2: Set up the Tomcat server
 FROM tomcat:10.1-jdk17
 
-# Remove default Tomcat webapps (optional but recommended for a cleaner environment)
+# Set memory limits mapped to Render's Free tier (512MB limit) to prevent OOM Kills
+ENV JAVA_OPTS="-Xms256m -Xmx350m -XX:MaxMetaspaceSize=128m"
+
+# Remove default Tomcat webapps
 RUN rm -rf /usr/local/tomcat/webapps/*
 
-# Copy the built WAR file from the build stage into Tomcat's webapps folder.
-# Naming it ROOT.war deploys it to the root context path (/) instead of /courseProject-1.0
+# Copy the built WAR file from the build stage into Tomcat's webapps folder
 COPY --from=build /app/target/courseProject-1.0.war /usr/local/tomcat/webapps/ROOT.war
 
 EXPOSE 8080

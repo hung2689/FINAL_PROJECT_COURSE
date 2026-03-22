@@ -40,7 +40,7 @@ public class SubmitQuizResultServlet extends HttpServlet {
             em.getTransaction().begin();
             
             // Đã dùng chính xác cột attempt_time và bảng QuizResult theo file SQL của bạn!
-            String insertSql = "INSERT INTO QuizResult (student_id, quiz_id, score, attempt_time) VALUES (:sid, :qid, :score, GETDATE())";
+            String insertSql = "INSERT INTO QuizResult (student_id, quiz_id, score, attempt_time) VALUES (:sid, :qid, :score, CURRENT_TIMESTAMP())";
             
             em.createNativeQuery(insertSql)
               .setParameter("sid", studentId)
