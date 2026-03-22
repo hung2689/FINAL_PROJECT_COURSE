@@ -40,6 +40,7 @@
      <class>courseitproject.model.MockExam</class>
      <class>courseitproject.model.MockQuestion</class>
      <class>courseitproject.model.MockAttempt</class>
+     <class>courseitproject.model.Errorreports</class>
      <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <!-- Provider JPA (EclipseLink hoặc Hibernate) -->
     <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>

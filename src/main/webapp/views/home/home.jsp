@@ -528,6 +528,7 @@
     </div>
 
     <jsp:include page="../common/userbuttom.jsp" />
+     <jsp:include page="../common/footer.jsp" />
 
     <script>
         // 1. Code xử lý CSS cho header khi scroll

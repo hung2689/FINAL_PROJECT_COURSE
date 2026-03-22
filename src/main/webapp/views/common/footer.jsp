@@ -84,4 +84,78 @@
         </div>
 
     </div>
+                    
+                    
 </footer>
+                    
+                                      
+<button id="supportBtn" class="fixed bottom-8 right-8 w-14 h-14 bg-[#10B981] hover:bg-emerald-600 text-white rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] flex items-center justify-center transition-transform hover:scale-110 z-40 cursor-pointer border-none">
+    <span class="material-symbols-outlined text-3xl">support_agent</span>
+</button>
+
+<div id="supportModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm transition-opacity">
+    
+    <div class="relative w-full max-w-lg mx-4 p-8 bg-white rounded-2xl shadow-2xl font-['Inter'] animate-[fadeIn_0.3s_ease-out]">
+        
+        <button id="closeModalBtn" class="absolute top-4 right-4 text-slate-400 hover:text-red-500 transition-colors bg-transparent border-none cursor-pointer">
+            <span class="material-symbols-outlined text-2xl">close</span>
+        </button>
+
+        <h3 class="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+            <span class="material-symbols-outlined text-[#10B981]">bug_report</span>
+            Report an Issue
+        </h3>
+        
+        <form action="${pageContext.request.contextPath}/submit-error" method="POST" enctype="multipart/form-data" class="space-y-5">
+            
+            <div>
+                <label class="block text-[14px] font-medium text-slate-700 mb-2">
+                    Describe the issue you are experiencing:
+                </label>
+                <textarea name="description" rows="4" required 
+                    placeholder="Example: I'm getting a NullPointerException when trying to connect to the database..." 
+                    class="w-full px-4 py-3 text-[14px] border border-slate-200 rounded-lg focus:outline-none focus:border-[#10B981] focus:ring-1 focus:ring-[#10B981] transition-colors resize-none"></textarea>
+            </div>
+
+            <div>
+                <label class="block text-[14px] font-medium text-slate-700 mb-2">
+                    Upload a screenshot:
+                </label>
+                <input type="file" name="errorImage" accept="image/*" required 
+                    class="block w-full text-[14px] text-slate-500 
+                    file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 
+                    file:text-[14px] file:font-medium file:bg-emerald-50 file:text-[#10B981] 
+                    hover:file:bg-emerald-100 transition-colors cursor-pointer outline-none">
+            </div>
+
+            <button type="submit" class="w-full bg-[#10B981] hover:bg-emerald-600 text-white font-medium text-[15px] px-4 py-3.5 rounded-lg transition-all shadow-md hover:shadow-lg mt-2 cursor-pointer border-none">
+                Submit Support Request
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const supportBtn = document.getElementById('supportBtn');
+        const supportModal = document.getElementById('supportModal');
+const closeModalBtn = document.getElementById('closeModalBtn');
+
+        // Mở Modal khi bấm nút tai nghe
+        supportBtn.addEventListener('click', () => {
+            supportModal.classList.remove('hidden');
+        });
+
+        // Đóng Modal khi bấm nút X
+        closeModalBtn.addEventListener('click', () => {
+            supportModal.classList.add('hidden');
+        });
+
+        // Nâng cao: Đóng Modal khi click chuột ra vùng đen bên ngoài Form
+        window.addEventListener('click', (e) => {
+            if (e.target === supportModal) {
+                supportModal.classList.add('hidden');
+            }
+        });
+    });
+</script>

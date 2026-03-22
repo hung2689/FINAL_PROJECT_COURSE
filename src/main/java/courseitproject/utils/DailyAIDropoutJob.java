@@ -30,7 +30,7 @@ public class DailyAIDropoutJob implements ServletContextListener {
         ZonedDateTime zonedNow = ZonedDateTime.of(localNow, currentZone);
         
         // Thiết lập mốc 00:00:00 của ngày tiếp theo
-        ZonedDateTime zonedNextMidnight = zonedNow.withHour(0).withMinute(0).withSecond(0).withNano(0).plusDays(1);
+        ZonedDateTime zonedNextMidnight =zonedNow.withHour(0).withMinute(0).withSecond(0).withNano(0).plusDays(1);
         
         // Tính số giây cần chờ cho đến lần chạy đầu tiên
         long initialDelay =5;//Duration.between(zonedNow, zonedNextMidnight).getSeconds();
