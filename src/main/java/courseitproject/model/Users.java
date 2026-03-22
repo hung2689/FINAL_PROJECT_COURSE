@@ -99,7 +99,7 @@ public class Users implements Serializable {
     private Student student;
     @OneToMany(mappedBy = "userId")
     private Collection<Candidates> candidatesCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId", fetch = jakarta.persistence.FetchType.EAGER)
     private Collection<UserRole> userRoleCollection;
 
     public Users() {

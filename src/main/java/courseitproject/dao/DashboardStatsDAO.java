@@ -46,10 +46,10 @@ public class DashboardStatsDAO {
         try {
             if ("today".equals(filter)) {
                 // Group by hour
-                String sql = "SELECT DATEPART(HOUR, access_time) AS hr, COUNT(*) AS total " +
+                String sql = "SELECT HOUR(access_time) AS hr, COUNT(*) AS total " +
                              "FROM StudyLog " +
                              "WHERE DATE(access_time) = CURRENT_DATE() " +
-                             "GROUP BY DATEPART(HOUR, access_time) " +
+                             "GROUP BY HOUR(access_time) " +
                              "ORDER BY hr";
                 @SuppressWarnings("unchecked")
             List<Object[]> rows = em.createNativeQuery(sql).getResultList();
