@@ -51,6 +51,12 @@
                             </select>
                         </div>
                     </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Study Coins</label>
+                        <input type="number" name="studyCoins" min="0" value="0"
+                            class="w-full px-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/50"
+                            placeholder="0" />
+                    </div>
                 </div>
                 <div class="mt-8 flex justify-end gap-3 border-t border-slate-200 dark:border-slate-800 pt-6">
                     <button type="button" onclick="closeAddUserModal()"

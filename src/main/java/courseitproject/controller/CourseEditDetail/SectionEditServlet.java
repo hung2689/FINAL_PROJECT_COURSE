@@ -15,7 +15,7 @@ import com.google.gson.JsonObject;
 
 import courseitproject.service.IUserService;
 import courseitproject.service.UserServiceImp;
-import courseitproject.model.Role;
+
 
 @WebServlet(name = "SectionAdminServlet", urlPatterns = { "/sectionAdmin" })
 public class SectionEditServlet extends HttpServlet {
@@ -54,13 +54,14 @@ public class SectionEditServlet extends HttpServlet {
             return;
         }
 
-        IUserService userService = new UserServiceImp();
-        boolean isAdmin = false;
-        for (Role r : userService.findRolesByUserId(user.getUserId())) {
-            if ("ADMIN".equals(r.getRoleName())) {
-                isAdmin = true;
-                break;
-            }
+        String cachedRole = (String) request.getSession().getAttribute("ROLE");
+        boolean isAdmin = "ADMIN".equalsIgnoreCase(cachedRole);
+
+        // Fallback to DB if session has no ROLE
+        if (!isAdmin) {
+            IUserService userService = new UserServiceImp();
+            isAdmin = userService.findRolesByUserId(user.getUserId()).stream()
+                    .anyMatch(r -> "ADMIN".equals(r.getRoleName()));
         }
 
         if (!isAdmin) {

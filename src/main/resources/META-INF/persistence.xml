@@ -19,7 +19,6 @@
     <class>courseitproject.model.LessonResource</class>
     <class>courseitproject.model.LearningProgress</class>
     <class>courseitproject.model.SubscriptionPlan</class>
-    <class>courseitproject.model.Sysdiagrams</class>
     <class>courseitproject.model.AIPrediction</class>
     <class>courseitproject.model.StudyLog</class>
     <class>courseitproject.model.Recommendation</class>
@@ -38,6 +37,9 @@
     <class>courseitproject.model.AssignmentCriteria</class>
     <class>courseitproject.model.TeacherJob</class>
      <class>courseitproject.model.RoadmapNode</class>
+     <class>courseitproject.model.MockExam</class>
+     <class>courseitproject.model.MockQuestion</class>
+     <class>courseitproject.model.MockAttempt</class>
      <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <!-- Provider JPA (EclipseLink hoặc Hibernate) -->
     <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
@@ -47,7 +49,7 @@
       <property name="jakarta.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
       <property name="jakarta.persistence.jdbc.url" value="jdbc:sqlserver://localhost:1433;databaseName=Course_Final_Project;encrypt=true;trustServerCertificate=true;sendStringParametersAsUnicode=true"/>
       <property name="jakarta.persistence.jdbc.user" value="sa"/>
-      <property name="jakarta.persistence.jdbc.password" value="123456"/>
+      <property name="jakarta.persistence.jdbc.password" value="123"/>
       <!-- Hibernate Config -->
       <property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect"/>
       <property name="hibernate.hbm2ddl.auto" value="update"/>

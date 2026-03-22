@@ -1,732 +1,189 @@
-<%-- Document : personal Author : DevLearn Team --%>
-    <%@page contentType="text/html" pageEncoding="UTF-8" %>
-        <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-            <!DOCTYPE html>
-            <html lang="en">
-
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>AI Roadmap Generator | DevLearn</title>
-                <meta name="description"
-                    content="Create a personalized AI learning roadmap tailored to your major and current skill set.">
-                <link
-                    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
-                    rel="stylesheet">
-                <link
-                    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
-                    rel="stylesheet">
-                <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries,line-clamp"></script>
-                <script>
-                    tailwind.config = {
-                        theme: { extend: { colors: { primary: '#10B981', 'primary-dark': '#059669' } } }
-                    }
-                </script>
-
-                <style>
-                    /* ─── RESET ─────────────────────────────────────────────────────── */
-                    *,
-                    *::before,
-                    *::after {
-                        box-sizing: border-box;
-                        margin: 0;
-                        padding: 0;
-                    }
-
-                    /* ─── BODY / BACKGROUND ──────────────────────────────────────────  */
-                    body {
-                        font-family: 'Inter', sans-serif;
-                        min-height: 100vh;
-                        overflow-x: hidden;
-                        background: linear-gradient(135deg, #f0fdf9 0%, #e6f7f1 50%, #f8fffc 100%);
-                        color: #0f172a;
-                    }
-
-                    /* ─── TOKENS ─────────────────────────────────────────────────────  */
-                    :root {
-                        --primary: #10B981;
-                        --primary-dark: #059669;
-                        --primary-light: #ecfdf5;
-                        --primary-brd: #a7f3d0;
-                        --primary-dim: rgba(16, 185, 129, 0.1);
-                        --text: #0f172a;
-                        --text-muted: #64748b;
-                        --text-sub: #94a3b8;
-                        --border: #e2e8f0;
-                        --border-hi: #bbf7d0;
-                        --card-bg: #ffffff;
-                        --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
-                        --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
-                        --shadow-lg: 0 12px 36px rgba(0, 0, 0, 0.1);
-                        --shadow-green: 0 8px 28px rgba(16, 185, 129, 0.22);
-                        --radius: 16px;
-                        --transition: 0.25s ease;
-                    }
-
-                    /* ─── LAYOUT ─────────────────────────────────────────────────────  */
-                    .page-wrapper {
-                        padding: 100px 24px 80px;
-                    }
-
-                    .container {
-                        max-width: 860px;
-                        margin: 0 auto;
-                    }
-
-                    /* ─── HERO ───────────────────────────────────────────────────────  */
-                    .hero {
-                        text-align: center;
-                        margin-bottom: 48px;
-                    }
-
-                    .badge {
-                        display: inline-flex;
-                        align-items: center;
-                        gap: 8px;
-                        padding: 7px 20px;
-                        border-radius: 999px;
-                        background: var(--primary-light);
-                        border: 1px solid var(--primary-brd);
-                        color: #065f46;
-                        font-size: 12px;
-                        font-weight: 700;
-                        letter-spacing: 0.7px;
-                        text-transform: uppercase;
-                        margin-bottom: 22px;
-                    }
-
-                    .badge-dot {
-                        width: 7px;
-                        height: 7px;
-                        border-radius: 50%;
-                        background: var(--primary);
-                        animation: blink 1.6s infinite;
-                    }
-
-                    @keyframes blink {
-
-                        0%,
-                        100% {
-                            opacity: 1;
-                            transform: scale(1)
-                        }
-
-                        50% {
-                            opacity: .4;
-                            transform: scale(1.5)
-                        }
-                    }
-
-                    .hero-title {
-                        font-size: clamp(2rem, 5vw, 3.2rem);
-                        font-weight: 900;
-                        line-height: 1.12;
-                        letter-spacing: -1px;
-                        color: var(--text);
-                        margin-bottom: 16px;
-                    }
-
-                    .hero-title .accent {
-                        background: linear-gradient(135deg, #10B981, #059669);
-                        -webkit-background-clip: text;
-                        -webkit-text-fill-color: transparent;
-                        background-clip: text;
-                    }
-
-                    .hero-sub {
-                        font-size: 16px;
-                        color: var(--text-muted);
-                        max-width: 520px;
-                        margin: 0 auto;
-                        line-height: 1.75;
-                    }
-
-                    /* ─── STAT PILLS ─────────────────────────────────────────────────  */
-                    .stats-row {
-                        display: grid;
-                        grid-template-columns: repeat(3, 1fr);
-                        gap: 14px;
-                        margin-bottom: 40px;
-                    }
-
-                    .stat-pill {
-                        background: var(--card-bg);
-                        border: 1px solid var(--border);
-                        border-radius: var(--radius);
-                        padding: 18px 16px;
-                        text-align: center;
-                        box-shadow: var(--shadow-sm);
-                        transition: all var(--transition);
-                    }
-
-                    .stat-pill:hover {
-                        border-color: var(--primary-brd);
-                        box-shadow: var(--shadow-green);
-                        transform: translateY(-3px);
-                    }
-
-                    .stat-num {
-                        font-size: 24px;
-                        font-weight: 800;
-                        color: var(--primary);
-                    }
-
-                    .stat-text {
-                        font-size: 11.5px;
-                        color: var(--text-muted);
-                        margin-top: 4px;
-                        font-weight: 600;
-                        text-transform: uppercase;
-                        letter-spacing: 0.5px;
-                    }
-
-                    /* ─── STEPS BAR ──────────────────────────────────────────────────  */
-                    .steps-bar {
-                        display: flex;
-                        align-items: center;
-                        margin-bottom: 28px;
-                    }
-
-                    .step-item {
-                        display: flex;
-                        flex-direction: column;
-                        align-items: center;
-                        flex: 1;
-                    }
-
-                    .step-circle {
-                        width: 34px;
-                        height: 34px;
-                        border-radius: 50%;
-                        background: var(--primary);
-                        color: #fff;
-                        font-size: 13px;
-                        font-weight: 700;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15), 0 4px 12px rgba(16, 185, 129, 0.3);
-                    }
-
-                    .step-circle.done {
-                        background: var(--primary-dark);
-                    }
-
-                    .step-circle.inactive {
-                        background: #e2e8f0;
-                        color: #94a3b8;
-                        box-shadow: none;
-                    }
-
-                    .step-label {
-                        font-size: 11px;
-                        font-weight: 600;
-                        margin-top: 7px;
-                        color: var(--primary-dark);
-                        letter-spacing: 0.3px;
-                    }
-
-                    .step-label.inactive {
-                        color: var(--text-sub);
-                    }
-
-                    .step-connector {
-                        flex: 1;
-                        height: 2px;
-                        background: var(--primary-brd);
-                        margin-top: -11px;
-                    }
-
-                    .step-connector.inactive {
-                        background: #e2e8f0;
-                    }
-
-                    /* ─── WHITE CARD ─────────────────────────────────────────────────  */
-                    .main-card {
-                        background: var(--card-bg);
-                        border: 1px solid var(--border);
-                        border-radius: 20px;
-                        padding: 40px 44px;
-                        box-shadow: var(--shadow-md);
-                        transition: box-shadow var(--transition);
-                        position: relative;
-                        overflow: hidden;
-                    }
-
-                    .main-card::before {
-                        content: '';
-                        position: absolute;
-                        top: 0;
-                        left: 0;
-                        right: 0;
-                        height: 3px;
-                        background: linear-gradient(90deg, var(--primary), #34d399, var(--primary));
-                    }
-
-                    .main-card:hover {
-                        box-shadow: 0 16px 48px rgba(16, 185, 129, 0.12);
-                    }
-
-                    /* ─── CARD HEADER ────────────────────────────────────────────────  */
-                    .card-head {
-                        display: flex;
-                        align-items: center;
-                        gap: 13px;
-                        margin-bottom: 28px;
-                    }
-
-                    .card-icon {
-                        width: 44px;
-                        height: 44px;
-                        border-radius: 13px;
-                        background: var(--primary-light);
-                        border: 1px solid var(--primary-brd);
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        font-size: 20px;
-                    }
-
-                    .card-title-text {
-                        font-size: 18px;
-                        font-weight: 800;
-                        color: var(--text);
-                    }
-
-                    .card-subtitle {
-                        font-size: 13px;
-                        color: var(--text-muted);
-                        margin-top: 2px;
-                    }
-
-                    /* ─── SECTION LABEL ──────────────────────────────────────────────  */
-                    .section-label {
-                        display: flex;
-                        align-items: center;
-                        gap: 8px;
-                        font-size: 10.5px;
-                        font-weight: 700;
-                        letter-spacing: 1.2px;
-                        text-transform: uppercase;
-                        color: var(--primary-dark);
-                        margin-bottom: 14px;
-                    }
-
-                    .section-label::after {
-                        content: '';
-                        flex: 1;
-                        height: 1px;
-                        background: linear-gradient(90deg, var(--primary-brd), transparent);
-                    }
-
-                    /* ─── DIVIDER ────────────────────────────────────────────────────  */
-                    .divider {
-                        border: none;
-                        border-top: 1px solid var(--border);
-                        margin: 24px 0;
-                    }
-
-                    /* ─── MAJOR CARDS ────────────────────────────────────────────────  */
-                    .major-grid {
-                        display: grid;
-                        grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
-                        gap: 10px;
-                    }
-
-                    .major-card {
-                        padding: 16px 16px;
-                        border: 1.5px solid var(--border);
-                        border-radius: 14px;
-                        background: #fafafa;
-                        cursor: pointer;
-                        transition: all var(--transition);
-                        display: flex;
-                        flex-direction: column;
-                        gap: 5px;
-                    }
-
-                    .major-card:hover {
-                        border-color: var(--primary-brd);
-                        background: var(--primary-light);
-                        transform: translateY(-2px);
-                        box-shadow: var(--shadow-sm);
-                    }
-
-                    .major-card.selected {
-                        border-color: var(--primary);
-                        background: var(--primary-light);
-                        box-shadow: 0 4px 18px rgba(16, 185, 129, 0.18);
-                    }
-
-                    .major-card-icon {
-                        font-size: 22px;
-                    }
-
-                    .major-card-name {
-                        font-size: 13px;
-                        font-weight: 700;
-                        color: var(--text);
-                    }
-
-                    .major-card-desc {
-                        font-size: 11px;
-                        color: var(--text-muted);
-                    }
-
-                    .select-hidden {
-                        display: none !important;
-                    }
-
-                    /* ─── SKILL TAGS ─────────────────────────────────────────────────  */
-                    .skills-grid {
-                        display: flex;
-                        flex-wrap: wrap;
-                        gap: 9px;
-                    }
-
-                    .skill-tag {
-                        display: inline-flex;
-                        align-items: center;
-                        gap: 7px;
-                        padding: 8px 16px;
-                        border: 1.5px solid var(--border);
-                        border-radius: 999px;
-                        background: #fafafa;
-                        color: var(--text-muted);
-                        font-size: 13px;
-                        font-weight: 600;
-                        cursor: pointer;
-                        user-select: none;
-                        transition: all var(--transition);
-                    }
-
-                    .skill-tag:hover {
-                        border-color: var(--primary-brd);
-                        color: #065f46;
-                        background: var(--primary-light);
-                        transform: translateY(-1px);
-                    }
-
-                    .skill-tag.selected {
-                        background: var(--primary);
-                        border-color: var(--primary-dark);
-                        color: #fff;
-                        box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
-                        transform: translateY(-1px);
-                    }
-
-                    /* ─── PRIMARY BUTTON ─────────────────────────────────────────────  */
-                    .btn-primary {
-                        display: inline-flex;
-                        align-items: center;
-                        justify-content: center;
-                        gap: 9px;
-                        height: 52px;
-                        padding: 0 36px;
-                        border-radius: 14px;
-                        border: none;
-                        background: linear-gradient(135deg, #10B981, #059669);
-                        color: #fff;
-                        font-size: 15px;
-                        font-weight: 700;
-                        font-family: 'Inter', sans-serif;
-                        cursor: pointer;
-                        box-shadow: var(--shadow-green);
-                        transition: all var(--transition);
-                        position: relative;
-                        overflow: hidden;
-                    }
-
-                    .btn-primary::before {
-                        content: '';
-                        position: absolute;
-                        top: 0;
-                        left: -100%;
-                        width: 100%;
-                        height: 100%;
-                        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-                        transition: left 0.5s;
-                    }
-
-                    .btn-primary:hover::before {
-                        left: 100%;
-                    }
-
-                    .btn-primary:hover {
-                        transform: translateY(-3px);
-                        box-shadow: 0 12px 32px rgba(16, 185, 129, 0.4);
-                    }
-
-                    .btn-primary:active {
-                        transform: translateY(0);
-                    }
-
-                    /* ─── TIP STRIP ──────────────────────────────────────────────────  */
-                    .tip-strip {
-                        margin-top: 24px;
-                        display: flex;
-                        gap: 12px;
-                        align-items: flex-start;
-                        padding: 14px 18px;
-                        background: var(--primary-light);
-                        border: 1px solid var(--primary-brd);
-                        border-radius: 12px;
-                        font-size: 13px;
-                        line-height: 1.65;
-                        color: #065f46;
-                    }
-
-                    .tip-strip-icon {
-                        font-size: 20px;
-                        flex-shrink: 0;
-                        color: var(--primary);
-                    }
-
-                    .tip-strip strong {
-                        color: var(--primary-dark);
-                    }
-
-                    /* ─── FOOTER ─────────────────────────────────────────────────────  */
-                    .site-footer {
-                        background: #fff;
-                        border-top: 1px solid #e2e8f0;
-                        padding: 64px 24px 36px;
-                    }
-
-                    .footer-inner {
-                        max-width: 1200px;
-                        margin: 0 auto;
-                    }
-
-                    .footer-grid {
-                        display: grid;
-                        grid-template-columns: 2fr 1fr 1fr 1fr;
-                        gap: 48px;
-                        margin-bottom: 48px;
-                    }
-
-                    .footer-logo-link {
-                        display: flex;
-                        align-items: center;
-                        gap: 10px;
-                        margin-bottom: 14px;
-                        text-decoration: none;
-                    }
-
-                    .footer-logo-box {
-                        width: 40px;
-                        height: 40px;
-                        border-radius: 10px;
-                        background: var(--primary);
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        color: #fff;
-                        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
-                    }
-
-                    .footer-logo-name {
-                        font-size: 20px;
-                        font-weight: 800;
-                        color: var(--text);
-                    }
-
-                    .footer-desc {
-                        font-size: 14px;
-                        color: var(--text-muted);
-                        line-height: 1.7;
-                        max-width: 280px;
-                        margin-bottom: 20px;
-                    }
-
-                    .footer-socials {
-                        display: flex;
-                        gap: 10px;
-                    }
-
-                    .footer-social-btn {
-                        width: 36px;
-                        height: 36px;
-                        border-radius: 50%;
-                        border: 1px solid var(--border);
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        color: var(--text-muted);
-                        text-decoration: none;
-                        transition: all var(--transition);
-                    }
-
-                    .footer-social-btn:hover {
-                        background: var(--primary);
-                        border-color: var(--primary);
-                        color: #fff;
-                        transform: translateY(-3px);
-                    }
-
-                    .footer-col-title {
-                        font-size: 11px;
-                        font-weight: 800;
-                        text-transform: uppercase;
-                        letter-spacing: 1.5px;
-                        color: var(--text);
-                        margin-bottom: 18px;
-                    }
-
-                    .footer-links {
-                        list-style: none;
-                        display: flex;
-                        flex-direction: column;
-                        gap: 11px;
-                    }
-
-                    .footer-links a {
-                        font-size: 14px;
-                        color: var(--text-muted);
-                        text-decoration: none;
-                        transition: color 0.2s;
-                    }
-
-                    .footer-links a:hover {
-                        color: var(--primary);
-                    }
-
-                    .footer-bottom {
-                        padding-top: 24px;
-                        border-top: 1px solid var(--border);
-                        display: flex;
-                        justify-content: space-between;
-                        align-items: center;
-                        flex-wrap: wrap;
-                        gap: 12px;
-                        color: var(--text-sub);
-                        font-size: 13px;
-                    }
-
-                    .footer-bottom-right {
-                        display: flex;
-                        gap: 20px;
-                        align-items: center;
-                    }
-
-                    @media(max-width: 1024px) {
-                        .footer-grid {
-                            grid-template-columns: repeat(2, 1fr);
-                            gap: 32px;
-                        }
-                    }
-
-                    @media(max-width: 640px) {
-                        .footer-grid {
-                            grid-template-columns: 1fr;
-                        }
-
-                        .main-card {
-                            padding: 26px 20px;
-                        }
-
-                        .stats-row {
-                            grid-template-columns: 1fr;
-                        }
-
-                        .major-grid {
-                            grid-template-columns: repeat(2, 1fr);
-                        }
-                    }
-                </style>
-            </head>
-
-            <body>
-
-                <!-- ── HEADER ────────────────────────────────────────────────────────────── -->
-                <jsp:include page="../common/header.jsp" />
-
-                <!-- ── USER PILL ─────────────────────────────────────────────────────────── -->
-                <jsp:include page="../common/userbuttom.jsp" />
-
-                <!-- Header override: keep dark glass nav on light bg -->
-                <style>
-                    header.glass-header-nav,
-                    .glass-header-nav {
-                        background: rgba(15, 23, 42, 0.92) !important;
-                        backdrop-filter: blur(20px) !important;
-                        -webkit-backdrop-filter: blur(20px) !important;
-                        border-bottom: 1px solid rgba(16, 185, 129, 0.2) !important;
-                        box-shadow: 0 4px 32px rgba(0, 0, 0, 0.3) !important;
-                        position: fixed !important;
-                        top: 0 !important;
-                        left: 0 !important;
-                        width: 100% !important;
-                        z-index: 50 !important;
-                    }
-                </style>
-
-                <!-- ── PAGE ───────────────────────────────────────────────────────────────── -->
-                <div class="page-wrapper">
-                    <div class="container">
-
-                        <!-- STAT PILLS -->
-                        <div class="stats-row">
-                            <div class="stat-pill">
-                                <div class="stat-num">12K+</div>
-                                <div class="stat-text">Roadmaps Generated</div>
+<%-- Learning Paths – DevLearn --%>
+<%@page contentType="text/html" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Paths | DevLearn</title>
+    <meta name="description" content="Create a personalized AI learning roadmap tailored to your major and skills on DevLearn.">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries,line-clamp"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#10B981",
+                        "background-light": "#0F172A",
+                        "background-dark": "#0F172A",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    maxWidth: {
+                        "canvas": "1200px",
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* major card */
+        .major-card { transition: all 0.3s ease; }
+        .major-card:hover { transform: translateY(-6px); }
+        .major-card.selected {
+            border-color: #10B981 !important;
+            background: linear-gradient(135deg, #ecfdf5, #d1fae5) !important;
+            box-shadow: 0 8px 30px rgba(16,185,129,0.15);
+        }
+        .major-card.selected .major-check { display: flex; }
+        /* skill pill */
+        .skill-pill { transition: all 0.2s ease; }
+        .skill-pill:hover {
+            border-color: #a7f3d0;
+            background: #f0fdf4;
+            transform: translateY(-1px);
+        }
+        .skill-pill.selected {
+            background: linear-gradient(135deg, #10B981, #059669) !important;
+            border-color: transparent !important;
+            color: #fff !important;
+            box-shadow: 0 4px 16px rgba(16,185,129,0.3);
+            transform: translateY(-1px);
+        }
+        /* hide native select */
+        .hidden-select { display: none !important; }
+        /* animate entrance */
+        .animate-fade-up {
+            animation: fadeUpAnim 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        @keyframes fadeUpAnim {
+            from { opacity: 0; transform: translateY(30px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+
+<body class="font-display antialiased" style="background: linear-gradient(135deg, #f8fffc, #e6f7f1); color: #0f172a;">
+    <div class="relative flex min-h-screen w-full flex-col">
+
+        <jsp:include page="../common/header.jsp" />
+
+        <main class="flex-1">
+
+            <!-- ═══ HERO SECTION ══════════════════════════════════════════ -->
+            <section class="relative min-h-[480px] flex items-center justify-center overflow-hidden">
+                <div class="absolute inset-0 -z-10"
+                     style="background: radial-gradient(circle at 50% 65%, rgba(16,185,129,0.2) 0%, rgba(16,185,129,0.1) 20%, transparent 60%),
+                            linear-gradient(135deg, #0f172a 0%, #064e3b 40%, #000000 100%);">
+                </div>
+                <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
+                    <div class="absolute inset-0 bg-[linear-gradient(rgba(16,185,129,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(16,185,129,0.03)_1px,transparent_1px)] bg-[size:3rem_3rem] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_65%,#000_70%,transparent_100%)] opacity-50"></div>
+                </div>
+
+                <div class="max-w-canvas mx-auto px-6 lg:px-12 relative z-10 text-center flex flex-col items-center py-28">
+
+                    <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-white/5 border border-white/10 text-emerald-400 text-sm font-semibold tracking-wide mb-8 backdrop-blur-md shadow-[0_0_20px_rgba(16,185,129,0.15)] animate-fade-up delay-1">
+                        <span class="relative flex h-2 w-2">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                        </span>
+                        AI-Powered Roadmap Generator
+                    </div>
+
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-black leading-[1.1] tracking-tighter mb-6 text-white max-w-3xl mx-auto drop-shadow-2xl animate-fade-up delay-2">
+                        Build Your
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400">Personalized Roadmap</span>
+                    </h1>
+
+                    <p class="text-lg text-white/60 max-w-xl mx-auto leading-relaxed animate-fade-up delay-3">
+                        Tell us your major and existing skills — our AI will craft the optimal learning path just for you.
+                    </p>
+                </div>
+            </section>
+
+            <!-- ═══ STATS BAR ═════════════════════════════════════════════ -->
+            <section class="py-10 relative z-10 border-t border-emerald-100">
+                <div class="max-w-canvas mx-auto px-8 lg:px-12">
+                    <div class="bg-white rounded-3xl shadow-2xl border border-emerald-100 py-10 animate-fade-up delay-2">
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                            <div class="flex flex-col items-center gap-2">
+                                <span class="text-3xl font-black text-primary">12K+</span>
+                                <span class="text-xs font-semibold uppercase tracking-widest text-slate-500">Roadmaps Created</span>
                             </div>
-                            <div class="stat-pill">
-                                <div class="stat-num">6</div>
-                                <div class="stat-text">Supported Majors</div>
+                            <div class="flex flex-col items-center gap-2">
+                                <span class="text-3xl font-black text-primary">6</span>
+                                <span class="text-xs font-semibold uppercase tracking-widest text-slate-500">Supported Majors</span>
                             </div>
-                            <div class="stat-pill">
-                                <div class="stat-num">98%</div>
-                                <div class="stat-text">Satisfaction Rate</div>
+                            <div class="flex flex-col items-center gap-2">
+                                <span class="text-3xl font-black text-primary">98%</span>
+                                <span class="text-xs font-semibold uppercase tracking-widest text-slate-500">Satisfaction Rate</span>
+                            </div>
+                            <div class="flex flex-col items-center gap-2">
+                                <span class="text-3xl font-black text-primary">24/7</span>
+                                <span class="text-xs font-semibold uppercase tracking-widest text-slate-500">AI Always Ready</span>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </section>
 
-                        <!-- HERO -->
-                        <div class="hero">
-                            <div class="badge">
-                                <span class="badge-dot"></span>
-                                AI-Powered Learning
-                            </div>
-                            <h1 class="hero-title">
-                                Build Your <span class="accent">Personalized Roadmap</span>
-                            </h1>
-                            <p class="hero-sub">
-                                Tell us your major and what you already know — our AI will craft a step-by-step learning
-                                path built exactly for you.
-                            </p>
-                        </div>
+            <!-- ═══ MAIN FORM SECTION ═════════════════════════════════════ -->
+            <section class="py-12 lg:py-16">
+                <div class="max-w-[860px] mx-auto px-6 lg:px-12">
 
-                        <!-- STEPS -->
-                        <div class="steps-bar">
-                            <div class="step-item">
-                                <div class="step-circle done">✓</div>
-                                <span class="step-label">Major</span>
-                            </div>
-                            <div class="step-connector"></div>
-                            <div class="step-item">
-                                <div class="step-circle">2</div>
-                                <span class="step-label">Skills</span>
-                            </div>
-                            <div class="step-connector inactive"></div>
-                            <div class="step-item">
-                                <div class="step-circle inactive">3</div>
-                                <span class="step-label inactive">Roadmap</span>
-                            </div>
-                        </div>
+                    <!-- Card chính chứa form -->
+                    <div class="bg-white rounded-[2rem] shadow-xl border border-emerald-100 overflow-hidden animate-fade-up delay-3">
 
-                        <!-- MAIN CARD -->
-                        <div class="main-card">
-                            <div class="card-head">
-                                <div class="card-icon">🎯</div>
-                                <div>
-                                    <div class="card-title-text">Info &amp; Goals</div>
-                                    <div class="card-subtitle">Select your target major and existing skills</div>
+                        <!-- Tabs Header -->
+                        <div class="border-b border-slate-100 px-8 pt-8 pb-0">
+                            <div class="flex items-center gap-6 mb-0">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white text-xs font-bold shadow-lg shadow-emerald-200">
+                                        <span class="material-symbols-outlined" style="font-size:16px; font-variation-settings: 'FILL' 1;">check</span>
+                                    </div>
+                                    <span class="text-sm font-bold text-primary">Set Goals</span>
+                                </div>
+                                <div class="w-12 h-[2px] bg-emerald-200 rounded"></div>
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 text-xs font-bold">2</div>
+                                    <span class="text-sm font-semibold text-slate-400">Major</span>
+                                </div>
+                                <div class="w-12 h-[2px] bg-slate-200 rounded"></div>
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 text-xs font-bold">3</div>
+                                    <span class="text-sm font-semibold text-slate-400">Roadmap</span>
                                 </div>
                             </div>
+                            <!-- Tab switcher -->
+                            <div class="flex mt-6">
+                                <button id="tabMajor" onclick="switchTab('major')"
+                                    class="px-6 py-3 text-sm font-bold border-b-2 border-primary text-primary transition-all">
+                                    Set Goals
+                                </button>
+                                <button id="tabSkills" onclick="switchTab('skills')"
+                                    class="px-6 py-3 text-sm font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-600 transition-all">
+                                    Major
+                                </button>
+                            </div>
+                        </div>
 
+                        <!-- Form Body -->
+                        <div class="p-8 lg:p-10">
                             <form id="personalForm" action="${pageContext.request.contextPath}/roadmap" method="GET">
-                                <!-- Hidden select for submit -->
-                                <select class="select-hidden" id="majorSelect" name="major" required>
+
+                                <!-- Hidden select for form submit -->
+                                <select class="hidden-select" id="majorSelect" name="major" required>
                                     <option value="" disabled selected></option>
                                     <option value="se">Software Engineering</option>
                                     <option value="ai">Artificial Intelligence</option>
@@ -736,215 +193,230 @@
                                     <option value="ns">Network &amp; Security</option>
                                 </select>
 
-                                <!-- MAJOR -->
-                                <p class="section-label">
-                                    <span class="material-symbols-outlined" style="font-size:14px">school</span>
-                                    Target Major
-                                </p>
-                                <div class="major-grid" id="majorGrid">
-                                    <div class="major-card" data-value="se" onclick="selectMajor(this)">
-                                        <div class="major-card-icon">💻</div>
-                                        <div class="major-card-name">Software Eng.</div>
-                                        <div class="major-card-desc">Build real-world systems</div>
+                                <!-- ── TAB 1: MAJOR ─────────────────────── -->
+                                <div id="panelMajor">
+
+                                    <!-- Major dropdown -->
+                                    <div class="mb-8">
+                                        <label class="block text-sm font-bold text-slate-700 mb-2">Target Major</label>
+                                        <div class="relative">
+                                            <select id="majorDropdown" class="w-full appearance-none bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-600 font-medium focus:outline-none focus:ring-2 focus:ring-emerald-200 focus:border-emerald-400 transition-all cursor-pointer" onchange="selectMajorFromDropdown(this.value)">
+                                                <option value="" disabled selected>Select a major</option>
+                                                <option value="se">Software Engineering</option>
+                                                <option value="ai">Artificial Intelligence</option>
+                                                <option value="ds">Data Science</option>
+                                                <option value="is">Information Systems</option>
+                                                <option value="cs">Computer Science</option>
+                                                <option value="ns">Network &amp; Security</option>
+                                            </select>
+                                            <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" style="font-size:20px">expand_more</span>
+                                        </div>
                                     </div>
-                                    <div class="major-card" data-value="ai" onclick="selectMajor(this)">
-                                        <div class="major-card-icon">🤖</div>
-                                        <div class="major-card-name">Artificial Intelligence</div>
-                                        <div class="major-card-desc">ML, Deep Learning & more</div>
+
+                                    <!-- Major Cards -->
+                                    <div class="mb-2">
+                                        <p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4 flex items-center gap-2">
+                                            <span class="material-symbols-outlined" style="font-size:14px">school</span>
+                                            Or quick select
+                                        </p>
                                     </div>
-                                    <div class="major-card" data-value="ds" onclick="selectMajor(this)">
-                                        <div class="major-card-icon">📊</div>
-                                        <div class="major-card-name">Data Science</div>
-                                        <div class="major-card-desc">Analytics & visualization</div>
-                                    </div>
-                                    <div class="major-card" data-value="is" onclick="selectMajor(this)">
-                                        <div class="major-card-icon">🗄️</div>
-                                        <div class="major-card-name">Info. Systems</div>
-                                        <div class="major-card-desc">Business & tech bridge</div>
-                                    </div>
-                                    <div class="major-card" data-value="cs" onclick="selectMajor(this)">
-                                        <div class="major-card-icon">🔬</div>
-                                        <div class="major-card-name">Computer Science</div>
-                                        <div class="major-card-desc">Theory & algorithms</div>
-                                    </div>
-                                    <div class="major-card" data-value="ns" onclick="selectMajor(this)">
-                                        <div class="major-card-icon">🔐</div>
-                                        <div class="major-card-name">Network &amp; Security</div>
-                                        <div class="major-card-desc">Cybersecurity & infra</div>
+
+                                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4" id="majorGrid">
+                                        <div class="major-card relative bg-slate-50 border-2 border-slate-100 rounded-2xl p-5 cursor-pointer hover:shadow-lg" data-value="se" onclick="pickMajor(this)">
+                                            <div class="major-check absolute top-3 right-3 w-6 h-6 rounded-full bg-primary hidden items-center justify-center shadow-md">
+                                                <span class="material-symbols-outlined text-white" style="font-size:16px">check</span>
+                                            </div>
+                                            <div class="text-3xl mb-3">💻</div>
+                                            <h3 class="text-sm font-bold text-slate-800">Software Eng.</h3>
+                                            <p class="text-xs text-slate-400 mt-1">Build real-world systems</p>
+                                        </div>
+                                        <div class="major-card relative bg-slate-50 border-2 border-slate-100 rounded-2xl p-5 cursor-pointer hover:shadow-lg" data-value="ai" onclick="pickMajor(this)">
+                                            <div class="major-check absolute top-3 right-3 w-6 h-6 rounded-full bg-primary hidden items-center justify-center shadow-md">
+                                                <span class="material-symbols-outlined text-white" style="font-size:16px">check</span>
+                                            </div>
+                                            <div class="text-3xl mb-3">🤖</div>
+                                            <h3 class="text-sm font-bold text-slate-800">Artificial Intelligence</h3>
+                                            <p class="text-xs text-slate-400 mt-1">ML, Deep Learning & more</p>
+                                        </div>
+                                        <div class="major-card relative bg-slate-50 border-2 border-slate-100 rounded-2xl p-5 cursor-pointer hover:shadow-lg" data-value="ds" onclick="pickMajor(this)">
+                                            <div class="major-check absolute top-3 right-3 w-6 h-6 rounded-full bg-primary hidden items-center justify-center shadow-md">
+                                                <span class="material-symbols-outlined text-white" style="font-size:16px">check</span>
+                                            </div>
+                                            <div class="text-3xl mb-3">📊</div>
+                                            <h3 class="text-sm font-bold text-slate-800">Data Science</h3>
+                                            <p class="text-xs text-slate-400 mt-1">Analytics & visualization</p>
+                                        </div>
+                                        <div class="major-card relative bg-slate-50 border-2 border-slate-100 rounded-2xl p-5 cursor-pointer hover:shadow-lg" data-value="is" onclick="pickMajor(this)">
+                                            <div class="major-check absolute top-3 right-3 w-6 h-6 rounded-full bg-primary hidden items-center justify-center shadow-md">
+                                                <span class="material-symbols-outlined text-white" style="font-size:16px">check</span>
+                                            </div>
+                                            <div class="text-3xl mb-3">🗄️</div>
+                                            <h3 class="text-sm font-bold text-slate-800">Info. Systems</h3>
+                                            <p class="text-xs text-slate-400 mt-1">Business & tech bridge</p>
+                                        </div>
+                                        <div class="major-card relative bg-slate-50 border-2 border-slate-100 rounded-2xl p-5 cursor-pointer hover:shadow-lg" data-value="cs" onclick="pickMajor(this)">
+                                            <div class="major-check absolute top-3 right-3 w-6 h-6 rounded-full bg-primary hidden items-center justify-center shadow-md">
+                                                <span class="material-symbols-outlined text-white" style="font-size:16px">check</span>
+                                            </div>
+                                            <div class="text-3xl mb-3">🔬</div>
+                                            <h3 class="text-sm font-bold text-slate-800">Computer Science</h3>
+                                            <p class="text-xs text-slate-400 mt-1">Theory & algorithms</p>
+                                        </div>
+                                        <div class="major-card relative bg-slate-50 border-2 border-slate-100 rounded-2xl p-5 cursor-pointer hover:shadow-lg" data-value="ns" onclick="pickMajor(this)">
+                                            <div class="major-check absolute top-3 right-3 w-6 h-6 rounded-full bg-primary hidden items-center justify-center shadow-md">
+                                                <span class="material-symbols-outlined text-white" style="font-size:16px">check</span>
+                                            </div>
+                                            <div class="text-3xl mb-3">🔐</div>
+                                            <h3 class="text-sm font-bold text-slate-800">Network & Security</h3>
+                                            <p class="text-xs text-slate-400 mt-1">Cybersecurity & infra</p>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <hr class="divider">
+                                <!-- ── SKILLS ─────────────────────── -->
+                                <div class="mt-10 pt-8 border-t border-slate-100">
+                                    <div class="flex items-center justify-between mb-5">
+                                        <p class="text-xs font-bold uppercase tracking-widest text-slate-400 flex items-center gap-2">
+                                            <span class="material-symbols-outlined" style="font-size:14px">psychology</span>
+                                            Skills You Have (<span id="skillCount">0</span>)
+                                        </p>
+                                    </div>
 
-                                <!-- SKILLS -->
-                                <p class="section-label">
-                                    <span class="material-symbols-outlined" style="font-size:14px">psychology</span>
-                                    Skills You Already Have
-                                </p>
-                                <div class="skills-grid" id="skillsGrid">
-                                    <div class="skill-tag" data-skill="c" onclick="toggleSkill(this)"><span>⚙️</span> C
-                                        Programming</div>
-                                    <div class="skill-tag" data-skill="java" onclick="toggleSkill(this)"><span>☕</span>
-                                        Java OOP</div>
-                                    <div class="skill-tag" data-skill="python" onclick="toggleSkill(this)">
-                                        <span>🐍</span> Python</div>
-                                    <div class="skill-tag" data-skill="js" onclick="toggleSkill(this)"><span>✨</span>
-                                        JavaScript</div>
-                                    <div class="skill-tag" data-skill="html" onclick="toggleSkill(this)"><span>🌐</span>
-                                        HTML &amp; CSS</div>
-                                    <div class="skill-tag" data-skill="sql" onclick="toggleSkill(this)"><span>🗃️</span>
-                                        SQL / Database</div>
-                                    <div class="skill-tag" data-skill="react" onclick="toggleSkill(this)">
-                                        <span>⚛️</span> React / Next.js</div>
-                                    <div class="skill-tag" data-skill="git" onclick="toggleSkill(this)"><span>🌿</span>
-                                        Git / GitHub</div>
-                                    <div class="skill-tag" data-skill="docker" onclick="toggleSkill(this)">
-                                        <span>🐳</span> Docker</div>
-                                    <div class="skill-tag" data-skill="linux" onclick="toggleSkill(this)">
-                                        <span>🐧</span> Linux</div>
+                                    <div class="flex flex-wrap gap-3" id="skillsGrid">
+                                        <div class="skill-pill inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-slate-200 bg-white text-sm font-semibold text-slate-600 cursor-pointer select-none" data-skill="c" onclick="toggleSkill(this)">C programming</div>
+                                        <div class="skill-pill inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-slate-200 bg-white text-sm font-semibold text-slate-600 cursor-pointer select-none" data-skill="java" onclick="toggleSkill(this)">Java OOP</div>
+                                        <div class="skill-pill inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-slate-200 bg-white text-sm font-semibold text-slate-600 cursor-pointer select-none" data-skill="python" onclick="toggleSkill(this)">Python</div>
+                                        <div class="skill-pill inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-slate-200 bg-white text-sm font-semibold text-slate-600 cursor-pointer select-none" data-skill="js" onclick="toggleSkill(this)">JavaScript</div>
+                                        <div class="skill-pill inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-slate-200 bg-white text-sm font-semibold text-slate-600 cursor-pointer select-none" data-skill="html" onclick="toggleSkill(this)">HTML & CSS</div>
+                                        <div class="skill-pill inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-slate-200 bg-white text-sm font-semibold text-slate-600 cursor-pointer select-none" data-skill="sql" onclick="toggleSkill(this)">SQL / Database</div>
+                                        <div class="skill-pill inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-slate-200 bg-white text-sm font-semibold text-slate-600 cursor-pointer select-none" data-skill="react" onclick="toggleSkill(this)">React / Next.js</div>
+                                        <div class="skill-pill inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-slate-200 bg-white text-sm font-semibold text-slate-600 cursor-pointer select-none" data-skill="git" onclick="toggleSkill(this)">Git / GitHub</div>
+                                        <div class="skill-pill inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-slate-200 bg-white text-sm font-semibold text-slate-600 cursor-pointer select-none" data-skill="web" onclick="toggleSkill(this)">Web Development</div>
+                                        <div class="skill-pill inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-slate-200 bg-white text-sm font-semibold text-slate-600 cursor-pointer select-none" data-skill="mobile" onclick="toggleSkill(this)">Mobile Dev</div>
+                                        <div class="skill-pill inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-slate-200 bg-white text-sm font-semibold text-slate-600 cursor-pointer select-none" data-skill="docker" onclick="toggleSkill(this)">Docker</div>
+                                        <div class="skill-pill inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-slate-200 bg-white text-sm font-semibold text-slate-600 cursor-pointer select-none" data-skill="linux" onclick="toggleSkill(this)">Linux</div>
+                                    </div>
+
+                                    <input type="hidden" id="selectedSkills" name="skills" value="">
                                 </div>
-                                <input type="hidden" id="selectedSkills" name="skills" value="">
 
-                                <!-- CTA -->
-                                <div style="display:flex;align-items:center;gap:14px;margin-top:32px;flex-wrap:wrap;">
-                                    <button type="submit" class="btn-primary" id="btnCreate">
-                                        <span class="material-symbols-outlined"
-                                            style="font-size:18px">auto_awesome</span>
+                                <!-- ── CTA ─────────────────────────── -->
+                                <div class="mt-10 flex flex-col sm:flex-row items-center gap-4">
+                                    <button type="submit" id="btnCreate"
+                                        class="w-full sm:w-auto h-14 px-10 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-base font-bold rounded-2xl shadow-xl shadow-emerald-500/20 hover:shadow-emerald-500/40 hover:scale-[1.02] transition-all flex items-center justify-center gap-3 group">
+                                        <span class="material-symbols-outlined" style="font-size:20px">auto_awesome</span>
                                         Generate AI Roadmap
+                                        <span class="material-symbols-outlined transition-transform group-hover:translate-x-1" style="font-size:18px">arrow_forward</span>
                                     </button>
                                 </div>
 
-                                <!-- TIP -->
-                                <div class="tip-strip">
-                                    <span class="material-symbols-outlined tip-strip-icon">lightbulb</span>
-                                    <span><strong>Tip:</strong> Select multiple skills so AI can better understand your
-                                        background and craft the most accurate roadmap for your level.</span>
+                                <!-- Tip -->
+                                <div class="mt-6 flex items-start gap-3 px-5 py-4 rounded-2xl bg-emerald-50 border border-emerald-100">
+                                    <span class="material-symbols-outlined text-primary flex-shrink-0" style="font-size:20px">lightbulb</span>
+                                    <p class="text-sm text-emerald-800 leading-relaxed">
+                                        <strong class="font-bold">Tip:</strong> Select multiple skills so the AI can better understand your current level and create a more accurate roadmap.
+                                    </p>
                                 </div>
                             </form>
                         </div>
-
                     </div>
                 </div>
+            </section>
 
-                <!-- ── FOOTER ─────────────────────────────────────────────────────────────── -->
-                <footer class="site-footer">
-                    <div class="footer-inner">
-                        <div class="footer-grid">
-                            <div>
-                                <a href="${pageContext.request.contextPath}/home" class="footer-logo-link">
-                                    <div class="footer-logo-box">
-                                        <span class="material-symbols-outlined"
-                                            style="font-size:20px;font-weight:700">terminal</span>
-                                    </div>
-                                    <span class="footer-logo-name">DevLearn</span>
-                                </a>
-                                <p class="footer-desc">Accompanying thousands of students on their journey to becoming
-                                    professional software engineers.</p>
-                                <div class="footer-socials">
-                                    <a class="footer-social-btn" href="#"><span class="material-symbols-outlined"
-                                            style="font-size:18px">social_leaderboard</span></a>
-                                    <a class="footer-social-btn" href="#"><span class="material-symbols-outlined"
-                                            style="font-size:18px">terminal</span></a>
-                                    <a class="footer-social-btn" href="#"><span class="material-symbols-outlined"
-                                            style="font-size:18px">smart_display</span></a>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="footer-col-title">Courses</div>
-                                <ul class="footer-links">
-                                    <li><a href="#">Frontend Development</a></li>
-                                    <li><a href="#">Backend Development</a></li>
-                                    <li><a href="#">Mobile Development</a></li>
-                                    <li><a href="#">Data Science &amp; AI</a></li>
-                                    <li><a href="#">DevOps &amp; Cloud</a></li>
-                                </ul>
-                            </div>
-                            <div>
-                                <div class="footer-col-title">Resources</div>
-                                <ul class="footer-links">
-                                    <li><a href="#">Tech Blog</a></li>
-                                    <li><a href="#">Community</a></li>
-                                    <li><a href="#">Free Materials</a></li>
-                                    <li><a href="#">YouTube Channel</a></li>
-                                    <li><a href="#">IT Podcast</a></li>
-                                </ul>
-                            </div>
-                            <div>
-                                <div class="footer-col-title">Quick Links</div>
-                                <ul class="footer-links">
-                                    <li><a href="#">About Us</a></li>
-                                    <li><a href="${pageContext.request.contextPath}/teacher-jobs">Careers</a></li>
-                                    <li><a href="#">Terms of Service</a></li>
-                                    <li><a href="#">Privacy Policy</a></li>
-                                    <li><a href="#">Contact</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="footer-bottom">
-                            <span>© 2024 DevLearn Academy. Built for the tech community.</span>
-                            <div class="footer-bottom-right">
-                                <span style="display:flex;align-items:center;gap:5px">
-                                    <span class="material-symbols-outlined" style="font-size:16px">language</span>
-                                    English
-                                </span>
-                                <span style="display:flex;align-items:center;gap:5px">
-                                    <span class="material-symbols-outlined" style="font-size:16px">support_agent</span>
-                                    1900 1234
-                                </span>
-                            </div>
-                        </div>
+            <!-- ═══ CTA BANNER ════════════════════════════════════════════ -->
+            <section class="pb-24 lg:pb-32 px-8 lg:px-12">
+                <div class="max-w-canvas mx-auto rounded-[3rem] p-12 lg:p-24 relative overflow-hidden text-center flex flex-col items-center" style="background: linear-gradient(135deg, #ecfdf5, #d1fae5);">
+                    <div class="absolute top-0 right-0 w-[400px] h-[400px] bg-primary/20 rounded-full blur-[120px]"></div>
+                    <div class="absolute bottom-0 left-0 w-[300px] h-[300px] bg-primary/10 rounded-full blur-[100px]"></div>
+                    <h2 class="text-3xl lg:text-5xl font-black text-[#0f172a] mb-6 max-w-3xl leading-tight z-10">
+                        Ready to start your learning journey?
+                    </h2>
+                    <p class="text-lg text-[#475569] mb-10 max-w-2xl z-10">
+                        Over 12,000 students already trust us. Create your personalized roadmap today — completely free.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 z-10">
+                        <a href="${pageContext.request.contextPath}/shop"
+                           class="h-14 px-10 bg-gradient-to-r from-emerald-400 to-emerald-600 text-white text-base font-bold rounded-2xl shadow-xl shadow-emerald-500/20 hover:shadow-emerald-500/40 hover:scale-105 transition-all flex items-center justify-center gap-2"
+                           style="text-decoration: none;">
+                            <span class="material-symbols-outlined">play_arrow</span>
+                            Explore Courses
+                        </a>
+                        <a href="${pageContext.request.contextPath}/home"
+                           class="h-14 px-10 border-2 border-emerald-300 text-[#0f172a] text-base font-bold rounded-2xl hover:bg-emerald-100 transition-all flex items-center justify-center"
+                           style="text-decoration: none;">
+                            Back to Home
+                        </a>
                     </div>
-                </footer>
+                </div>
+            </section>
 
-                <script>
-                    function selectMajor(card) {
-                        document.querySelectorAll('.major-card').forEach(c => c.classList.remove('selected'));
-                        card.classList.add('selected');
-                        document.getElementById('majorSelect').value = card.getAttribute('data-value');
-                    }
+        </main>
 
-                    function toggleSkill(el) {
-                        el.classList.toggle('selected');
-                        syncSkillsInput();
-                    }
-                    function syncSkillsInput() {
-                        const selected = [];
-                        document.querySelectorAll('.skill-tag.selected').forEach(t => selected.push(t.getAttribute('data-skill')));
-                        document.getElementById('selectedSkills').value = selected.join(',');
-                    }
+        <jsp:include page="../common/footer.jsp" />
+    </div>
 
-                    document.getElementById('personalForm').addEventListener('submit', function (e) {
-                        syncSkillsInput();
-                        if (!document.getElementById('majorSelect').value) {
-                            e.preventDefault();
-                            document.querySelectorAll('.major-card').forEach(c => {
-                                c.style.borderColor = '#fca5a5';
-                                setTimeout(() => { c.style.borderColor = ''; }, 1500);
-                            });
-                            document.getElementById('majorGrid').scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        }
-                    });
+    <jsp:include page="../common/userbuttom.jsp" />
 
-                    // Entrance animation
-                    (function () {
-                        const els = document.querySelectorAll('.stat-pill, .main-card, .major-card');
-                        const obs = new IntersectionObserver((entries) => {
-                            entries.forEach((entry, i) => {
-                                if (entry.isIntersecting) {
-                                    entry.target.style.opacity = '0';
-                                    entry.target.style.transform = 'translateY(16px)';
-                                    setTimeout(() => {
-                                        entry.target.style.transition = 'opacity 0.45s ease, transform 0.45s ease';
-                                        entry.target.style.opacity = '1';
-                                        entry.target.style.transform = 'translateY(0)';
-                                    }, 60 * i);
-                                    obs.unobserve(entry.target);
-                                }
-                            });
-                        }, { threshold: 0.1 });
-                        els.forEach(c => obs.observe(c));
-                    })();
-                </script>
-            </body>
+    <script>
+        /* ── Major selection ──────────────────── */
+        function pickMajor(card) {
+            document.querySelectorAll('.major-card').forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+            const val = card.dataset.value;
+            document.getElementById('majorSelect').value = val;
+            document.getElementById('majorDropdown').value = val;
+        }
 
-            </html>
+        function selectMajorFromDropdown(val) {
+            document.getElementById('majorSelect').value = val;
+            document.querySelectorAll('.major-card').forEach(c => {
+                c.classList.toggle('selected', c.dataset.value === val);
+            });
+        }
+
+        /* ── Skill toggle ─────────────────────── */
+        function toggleSkill(el) {
+            el.classList.toggle('selected');
+            syncSkills();
+        }
+
+        function syncSkills() {
+            const arr = [];
+            document.querySelectorAll('.skill-pill.selected').forEach(t => arr.push(t.dataset.skill));
+            document.getElementById('selectedSkills').value = arr.join(',');
+            document.getElementById('skillCount').textContent = arr.length;
+        }
+
+        /* ── Tab switching ────────────────────── */
+        function switchTab(tab) {
+            const tabMajor = document.getElementById('tabMajor');
+            const tabSkills = document.getElementById('tabSkills');
+            if (tab === 'major') {
+                tabMajor.classList.add('border-primary', 'text-primary');
+                tabMajor.classList.remove('border-transparent', 'text-slate-400');
+                tabSkills.classList.remove('border-primary', 'text-primary');
+                tabSkills.classList.add('border-transparent', 'text-slate-400');
+            } else {
+                tabSkills.classList.add('border-primary', 'text-primary');
+                tabSkills.classList.remove('border-transparent', 'text-slate-400');
+                tabMajor.classList.remove('border-primary', 'text-primary');
+                tabMajor.classList.add('border-transparent', 'text-slate-400');
+            }
+        }
+
+        /* ── Form validation ──────────────────── */
+        document.getElementById('personalForm').addEventListener('submit', function(e) {
+            syncSkills();
+            if (!document.getElementById('majorSelect').value) {
+                e.preventDefault();
+                document.querySelectorAll('.major-card').forEach(c => {
+                    c.style.borderColor = '#fca5a5';
+                    setTimeout(() => { c.style.borderColor = ''; }, 1500);
+                });
+                document.getElementById('majorGrid').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        });
+    </script>
+
+</body>
+</html>

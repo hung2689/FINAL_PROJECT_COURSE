@@ -2,6 +2,7 @@
 
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -79,16 +80,7 @@
                             <span class="material-icons">notifications</span>
                             <span class="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full border-2 border-white dark:border-background-dark"></span>
                         </button>
-                        <div class="h-8 w-[1px] bg-slate-200 dark:bg-slate-800 mx-2"></div>
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-400 to-teal-600 flex items-center justify-center text-white font-bold text-sm">
-                                A
-                            </div>
-                            <div class="hidden lg:block">
-                                <p class="text-sm font-semibold text-slate-900 dark:text-white">Admin</p>
-                                <p class="text-xs text-slate-500">Super Admin</p>
-                            </div>
-                        </div>
+
                     </div>
                 </header>
 
@@ -204,6 +196,88 @@
                         </div>
                     </div>
 
+                    <!-- ======================================= -->
+                    <!-- STUDENT DROPOUT RISK SECTION            -->
+                    <!-- ======================================= -->
+                    <div class="grid grid-cols-1 gap-6 mb-8">
+
+                        <!-- Left: Big Stat Card -->
+                        
+
+                        <!-- Right: Doughnut Chart (2 cols) -->
+                        <div class="fade-up fade-up-4 bg-white dark:bg-slate-800/50 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                            <div class="px-6 py-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                                <div>
+                                    <h3 class="text-base font-bold text-slate-900 dark:text-white">Risk Distribution</h3>
+                                    <p class="text-xs text-slate-400 mt-0.5">Breakdown by risk level</p>
+                                </div>
+                                <select id="riskFilter" onchange="loadDropoutRiskData()"
+                                        class="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs font-semibold text-slate-600 dark:text-slate-300 focus:ring-2 focus:ring-primary/50 focus:border-primary cursor-pointer">
+                                    <option value="0" selected>All Time</option>
+                                    <option value="7">Last 7 Days</option>
+                                    <option value="30">Last 30 Days</option>
+                                </select>
+                            </div>
+                            <div class="p-6 flex items-center justify-center">
+                                <div class="w-full max-w-md">
+                                    <canvas id="dropoutDoughnutChart" height="260"></canvas>
+                                </div>
+                            </div>
+                            <div class="px-6 pb-5 grid grid-cols-3 gap-4" id="dropoutLegend">
+                                <div class="flex items-center gap-2.5">
+                                    <div class="w-3 h-3 rounded-full bg-emerald-500"></div>
+                                    <div>
+                                        <span class="text-xs font-medium text-slate-600 dark:text-slate-400">Low Risk</span>
+                                        <span id="legendLow" class="text-xs font-bold text-slate-800 dark:text-white ml-1">--</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2.5">
+                                    <div class="w-3 h-3 rounded-full bg-amber-500"></div>
+                                    <div>
+                                        <span class="text-xs font-medium text-slate-600 dark:text-slate-400">Medium Risk</span>
+                                        <span id="legendMedium" class="text-xs font-bold text-slate-800 dark:text-white ml-1">--</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2.5">
+                                    <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                                    <div>
+                                        <span class="text-xs font-medium text-slate-600 dark:text-slate-400">High Risk</span>
+                                        <span id="legendHigh" class="text-xs font-bold text-slate-800 dark:text-white ml-1">--</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+
+                    <!-- Top High-Risk Students List -->
+                    <div class="fade-up fade-up-5 bg-white dark:bg-slate-800/50 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm mb-8">
+                        <div class="px-6 py-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                            <div>
+                                <h3 class="text-base font-bold text-slate-900 dark:text-white">Student Risk Predictions</h3>
+                                <p class="text-xs text-slate-400 mt-0.5">Overview of AI dropout risk for all students</p>
+                            </div>
+                            <span class="px-3 py-1 bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300 text-xs font-bold rounded-lg border border-slate-200 dark:border-slate-600 material-icons" style="font-size: 16px;">analytics</span>
+                        </div>
+                        <div class="p-0">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-slate-50/50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-700">
+                                        <th class="px-6 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Student</th>
+                                        <th class="px-6 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Contact</th>
+                                        <th class="px-6 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-right">Risk Score</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="highRiskStudentsTable" class="divide-y divide-slate-100 dark:divide-slate-800">
+                                    <!-- Rows rendered by JS -->
+                                    <tr>
+                                        <td colspan="3" class="px-6 py-8 text-center text-sm text-slate-500">Loading data...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
                     <!-- Quick Access Cards -->
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
                         <a href="${pageContext.request.contextPath}/courseAdmin"
@@ -266,24 +340,6 @@
 
         <script>
             // =============================================
-            //  MOCK DATA
-            // =============================================
-            var dataSets = {
-                'today': {
-                    labels: ['6AM','8AM','10AM','12PM','2PM','4PM','6PM','8PM','10PM'],
-                    data:   [8, 25, 62, 45, 78, 54, 39, 28, 12]
-                },
-                '7days': {
-                    labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
-                    data:   [120, 98, 150, 200, 170, 90, 60]
-                },
-                '30days': {
-                    labels: ['Week 1','Week 2','Week 3','Week 4'],
-                    data:   [680, 820, 750, 910]
-                }
-            };
-
-            // =============================================
             //  LOGIN ACTIVITY LINE CHART
             // =============================================
             var ctx = document.getElementById('loginChart').getContext('2d');
@@ -296,10 +352,10 @@
             var loginChart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: dataSets['7days'].labels,
+                    labels: [],
                     datasets: [{
                         label: 'Student Logins',
-                        data: dataSets['7days'].data,
+                        data: [],
                         borderColor: '#10B981',
                         backgroundColor: gradient,
                         borderWidth: 3,
@@ -367,26 +423,20 @@
 
             function updateChart() {
                 var filter = document.getElementById('chartFilter').value;
-                var ds = dataSets[filter];
-                loginChart.data.labels = ds.labels;
-                loginChart.data.datasets[0].data = ds.data;
-                loginChart.update('active');
+                loadDashboardCharts(filter);
             }
 
             // =============================================
             //  COURSE CATEGORY DOUGHNUT CHART
             // =============================================
-            var catColors = ['#10B981','#6366F1','#F59E0B','#EF4444','#3B82F6'];
-            var catLabels = ['Software','Math','Foreign Language','Free Courses','Others'];
-            var catData   = [35, 18, 22, 8, 3];
-
-            var catCtx = document.getElementById('categoryChart').getContext('2d');
-            new Chart(catCtx, {
+            var catColors = ['#10B981','#6366F1','#F59E0B','#EF4444','#3B82F6', '#Ec4899', '#8b5cf6', '#14b8a6', '#f97316'];
+            
+            var categoryChart = new Chart(document.getElementById('categoryChart').getContext('2d'), {
                 type: 'doughnut',
                 data: {
-                    labels: catLabels,
+                    labels: [],
                     datasets: [{
-                        data: catData,
+                        data: [],
                         backgroundColor: catColors,
                         borderWidth: 0,
                         hoverOffset: 6
@@ -418,18 +468,183 @@
                 }
             });
 
-            // Build custom legend
-            var legendHtml = '';
-            for (var i = 0; i < catLabels.length; i++) {
-                legendHtml += '<div class="flex items-center justify-between">' +
-                    '<div class="flex items-center gap-2.5">' +
-                    '<div class="w-2.5 h-2.5 rounded-full" style="background:' + catColors[i] + ';"></div>' +
-                    '<span class="text-xs font-medium text-slate-600 dark:text-slate-400">' + catLabels[i] + '</span>' +
-                    '</div>' +
-                    '<span class="text-xs font-bold text-slate-800 dark:text-white">' + catData[i] + '</span>' +
-                    '</div>';
+            // Fetch mapped data from API
+            function loadDashboardCharts(filter) {
+                var url = '${pageContext.request.contextPath}/api/dashboard/charts';
+                if (filter) {
+                    url += '?filter=' + filter;
+                }
+                
+                fetch(url)
+                    .then(r => r.json())
+                    .then(data => {
+                        // Update Login Chart
+                        loginChart.data.labels = data.loginActivity.labels;
+                        loginChart.data.datasets[0].data = data.loginActivity.data;
+                        loginChart.update();
+                        
+                        // Update Category Chart
+                        var catLabels = [];
+                        var catData = [];
+                        var legendHtml = '';
+                        
+                        data.courseCategories.forEach((cat, index) => {
+                             catLabels.push(cat.categoryName);
+                             catData.push(cat.totalCourses);
+                             
+                             var color = catColors[index % catColors.length];
+                             legendHtml += '<div class="flex items-center justify-between">' +
+                                 '<div class="flex items-center gap-2.5">' +
+                                 '<div class="w-2.5 h-2.5 rounded-full" style="background:' + color + ';"></div>' +
+                                 '<span class="text-xs font-medium text-slate-600 dark:text-slate-400">' + cat.categoryName + '</span>' +
+                                 '</div>' +
+                                 '<span class="text-xs font-bold text-slate-800 dark:text-white">' + cat.totalCourses + '</span>' +
+                                 '</div>';
+                        });
+                        
+                        document.getElementById('categoryLegend').innerHTML = legendHtml;
+                        categoryChart.data.labels = catLabels;
+                        categoryChart.data.datasets[0].data = catData;
+                        categoryChart.update();
+                    })
+                    .catch(err => console.error('Failed to load dashboard chart data', err));
             }
-            document.getElementById('categoryLegend').innerHTML = legendHtml;
+
+            // =============================================
+            //  DROPOUT RISK DOUGHNUT CHART
+            // =============================================
+            var dropoutCtx = document.getElementById('dropoutDoughnutChart').getContext('2d');
+            var dropoutChart = new Chart(dropoutCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Low Risk', 'Medium Risk', 'High Risk'],
+                    datasets: [{
+                        data: [0, 0, 0],
+                        backgroundColor: ['#10B981', '#F59E0B', '#EF4444'],
+                        borderWidth: 0,
+                        hoverOffset: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '68%',
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#0f172a',
+                            bodyColor: '#ffffff',
+                            bodyFont: { size: 13, weight: 'bold' },
+                            padding: 12,
+                            cornerRadius: 10,
+                            displayColors: true,
+                            boxWidth: 10,
+                            boxHeight: 10,
+                            boxPadding: 4,
+                            callbacks: {
+                                label: function(item) {
+                                    return ' ' + item.label + ': ' + item.raw + ' students';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Animate counting up
+            function animateCount(elementId, targetValue, suffix) {
+                suffix = suffix || '';
+                var el = document.getElementById(elementId);
+                var duration = 800;
+                var startTime = null;
+                function step(timestamp) {
+                    if (!startTime) startTime = timestamp;
+                    var progress = Math.min((timestamp - startTime) / duration, 1);
+                    var eased = 1 - Math.pow(1 - progress, 3);
+                    var current = Math.round(eased * targetValue * 100) / 100;
+                    el.textContent = (Number.isInteger(targetValue) ? Math.round(current) : current.toFixed(1)) + suffix;
+                    if (progress < 1) requestAnimationFrame(step);
+                }
+                requestAnimationFrame(step);
+            }
+
+            function loadDropoutRiskData() {
+                var days = document.getElementById('riskFilter').value;
+                var url = '${pageContext.request.contextPath}/api/dashboard/dropout-rate';
+                if (days !== '0') url += '?days=' + days;
+
+                fetch(url)
+                    .then(function(res) { return res.json(); })
+                    .then(function(data) {
+                        // Update big stat
+                        animateCount('dropoutRateBig', data.dropoutRate, '%');
+
+                        // Update risk counts
+                        animateCount('lowRiskCount', data.lowRisk);
+                        animateCount('mediumRiskCount', data.mediumRisk);
+                        animateCount('highRiskCount', data.highRisk);
+
+                        // Update legend
+                        document.getElementById('legendLow').textContent = data.lowRisk;
+                        document.getElementById('legendMedium').textContent = data.mediumRisk;
+                        document.getElementById('legendHigh').textContent = data.highRisk;
+
+                        // Update chart
+                        dropoutChart.data.datasets[0].data = [data.lowRisk, data.mediumRisk, data.highRisk];
+                        dropoutChart.update('active');
+
+                        // Render High Risk Students Table
+                        var tableBody = document.getElementById('highRiskStudentsTable');
+                        var studentsHtml = '';
+                        if (data.topRiskStudents && data.topRiskStudents.length > 0) {
+                            data.topRiskStudents.forEach(function(student) {
+                                // Extract first letter for avatar
+                                var firstLetter = student.fullName ? student.fullName.charAt(0).toUpperCase() : '?';
+                                // Determine color base on score
+                                var scoreColorClass = '';
+                                if (student.riskScore >= 70) {
+                                    scoreColorClass = 'text-red-600 bg-red-100 dark:bg-red-900/30 dark:text-red-400';
+                                } else if (student.riskScore >= 30) {
+                                    scoreColorClass = 'text-amber-600 bg-amber-100 dark:bg-amber-900/30 dark:text-amber-400';
+                                } else {
+                                    scoreColorClass = 'text-emerald-600 bg-emerald-100 dark:bg-emerald-900/30 dark:text-emerald-400';
+                                }
+                                
+                                studentsHtml += '<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">' +
+                                    '<td class="px-6 py-4">' +
+                                        '<div class="flex items-center gap-3">' +
+                                            '<div class="w-9 h-9 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-sm font-bold text-slate-600 dark:text-slate-300">' +
+                                                firstLetter +
+                                            '</div>' +
+                                            '<div>' +
+                                                '<p class="text-sm font-bold text-slate-900 dark:text-white">' + student.fullName + '</p>' +
+                                                '<p class="text-xs text-slate-500">ID: ' + student.userId + '</p>' +
+                                            '</div>' +
+                                        '</div>' +
+                                    '</td>' +
+                                    '<td class="px-6 py-4">' +
+                                        '<p class="text-sm text-slate-500">' + student.email + '</p>' +
+                                    '</td>' +
+                                    '<td class="px-6 py-4 text-right">' +
+                                        '<span class="px-2.5 py-1 text-xs font-bold rounded-full ' + scoreColorClass + '">' +
+                                            student.riskScore.toFixed(1) + '%' +
+                                        '</span>' +
+                                    '</td>' +
+                                '</tr>';
+                            });
+                        } else {
+                            studentsHtml = '<tr><td colspan="3" class="px-6 py-8 text-center text-sm text-slate-500">No predictions found.</td></tr>';
+                        }
+                        tableBody.innerHTML = studentsHtml;
+                    })
+                    .catch(function(err) {
+                        console.error('Failed to load dropout risk data:', err);
+                    });
+            }
+
+            // Load on page init
+            loadDropoutRiskData();
+            loadDashboardCharts('7days');
         </script>
     </body>
 </html>

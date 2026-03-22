@@ -1,170 +1,115 @@
-<%-- 
-    Document   : complete-profile
-    Created on : Feb 8, 2026, 10:37:10 AM
-    Author     : ASUS
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
 <!DOCTYPE html>
-
-<html lang="vi"><head>
-        <meta charset="utf-8"/>
-        <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-        <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
-        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-        <script id="tailwind-config">
-            tailwind.config = {
-                darkMode: "class",
-                theme: {
-                    extend: {
-                        colors: {
-                            "primary": "#37ec13",
-                            "background-light": "#f6f8f6",
-                            "background-dark": "#132210",
-                        },
-                        fontFamily: {
-                            "display": ["Inter"]
-                        },
-                        borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Complete Profile - CourseIT</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#10B981",
+                        "primary-hover": "#059669"
                     },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    }
                 },
-            }
-        </script>
-        <style>
-            body {
-                font-family: 'Inter', sans-serif;
-            }
-            .glass-card {
-                background: rgba(255, 255, 255, 0.7);
-                backdrop-filter: blur(12px);
-                -webkit-backdrop-filter: blur(12px);
-                border: 1px solid rgba(255, 255, 255, 0.3);
-            }
-            @keyframes fadeInUp {
-                from { opacity: 0; transform: translateY(24px); }
-                to { opacity: 1; transform: translateY(0); }
-            }
-            .animate-card {
-                animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
-            }
-        </style>
-    </head>
-    <body class="bg-background-light dark:bg-background-dark min-h-screen flex items-center justify-center p-6">
-        <div class="w-full max-w-[640px]">
-            <!-- Main Onboarding Card -->
-            <div class="glass-card rounded-xl shadow-2xl p-8 md:p-12 flex flex-col items-center animate-card">
-                <!-- Progress & Avatar -->
-                <div class="relative mb-8">
-                    <div class="size-24 rounded-full p-1 ring-4 ring-primary ring-offset-2 overflow-hidden bg-white">
-                        <img alt="Google Profile Avatar" class="w-full h-full object-cover rounded-full" data-alt="User circular Google profile avatar portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCB_pz9rvA8wGPfQK3U7ZErVbom6W3yoqnuFk_e4569Qa3w6w-qnpuzlJmh1uXixS_NLXZ3wSn1PsIaRRiV815lkUUOmoleV1ZFFM5EpW0aE0GWYu4dq9uV2U39WqpKYy8a7U39DrVvuIc1yDJRI1rXTn0NxKT_ylD9Nt37QFPFKGXZ43SiCkho8f1ebc5PIMplQntOOJjztZmCmeRytC5iV6ovKmBsdfVK25rB23DoMNYmRPHV-EizJnuLuC1TvCCGpjg5gf_n0nk"/>
-                    </div>
-                    <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-primary text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-                        Google
-                    </div>
-                </div>
-                <!-- Header -->
-                <div class="text-center mb-10">
-                    <h1 class="text-3xl font-bold text-[#101b0d] tracking-tight mb-2">Hoàn tất hồ sơ của bạn</h1>
-                    <p class="text-[#599a4c] text-base">Chỉ còn một bước nữa để bắt đầu sử dụng hệ thống</p>
-                    <div class="mt-6 w-full max-w-[240px] mx-auto">
-
-                        <div class="h-1.5 w-full bg-primary/20 rounded-full overflow-hidden">
-                            <div class="h-full bg-primary rounded-full" style="width: 100%;"></div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Form -->
-                <form action="${pageContext.request.contextPath}/complete-profile" method="POST" class="w-full space-y-6">
-                    <!-- Prefilled Email (Read-only) -->
-                    <div class="space-y-2">
-                        <label class="block text-sm font-semibold text-[#101b0d]">Địa chỉ Email</label>
-                        <div class="relative">
-                            <input class="w-full bg-[#f0f4f0] border-transparent text-[#599a4c] rounded-lg py-3.5 px-4 cursor-not-allowed text-sm focus:ring-0" readonly="" type="email" value="${USER.email}"/>
-                            <span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-[#599a4c]/50 text-xl">lock</span>
-                        </div>
-
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Username -->
-                        <div class="space-y-2">
-                            <label class="block text-sm font-semibold text-[#101b0d]">Tên đăng nhập <span class="text-red-500">*</span></label>
-                            <input required name="username" class="w-full bg-white border-[#e9f3e7] focus:border-primary focus:ring-primary/20 rounded-lg py-3.5 px-4 text-sm transition-all shadow-sm" placeholder="your_username" type="text"/>
-                            <c:choose>
-                                <c:when test="${not empty ERROR}">
-                                    <p class="text-[11px] text-red-500 font-medium">
-                                        ${ERROR}
-                                    </p>
-                                </c:when>
-                                <c:otherwise>
-                                    <p class="text-[11px] text-[#599a4c] font-medium">
-                                        Tên dùng để đăng nhập
-                                    </p>
-                                </c:otherwise>
-                            </c:choose>
-
-                        </div>
-                        <!-- Full Name -->
-                        <div class="space-y-2">
-                            <label class="block text-sm font-semibold text-[#101b0d]">Họ và tên</label>
-                            <input required name="fullname" class="w-full bg-white border-[#e9f3e7] focus:border-primary focus:ring-primary/20 rounded-lg py-3.5 px-4 text-sm transition-all shadow-sm" type="text" value=""/>
-                        </div>
-                    </div>
-                    <!-- Role Selection -->
-                    <div class="space-y-4 pt-2">
-                        <label class="block text-sm font-semibold text-[#101b0d]">Tôi muốn tham gia với tư cách:</label>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <!-- Learner Card -->
-                            <label class="relative group cursor-pointer">
-                                <input checked="" class="peer sr-only" name="role" type="radio" value="STUDENT"/>
-                                <div class="h-full border-2 border-[#e9f3e7] rounded-xl p-5 peer-checked:border-primary peer-checked:bg-primary/5 transition-all hover:border-primary/50 bg-white/50">
-                                    <div class="flex items-center gap-3 mb-2">
-                                        <div class="size-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
-                                            <span class="material-symbols-outlined">school</span>
-                                        </div>
-                                        <span class="font-bold text-[#101b0d]">Học viên</span>
-                                    </div>
-                                    <p class="text-xs text-[#599a4c] leading-relaxed">Truy cập khóa học, làm bài tập và nhận tài liệu học tập.</p>
-                                    <div class="absolute top-4 right-4 text-primary opacity-0 peer-checked:opacity-100 transition-opacity">
-                                        <span class="material-symbols-outlined text-lg">check_circle</span>
-                                    </div>
-                                </div>
-                            </label>
-                            <!-- Instructor Card -->
-                            <label class="relative group cursor-pointer">
-                                <input class="peer sr-only" name="role" type="radio" value="TEACHER"/>
-                                <div class="h-full border-2 border-[#e9f3e7] rounded-xl p-5 peer-checked:border-primary peer-checked:bg-primary/5 transition-all hover:border-primary/50 bg-white/50">
-                                    <div class="flex items-center gap-3 mb-2">
-                                        <div class="size-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
-                                            <span class="material-symbols-outlined">auto_stories</span>
-                                        </div>
-                                        <span class="font-bold text-[#101b0d]">Giảng viên</span>
-                                    </div>
-                                    <p class="text-xs text-[#599a4c] leading-relaxed">Tạo nội dung giảng dạy, quản lý học viên và lớp học.</p>
-                                    <div class="absolute top-4 right-4 text-primary opacity-0 peer-checked:opacity-100 transition-opacity">
-                                        <span class="material-symbols-outlined text-lg">check_circle</span>
-                                    </div>
-                                </div>
-                            </label>
-                        </div>
-                    </div>
-                    <!-- Action Button -->
-                    <div class="pt-6">
-                        <button class="w-full bg-primary hover:bg-[#2ed60f] text-white font-bold py-4 rounded-lg transition-all shadow-lg shadow-primary/20 flex items-center justify-center gap-2 text-lg active:scale-[0.98]" type="submit">
-                            Hoàn tất &amp; Bắt đầu
-                            <span class="material-symbols-outlined">arrow_forward</span>
-                        </button>
-                        <p class="text-center text-xs text-[#101b0d]/40 mt-6">
-                            Bằng cách tiếp tục, bạn đồng ý với <a class="underline hover:text-primary" href="#">Điều khoản dịch vụ</a> và <a class="underline hover:text-primary" href="#">Chính sách bảo mật</a> của chúng tôi.
-                        </p>
-                    </div>
-                </form>
+            },
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+        .glass-panel {
+            background: #ffffff;
+            border-radius: 1.25rem;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+            border: 1px solid #e5e7eb;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-6">
+    
+    <div class="w-full max-w-md">
+        <!-- Logo -->
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center gap-2 text-primary">
+                <span class="material-icons text-4xl">rocket_launch</span>
+                <span class="text-3xl font-extrabold tracking-tight text-slate-900">CourseIT</span>
             </div>
-            <!-- Background decorative elements -->
-            <div class="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/5 rounded-full blur-[100px] -z-10"></div>
-            <div class="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-primary/10 rounded-full blur-[100px] -z-10"></div>
         </div>
-    </body></html>
+
+        <div class="glass-panel p-8 sm:p-10 relative overflow-hidden">
+            <!-- Top Accent Line -->
+            <div class="absolute top-0 left-0 w-full h-1.5 bg-primary"></div>
+
+            <div class="text-center mb-8">
+                <h2 class="text-2xl font-bold text-slate-900 mb-1">Complete Profile</h2>
+                <p class="text-slate-500 text-sm">Please verify your details to continue.</p>
+            </div>
+
+            <form action="${pageContext.request.contextPath}/complete-profile" method="POST" class="space-y-5">
+                <!-- Default Role (Hidden) -->
+                <input type="hidden" name="role" value="STUDENT"/>
+
+                <div class="flex items-center justify-center gap-2 mb-6 bg-slate-50 rounded-lg p-2 border border-slate-200">
+                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" class="w-5 h-5"/>
+                    <span class="text-sm font-medium text-slate-700">Linked to Google</span>
+                </div>
+
+                <!-- Email Field (Readonly) -->
+                <div class="space-y-1">
+                    <label class="text-xs font-semibold text-slate-600 uppercase tracking-widest">Email Address</label>
+                    <div class="relative flex items-center bg-slate-100 rounded-lg px-3 py-2.5 border border-slate-200 opacity-80 cursor-not-allowed">
+                        <span class="material-icons text-slate-400 mr-2 text-lg">mail</span>
+                        <input class="w-full bg-transparent border-none p-0 text-slate-500 focus:ring-0 text-sm font-medium" 
+                               readonly="" type="email" value="${USER.email}"/>
+                    </div>
+                </div>
+
+                <!-- Username Field -->
+                <div class="space-y-1">
+                    <div class="flex justify-between items-end">
+                        <label class="text-xs font-semibold text-slate-700 uppercase tracking-widest">Username <span class="text-red-500">*</span></label>
+                        <c:if test="${not empty ERROR}">
+                            <span class="text-xs text-red-500 font-bold">${ERROR}</span>
+                        </c:if>
+                    </div>
+                    <div class="relative flex items-center bg-white rounded-lg px-3 py-2.5 border ${not empty ERROR ? 'border-red-400 ring-2 ring-red-100' : 'border-slate-300'} focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 transition-all">
+                        <span class="material-icons text-slate-400 mr-2 text-lg">account_circle</span>
+                        <input required name="username" 
+                               class="w-full bg-transparent border-none p-0 text-slate-900 focus:ring-0 text-sm font-medium placeholder-slate-400" 
+                               placeholder="e.g. johndoe" type="text" autocomplete="off"/>
+                    </div>
+                </div>
+
+                <!-- Full Name Field -->
+                <div class="space-y-1">
+                    <label class="text-xs font-semibold text-slate-700 uppercase tracking-widest">Full Name <span class="text-red-500">*</span></label>
+                    <div class="relative flex items-center bg-white rounded-lg px-3 py-2.5 border border-slate-300 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 transition-all">
+                        <span class="material-icons text-slate-400 mr-2 text-lg">badge</span>
+                        <input required name="fullname" 
+                               class="w-full bg-transparent border-none p-0 text-slate-900 focus:ring-0 text-sm font-medium placeholder-slate-400" 
+                               placeholder="e.g. John Doe" type="text" value="${USER.fullName}" autocomplete="off"/>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="pt-4">
+                    <button class="w-full bg-primary hover:bg-primary-hover text-white font-bold py-3.5 px-4 rounded-lg transition-colors flex items-center justify-center gap-2" type="submit">
+                        Complete & Continue
+                        <span class="material-icons text-lg">arrow_forward</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

@@ -35,8 +35,11 @@
                 <a class="text-[15px] font-medium text-white/80 hover:text-[#10B981] transition-colors duration-300"
                    href="${pageContext.request.contextPath}/shop">Courses</a>
                 <a class="text-[15px] font-medium text-white/80 hover:text-[#10B981] transition-colors duration-300"
-
                    href="${pageContext.request.contextPath}/learningpaths">Learning Paths</a>
+                <a class="text-[15px] font-medium text-white/80 hover:text-[#10B981] transition-colors duration-300 flex items-center gap-1"
+                   href="${pageContext.request.contextPath}/mock-exams">
+                   <span class="material-symbols-outlined text-[18px]">quiz</span> Mock Exams
+                </a>
                 <a class="text-[15px] font-medium text-white/80 hover:text-[#10B981] transition-colors duration-300"
                    href="#">Community</a>
                 <div class="relative group">

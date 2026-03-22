@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface ICandidateService {
 
+    boolean updateCandidateFromN8n(int userId, int jobId, int score, String decision, int skillsCount, int projectsCount, String name, String cvUrl, String email);
+
     List<CandidateDTO> getCandidates();
 
     boolean approveCandidate(int candidateId);

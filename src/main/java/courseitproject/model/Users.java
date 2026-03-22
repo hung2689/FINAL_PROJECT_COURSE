@@ -84,6 +84,13 @@ public class Users implements Serializable {
     @NotNull
     @Column(name = "email_verified")
     private boolean emailVerified;
+    
+    @Column(name = "study_coins", columnDefinition = "integer default 0")
+    private Integer studyCoins = 0;
+
+    @Column(name = "last_login_date")
+    @Temporal(TemporalType.DATE)
+    private Date lastLoginDate;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private Collection<Notification> notificationCollection;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "users")
@@ -185,6 +192,22 @@ public class Users implements Serializable {
 
     public void setEmailVerified(boolean emailVerified) {
         this.emailVerified = emailVerified;
+    }
+
+    public Integer getStudyCoins() {
+        return studyCoins == null ? 0 : studyCoins;
+    }
+
+    public void setStudyCoins(Integer studyCoins) {
+        this.studyCoins = studyCoins;
+    }
+
+    public Date getLastLoginDate() {
+        return lastLoginDate;
+    }
+
+    public void setLastLoginDate(Date lastLoginDate) {
+        this.lastLoginDate = lastLoginDate;
     }
 
     @XmlTransient

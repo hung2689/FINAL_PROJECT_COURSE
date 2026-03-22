@@ -4,67 +4,81 @@
  */
 package courseitproject.controller.admin;
 
-import courseitproject.model.Candidates;
-import courseitproject.model.Users;
-import courseitproject.repository.CandidateRepository;
-import courseitproject.service.ITeacherJobService;
-import courseitproject.service.TeacherJobServiceImp;
+import courseitproject.service.ICandidateService;
+import courseitproject.service.CandidateServiceImp;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import java.util.Date;
 
 /**
- *
- * @author ASUS
+ * N8N Webhook handler
  */
 @WebServlet(name = "N8nApiServlet", urlPatterns = {"/api/candidates"})
 public class N8nApiServlet extends HttpServlet {
 
-    private ITeacherJobService jobService;
-    private CandidateRepository repo;
+    private ICandidateService candidateService;
 
     @Override
-    public void init(){
-       repo  = new CandidateRepository();
-       jobService= new TeacherJobServiceImp();
+    public void init() {
+        candidateService = new CandidateServiceImp();
     }
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
 
-        
-
-        Candidates c = new Candidates();
-
-        c.setUserId(new Users(Integer.parseInt(req.getParameter("user_id"))));
-        c.setName(req.getParameter("name"));
-        c.setCvText(req.getParameter("cv_url"));
-        c.setEmail(req.getParameter("email"));
-        c.setScore(Integer.parseInt(req.getParameter("score")));
-        c.setDecision(req.getParameter("decision"));
-        c.setSkillsCount(Integer.parseInt(req.getParameter("skills_count")));
-        c.setProjectsCount(Integer.parseInt(req.getParameter("projects_count")));
-        
-        // Find job by ID
-        int jobId = Integer.parseInt(req.getParameter("job_id"));
-        courseitproject.model.TeacherJob job = jobService.findById(jobId);
-        if (job == null) {
-            System.err.println("API Error: TeacherJob with ID " + jobId + " does not exist in the Database!");
+    private int parseIntSafe(String val1, String val2) {
+        if (val1 != null && !val1.trim().isEmpty() && !"null".equalsIgnoreCase(val1.trim())) {
+            try { return Integer.parseInt(val1.trim()); } catch (NumberFormatException ignored) {}
         }
-        c.setJobId(job);
-        
-        c.setCreatedAt(new Date());
-        repo.save(c);
+        if (val2 != null && !val2.trim().isEmpty() && !"null".equalsIgnoreCase(val2.trim())) {
+            try { return Integer.parseInt(val2.trim()); } catch (NumberFormatException ignored) {}
+        }
+        return 0; // Default if neither parameter parses correctly
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+            throws IOException {
 
+        try {
+            int userId = parseIntSafe(req.getParameter("user_id"), null);
+            int jobId = parseIntSafe(req.getParameter("job_id"), null);
+            int score = parseIntSafe(req.getParameter("score"), null);
+            String decision = req.getParameter("decision");
+            String name = req.getParameter("name");
+            String email = req.getParameter("email");
+            String cvUrl = req.getParameter("cv_url");
+
+            // N8N sometimes sends singular forms (skill_count instead of skills_count)
+            int skillsCount = parseIntSafe(req.getParameter("skills_count"), req.getParameter("skill_count"));
+            int projectsCount = parseIntSafe(req.getParameter("projects_count"), req.getParameter("project_count"));
+
+            if (userId == 0 || jobId == 0) {
+                resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                resp.getWriter().write("{\"error\":\"Missing user_id or job_id\"}");
+                return;
+            }
+
+            boolean success = candidateService.updateCandidateFromN8n(
+                    userId, jobId, score, decision, skillsCount, projectsCount, name, cvUrl, email);
+
+            if (success) {
+                resp.setStatus(HttpServletResponse.SC_OK);
+                resp.getWriter().write("{\"status\":\"updated\"}");
+            } else {
+                resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                resp.getWriter().write("{\"error\":\"Failed to update candidate.\"}");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            resp.getWriter().write("{\"error\":\"" + e.getMessage() + "\"}");
+        }
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws IOException, ServletException {
         req.getRequestDispatcher("/views/auth/login.jsp").forward(req, resp);
     }
 }

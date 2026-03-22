@@ -14,6 +14,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import courseitproject.service.IUserService;
 import courseitproject.service.UserServiceImp;
+import java.util.Set;
 
 @WebServlet(name = "ResourceAdminServlet", urlPatterns = {"/resourceAdmin"})
 public class ResourceEditServlet extends HttpServlet {
@@ -49,9 +50,17 @@ public class ResourceEditServlet extends HttpServlet {
             return;
         }
 
-        String role = userService.findOneRoleByUserId(user.getUserId()).getRoleName();
+        // Check session-cached role first (no DB call)
+        String cachedRole = (String) request.getSession().getAttribute("ROLE");
+        Set<String> allowedRoles = Set.of("ADMIN", "TEACHER");
+        String role = cachedRole;
 
-        if (!role.equals("ADMIN") && !role.equals("TEACHER")) {
+        // Fallback to DB only if session has no ROLE
+        if (role == null) {
+            role = userService.findOneRoleByUserId(user.getUserId()).getRoleName();
+        }
+
+        if (!allowedRoles.contains(role)) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             jsonResponse.addProperty("status", "error");
             jsonResponse.addProperty("message", "Unauthorized access.");

@@ -48,16 +48,9 @@
             </a>
         </nav>
         <div class="p-4 border-t border-slate-800">
-            <a class="flex items-center gap-3 px-4 py-3 rounded-lg ${activeMenu == 'settings' ? 'bg-primary/10 text-primary' : 'hover:bg-slate-800'} transition-colors"
-                href="#">
-                <span class="material-icons text-xl">settings</span>
-                <span class="font-medium">Settings</span>
-            </a>
-            <a class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-500/10 text-red-400 transition-colors"
-                href="#">
-                <span class="material-icons text-xl">logout</span>
-                <span class="font-medium">Logout</span>
-            </a>
+            <jsp:include page="/views/common/userbuttom.jsp">
+                <jsp:param name="isSidebar" value="true" />
+            </jsp:include>
         </div>
     </aside>
 

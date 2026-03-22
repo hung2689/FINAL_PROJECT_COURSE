@@ -78,6 +78,14 @@ public class Enrollment implements Serializable {
         this.enrollmentDate = enrollmentDate;
     }
 
+    public String getFormattedEnrollmentDate() {
+        if (this.enrollmentDate == null) {
+            return "";
+        }
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy");
+        return sdf.format(this.enrollmentDate);
+    }
+
     public String getStatus() {
         return status;
     }

@@ -89,16 +89,7 @@
                                     <span
                                         class="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full border-2 border-white dark:border-background-dark"></span>
                                 </button>
-                                <div class="h-8 w-[1px] bg-slate-200 dark:bg-slate-800 mx-2"></div>
-                                <div class="flex items-center gap-3">
-                                    <img class="w-10 h-10 rounded-full object-cover border-2 border-primary/20"
-                                        data-alt="Admin user avatar"
-                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3fr4TV71PEV9sNYTnWVWnR7SFkKNCP2tOJ3uTs7_134rEVjBQFJH_1TZv4PVE7-oihzRX-tgoP57g8KmcdbXZprDHAErYLIExmsgNUM3McmNYrzKm2iqzA3IF_JI_3dybUgk1kLagPSA4IxAI88M2-hbR_SNvLDVV9brN8WLVtQ5tJyF-ThF1ajLFnn_BDKoOK_XLZI68wABBdqinG1IIYP4gVTXlzN3NGob2goNK-zcTPi9O2dawgzY5HtsEjf7uojzNKEW_8DQ" />
-                                    <div class="hidden lg:block">
-                                        <p class="text-sm font-semibold text-slate-900 dark:text-white">Alex Rivera</p>
-                                        <p class="text-xs text-slate-500">Super Admin</p>
-                                    </div>
-                                </div>
+
                             </div>
                         </header>
 

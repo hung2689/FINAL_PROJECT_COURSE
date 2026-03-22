@@ -4,6 +4,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -13,6 +14,11 @@ public class CodeScannerService {
 
     // Maximum file size to read (skip huge generated/minified files)
     private static final long MAX_FILE_SIZE = 100_000; // 100KB
+
+    private static final Set<String> SKIP_DIRS = Set.of(
+            ".git", "node_modules", "target", "build",
+            ".idea", ".vscode", "dist", "out", "bin", ".gradle"
+    );
 
     public Map<String, String> scanRepositoryFiles(String repoPath, String allowedExtensionsStr) {
         Map<String, String> fileContents = new HashMap<>();
@@ -35,11 +41,7 @@ public class CodeScannerService {
         if (current.isDirectory()) {
             String name = current.getName();
             // Skip common non-source directories
-            if (name.equals(".git") || name.equals("node_modules")
-                    || name.equals("target") || name.equals("build")
-                    || name.equals(".idea") || name.equals(".vscode")
-                    || name.equals("dist") || name.equals("out")
-                    || name.equals("bin") || name.equals(".gradle")) {
+            if (SKIP_DIRS.contains(name)) {
                 return;
             }
             File[] files = current.listFiles();

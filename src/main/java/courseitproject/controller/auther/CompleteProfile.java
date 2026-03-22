@@ -43,8 +43,9 @@ public class CompleteProfile extends HttpServlet {
         String username = req.getParameter("username");
         String fullname = req.getParameter("fullname");
         if(userService.findUserByUsername(username)!=null){
-            req.setAttribute("ERROR", "this user is duplicate");
+            req.setAttribute("ERROR", "Tên đăng nhập đã được sử dụng. Vui lòng chọn tên khác.");
             req.getRequestDispatcher("views/auth/complete-profile.jsp").forward(req, resp);
+            return;
         }
         HttpSession session = req.getSession();
         Users user = (Users) session.getAttribute("USER");
@@ -61,18 +62,21 @@ public class CompleteProfile extends HttpServlet {
             user = userService.findUserById(user.getUserId());
             session.setAttribute("USER", user);
 
-            if ("TEACHER".equalsIgnoreCase(role)) {
+            if (courseitproject.model.RoleName.TEACHER.matches(role)) {
                 session.setAttribute("PENDING_TEACHER_USER", user);
                 resp.sendRedirect(req.getContextPath() + "/teacherRegister");
                 return;
             }
 
-            req.setAttribute("registerSuccess", "true");
-            req.getRequestDispatcher("/views/auth/registerOtp.jsp").forward(req, resp);
+            // Immediately establish session role as STUDENT and redirect to home
+            session.setAttribute("ROLE", courseitproject.model.RoleName.STUDENT.name());
+            new courseitproject.dao.DashboardStatsDAO().recordStudentLogin(user.getUserId());
+            resp.sendRedirect(req.getContextPath() + "/home");
+            
         } catch (Exception e) {
             e.printStackTrace();
             req.setAttribute("userError", e.toString());
-            req.getRequestDispatcher("/views/auth/register.jsp")
+            req.getRequestDispatcher("views/auth/complete-profile.jsp")
                     .forward(req, resp);
         }
 

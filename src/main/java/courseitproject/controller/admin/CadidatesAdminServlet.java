@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -35,17 +36,19 @@ public class CadidatesAdminServlet extends HttpServlet {
         List<CandidateDTO> allCandidates = candidateService.getCandidates();
         List<CandidateDTO> filteredCandidates = new ArrayList<>();
 
+        // Map filter tab to expected status
+        Map<String, String> filterStatusMap = Map.of(
+                "Waiting", "PENDING",
+                "Interview", "INTERVIEWING",
+                "Accept", "APPROVED",
+                "Reject", "REJECTED"
+        );
+
         for (CandidateDTO c : allCandidates) {
             String status = c.getStatus() == null ? "PENDING" : c.getStatus();
-            if ("All".equals(filter)) {
-                filteredCandidates.add(c);
-            } else if ("Waiting".equals(filter) && "PENDING".equalsIgnoreCase(status)) {
-                filteredCandidates.add(c);
-            } else if ("Interview".equals(filter) && "INTERVIEWING".equalsIgnoreCase(status)) {
-                filteredCandidates.add(c);
-            } else if ("Accept".equals(filter) && "APPROVED".equalsIgnoreCase(status)) {
-                filteredCandidates.add(c);
-            } else if ("Reject".equals(filter) && "REJECTED".equalsIgnoreCase(status)) {
+            if ("All".equals(filter)
+                    || (filterStatusMap.containsKey(filter)
+                        && filterStatusMap.get(filter).equalsIgnoreCase(status))) {
                 filteredCandidates.add(c);
             }
         }

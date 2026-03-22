@@ -44,6 +44,24 @@ public class CourseServiceImp implements ICourseService {
     }
 
     @Override
+    public List<Course> findCoursesByTeacherId(int teacherId) {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            return em.createQuery(
+                    "SELECT DISTINCT c FROM Course c "
+                    + "JOIN c.courseTeacherCollection ct "
+                    + "WHERE ct.teacherId.teacherId = :teacherId "
+                    + "AND c.status = 'ACTIVE' "
+                    + "ORDER BY c.createdAt DESC",
+                    Course.class)
+                    .setParameter("teacherId", teacherId)
+                    .getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
     public void assignTeacherToCourse(int courseId, int teacherId) {
         EntityManager em = JPAUtil.getEntityManager();
         try {
@@ -82,9 +100,8 @@ public class CourseServiceImp implements ICourseService {
         try {
             return em.createQuery(
                     "SELECT DISTINCT c FROM Course c "
-                    + "LEFT JOIN FETCH c.courseTeacherList ct "
+                    + "LEFT JOIN FETCH c.courseTeacherCollection ct "
                     + "LEFT JOIN FETCH ct.teacherId t "
-                    + "LEFT JOIN FETCH t.users "
                     + "WHERE c.status = 'ACTIVE' "
                     + "ORDER BY c.courseId DESC",
                     Course.class).getResultList();

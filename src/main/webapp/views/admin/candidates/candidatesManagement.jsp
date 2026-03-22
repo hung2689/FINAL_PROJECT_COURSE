@@ -89,16 +89,7 @@
                             <span
                                 class="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full border-2 border-white dark:border-background-dark"></span>
                         </button>
-                        <div class="h-8 w-[1px] bg-slate-200 dark:bg-slate-800 mx-2"></div>
-                        <div class="flex items-center gap-3">
-                            <img class="w-10 h-10 rounded-full object-cover border-2 border-primary/20"
-                                 data-alt="Admin user avatar"
-                                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3fr4TV71PEV9sNYTnWVWnR7SFkKNCP2tOJ3uTs7_134rEVjBQFJH_1TZv4PVE7-oihzRX-tgoP57g8KmcdbXZprDHAErYLIExmsgNUM3McmNYrzKm2iqzA3IF_JI_3dybUgk1kLagPSA4IxAI88M2-hbR_SNvLDVV9brN8WLVtQ5tJyF-ThF1ajLFnn_BDKoOK_XLZI68wABBdqinG1IIYP4gVTXlzN3NGob2goNK-zcTPi9O2dawgzY5HtsEjf7uojzNKEW_8DQ" />
-                            <div class="hidden lg:block">
-                                <p class="text-sm font-semibold text-slate-900 dark:text-white">Alex Rivera</p>
-                                <p class="text-xs text-slate-500">Super Admin</p>
-                            </div>
-                        </div>
+
                     </div>
                 </header>
 
@@ -398,19 +389,32 @@
                         <span class="material-icons text-primary">description</span>
                         Candidate CV Preview
                     </h3>
-                    <button type="button" onclick="closeCvModal()"
-                            class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
-                        <span class="material-icons">close</span>
-                    </button>
+                    <div class="flex items-center gap-2">
+                        <a id="cvOpenNewTab" href="#" target="_blank"
+                           class="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-semibold text-primary bg-primary/10 hover:bg-primary/20 rounded-lg transition-colors"
+                           title="Open in new tab">
+                            <span class="material-icons text-sm">open_in_new</span> Open
+                        </a>
+                        <a id="cvDownloadLink" href="#" download
+                           class="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-semibold text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors"
+                           title="Download CV">
+                            <span class="material-icons text-sm">download</span> Download
+                        </a>
+                        <button type="button" onclick="closeCvModal()"
+                                class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors ml-2">
+                            <span class="material-icons">close</span>
+                        </button>
+                    </div>
                 </div>
 
-                <!-- Modal Body (iframe) -->
+                <!-- Modal Body -->
                 <div class="flex-1 p-0 overflow-hidden bg-slate-100 dark:bg-slate-900">
                     <iframe id="cvIframe" src="" width="100%" height="100%" class="border-none"></iframe>
                 </div>
 
                 <!-- Modal Footer -->
-                <div class="px-6 py-4 border-t border-slate-200 dark:border-slate-700 flex justify-end">
+                <div class="px-6 py-3 border-t border-slate-200 dark:border-slate-700 flex items-center justify-between">
+                    <p class="text-xs text-slate-400">If the preview doesn't load, use the "Open" or "Download" buttons above.</p>
                     <button type="button" onclick="closeCvModal()"
                             class="px-5 py-2 text-sm font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 dark:text-slate-300 dark:bg-slate-700 dark:hover:bg-slate-600 rounded-lg transition-colors">
                         Close
@@ -483,16 +487,19 @@
                 const modal = document.getElementById('cvPreviewModal');
                 const iframe = document.getElementById('cvIframe');
 
-                // đảm bảo có .pdf
-                if (!cvUrl.endsWith(".pdf")) {
-                    cvUrl = cvUrl + ".pdf";
+                if (!cvUrl || cvUrl === 'null' || cvUrl.trim() === '') {
+                    alert('LỐI: Không tìm thấy CV! (Ứng viên chưa tải lên CV hoặc Webhook bị thiếu thông tin cv_url)');
+                    return;
                 }
 
-                // dùng pdf.js viewer
-                const viewer = "https://mozilla.github.io/pdf.js/web/viewer.html?file="
-                        + encodeURIComponent(cvUrl);
+                // Set Open / Download links (direct Cloudinary URL)
+                document.getElementById('cvOpenNewTab').href = cvUrl;
+                document.getElementById('cvDownloadLink').href = cvUrl;
 
-                iframe.src = viewer;
+                // Sử dụng Google Docs Viewer thay vì Local Proxy.
+                // Giải quyết vĩnh viễn lỗi bị đụng độ Tomcat tải lại (503/404) và lỗi trình PDF của Edge chặn iframe.
+                const viewerUrl = 'https://docs.google.com/viewer?url=' + encodeURIComponent(cvUrl) + '&embedded=true';
+                iframe.src = viewerUrl;
 
                 modal.classList.remove('hidden');
                 modal.classList.add('flex');
@@ -503,7 +510,7 @@
                 const modal = document.getElementById('cvPreviewModal');
                 const iframe = document.getElementById('cvIframe');
 
-                iframe.src = "";
+                iframe.src = '';
 
                 modal.classList.add('hidden');
                 modal.classList.remove('flex');

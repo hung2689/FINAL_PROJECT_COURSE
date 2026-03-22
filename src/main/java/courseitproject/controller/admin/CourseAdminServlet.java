@@ -77,23 +77,10 @@ public class CourseAdminServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
 
+            List<Course> list = courseService.findAll();
+            long totalCourses = list.size();
+            int totalPages = 1;
             int currentPage = 1;
-            String pageParam = request.getParameter("page");
-
-            if (pageParam != null) {
-                currentPage = Integer.parseInt(pageParam);
-            }
-            long totalCourses = courseService.countActiveCourses();
-            int totalPages = (int) Math.ceil((double) totalCourses / 10);
-
-            if (currentPage > totalPages && totalPages > 0) {
-                currentPage = totalPages;
-            }
-
-            if (currentPage < 1) {
-                currentPage = 1;
-            }
-            List<Course> list = courseService.findAllPaging(currentPage);
 
             Map<Integer, String> teacherMap = new HashMap<>();
             Map<Integer, Long> studentCountMap = new HashMap<>();

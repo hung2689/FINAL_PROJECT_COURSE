@@ -1,58 +1,27 @@
-You are a senior frontend developer.
+État HTTP 500 – Erreur interne du serveur
+Type Rapport d'exception
 
-Build a modern Admin Dashboard chart using React + Tailwind + Recharts.
+message Cannot lazily initialize collection of role 'courseitproject.model.Users.userRoleCollection' (no session)
 
-=====================
-FEATURE: LOGIN ACTIVITY (LAST 7 DAYS)
-=====================
+description Le serveur a rencontré une erreur interne qui l'a empêché de satisfaire la requête.
 
-Create a responsive Line Chart showing student login activity for the last 7 days.
+exception
 
-REQUIREMENTS:
+org.hibernate.LazyInitializationException: Cannot lazily initialize collection of role 'courseitproject.model.Users.userRoleCollection' (no session)
+	org.hibernate.collection.spi.AbstractPersistentCollection.throwLazyInitializationException(AbstractPersistentCollection.java:658)
+	org.hibernate.collection.spi.AbstractPersistentCollection.throwLazyInitializationException(AbstractPersistentCollection.java:653)
+	org.hibernate.collection.spi.AbstractPersistentCollection.withTemporarySessionIfNeeded(AbstractPersistentCollection.java:237)
+	org.hibernate.collection.spi.AbstractPersistentCollection.initialize(AbstractPersistentCollection.java:634)
+	org.hibernate.collection.spi.AbstractPersistentCollection.read(AbstractPersistentCollection.java:148)
+	org.hibernate.collection.spi.PersistentBag.iterator(PersistentBag.java:418)
+	courseitproject.model.Users.getRole(Users.java:258)
+	courseitproject.controller.auther.AutherServlet.postLogin(AutherServlet.java:361)
+	courseitproject.controller.auther.AutherServlet.doPost(AutherServlet.java:86)
+	jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590)
+	jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	courseitproject.filter.CharacterEncodingFilter.doFilter(CharacterEncodingFilter.java:39)
+	courseitproject.filter.BlockJsp.doFilter(BlockJsp.java:37)
+	courseitproject.filter.AuthFilter.doFilter(AuthFilter.java:63)
+note La trace complète de la cause mère de cette erreur est disponible dans les fichiers journaux de ce serveur.
 
-1. CHART TITLE
-- "Student Login Activity (Last 7 Days)"
-
-2. DATA FORMAT
-Use mock data like:
-[
-  { date: "Mon", users: 120 },
-  { date: "Tue", users: 98 },
-  { date: "Wed", users: 150 },
-  { date: "Thu", users: 200 },
-  { date: "Fri", users: 170 },
-  { date: "Sat", users: 90 },
-  { date: "Sun", users: 60 }
-]
-
-3. CHART DESIGN
-- Use LineChart from Recharts
-- Smooth line (type="monotone")
-- Add dots on each point
-- Tooltip on hover
-- Grid lines (light)
-- ResponsiveContainer
-
-4. AXIS
-- X-axis: Day (Mon → Sun)
-- Y-axis: Number of students
-
-5. STYLE
-- Clean modern dashboard style
-- Rounded card container
-- Soft shadow
-- Padding
-
-6. BONUS
-- Add dropdown filter:
-  - "Today"
-  - "Last 7 Days"
-  - "Last 30 Days"
-
-7. COMPONENT STRUCTURE
-- Create component: LoginChart.jsx
-- Export default component
-
-8. OUTPUT
-- Return full React component code
-- No explanation
