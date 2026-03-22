@@ -30,10 +30,11 @@
         }
     </style>
 
+ 
     <!-- Fixed User Pill -->
     <c:set var="pillClasses" value="${param.isSidebar == 'true' ? 'relative w-full z-50' : 'fixed bottom-6 left-6 z-50'}" />
     <div class="${pillClasses}">
-        <c:choose>
+         <c:choose>
             <c:when test="${sessionScope.USER == null}">
                 <div class="relative z-50 user-pill w-full">
                     <div class="animate-border relative w-full inline-flex p-[4px] overflow-hidden rounded-full">
@@ -74,6 +75,7 @@
                     </div>
 
                     <div class="py-2">
+ 
                         <c:choose>
                             <c:when test="${sessionScope.ROLE == 'ADMIN'}">
                                 <a href="${pageContext.request.contextPath}/adminDashboard"
@@ -111,7 +113,7 @@
                             </c:otherwise>
                         </c:choose>
                     </div>
-
+ 
                     <div class="py-2 border-t ${param.isSidebar == 'true' ? 'border-slate-700' : 'border-gray-200'}">
                         <div class="flex items-center justify-between px-4 py-2 mb-2 rounded-lg mx-3 ${param.isSidebar == 'true' ? 'bg-emerald-500/10 border border-emerald-500/20' : 'bg-emerald-50 border border-emerald-100'}">
                              <div class="flex items-center gap-2">

@@ -1,11 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package courseitproject.model;
 
 import jakarta.persistence.Basic;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,27 +9,21 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
 
-/**
- *
- * @author ASUS
- */
+
 @Entity
 @Table(name = "Users")
 @XmlRootElement
 @NamedQueries({
+ 
         @NamedQuery(name = "Users.findAll", query = "SELECT u FROM Users u"),
         @NamedQuery(name = "Users.findByUserId", query = "SELECT u FROM Users u WHERE u.userId = :userId"),
         @NamedQuery(name = "Users.findByUsername", query = "SELECT u FROM Users u WHERE u.username = :username"),
@@ -45,7 +35,7 @@ import java.util.Date;
         @NamedQuery(name = "Users.findByProvider", query = "SELECT u FROM Users u WHERE u.provider = :provider"),
         @NamedQuery(name = "Users.findByProviderId", query = "SELECT u FROM Users u WHERE u.providerId = :providerId"),
         @NamedQuery(name = "Users.findByEmailVerified", query = "SELECT u FROM Users u WHERE u.emailVerified = :emailVerified") })
-public class Users implements Serializable {
+ public class Users implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -84,6 +74,7 @@ public class Users implements Serializable {
     @NotNull
     @Column(name = "email_verified")
     private boolean emailVerified;
+ 
     
     @Column(name = "study_coins", columnDefinition = "integer default 0")
     private Integer studyCoins = 0;
@@ -101,7 +92,7 @@ public class Users implements Serializable {
     private Collection<Candidates> candidatesCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private Collection<UserRole> userRoleCollection;
-
+ 
     public Users() {
     }
 
@@ -109,9 +100,10 @@ public class Users implements Serializable {
         this.userId = userId;
     }
 
-    public Users(Integer userId, boolean emailVerified) {
+    public Users(Integer userId, boolean emailVerified, int rewardPoints) {
         this.userId = userId;
         this.emailVerified = emailVerified;
+        this.rewardPoints = rewardPoints;
     }
 
     public Integer getUserId() {
@@ -194,6 +186,7 @@ public class Users implements Serializable {
         this.emailVerified = emailVerified;
     }
 
+ 
     public Integer getStudyCoins() {
         return studyCoins == null ? 0 : studyCoins;
     }
@@ -217,40 +210,10 @@ public class Users implements Serializable {
 
     public void setNotificationCollection(Collection<Notification> notificationCollection) {
         this.notificationCollection = notificationCollection;
-    }
+     }
 
-    public Teacher getTeacher() {
-        return teacher;
-    }
-
-    public void setTeacher(Teacher teacher) {
-        this.teacher = teacher;
-    }
-
-    public Student getStudent() {
-        return student;
-    }
-
-    public void setStudent(Student student) {
-        this.student = student;
-    }
-
-    @XmlTransient
-    public Collection<Candidates> getCandidatesCollection() {
-        return candidatesCollection;
-    }
-
-    public void setCandidatesCollection(Collection<Candidates> candidatesCollection) {
-        this.candidatesCollection = candidatesCollection;
-    }
-
-    @XmlTransient
-    public Collection<UserRole> getUserRoleCollection() {
-        return userRoleCollection;
-    }
-
-    public void setUserRoleCollection(Collection<UserRole> userRoleCollection) {
-        this.userRoleCollection = userRoleCollection;
+    public void setRewardPoints(int rewardPoints) {
+        this.rewardPoints = rewardPoints;
     }
 
     public String getRole() {

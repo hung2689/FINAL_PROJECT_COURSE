@@ -107,53 +107,7 @@ public class PayOSReturnServlet extends HttpServlet {
 
     private void sendReceiptEmailBackground(CourseOrder order, int orderId) {
         new Thread(() -> {
-            EntityManager em = JPAUtil.getEntityManager();
-            try {
-                // Fetch the user from the Student entity rather than the session layer
-                // so callbacks work purely via Order IDs even if the user swaps
-                // browsers/devices.
-                CourseOrder reloadedOrder = em.find(CourseOrder.class, orderId);
-
-                if (reloadedOrder != null && reloadedOrder.getStudentId() != null
-                        && reloadedOrder.getStudentId().getUsers() != null) {
-
-                    Users user = reloadedOrder.getStudentId().getUsers();
-
-                    if (user.getEmail() != null && !user.getEmail().trim().isEmpty()) {
-                        String toEmail = user.getEmail();
-                        String fullName = (user.getFullName() != null && !user.getFullName().trim().isEmpty())
-                                ? user.getFullName()
-                                : user.getUsername();
-
-                        long totalVND = (long) (reloadedOrder.getTotalAmount().doubleValue() * 25000);
-                        String formattedAmount = String.format("%,d", totalVND);
-
-                        String subject = "Payment Success Confirmation - DevLearn";
-                        String htmlBill = "<div style='font-family: Arial, sans-serif; padding: 20px; background-color: #f8f9fa;'>"
-                                + "<div style='background-color: white; padding: 30px; border-radius: 12px; max-width: 500px; margin: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.05);'>"
-                                + "<h2 style='color: #10B981; text-align: center; margin-bottom: 20px;'>Payment Successful!</h2>"
-                                + "<p style='color: #333;'>Hello <b>" + fullName + "</b>,</p>"
-                                + "<p style='color: #555; line-height: 1.6;'>Thank you for enrolling in the course. Below are your invoice details:</p>"
-                                + "<table style='width: 100%; border-collapse: collapse; margin-top: 20px; margin-bottom: 25px;'>"
-                                + "<tr><td style='padding: 12px 0; border-bottom: 1px dashed #ccc; color: #666;'>Order ID:</td><td style='padding: 12px 0; border-bottom: 1px dashed #ccc; text-align: right; color: #333;'><b>#"
-                                + orderId + "</b></td></tr>"
-                                + "<tr><td style='padding: 12px 0; border-bottom: 1px dashed #ccc; color: #666;'>Payment Method:</td><td style='padding: 12px 0; border-bottom: 1px dashed #ccc; text-align: right; color: #333;'><b>payOS (VietQR)</b></td></tr>"
-                                + "<tr><td style='padding: 12px 0; border-bottom: 1px solid #eee; color: #333; font-weight: bold;'>Total Amount:</td><td style='padding: 12px 0; border-bottom: 1px solid #eee; text-align: right; color: #e11d48; font-size: 18px;'><b>"
-                                + formattedAmount + " VNĐ</b></td></tr>"
-                                + "</table>"
-                                + "</div></div>";
-
-                        EmailUtil emailUtil = new EmailUtil();
-                        emailUtil.sendHtml(toEmail, subject, htmlBill);
-                    }
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            } finally {
-                if (em != null && em.isOpen()) {
-                    em.close();
-                }
-            }
+    
         }).start();
     }
 }

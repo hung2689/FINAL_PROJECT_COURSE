@@ -15,7 +15,8 @@ import jakarta.servlet.http.HttpSession;
     "/login",
     "/otpRegister",
     "/reset",
-    "/otpverify"
+    "/otpverify",
+    "/submit-error" // Đã thêm đường dẫn này vào để Filter nhận diện
 })
 public class AuthFilter implements Filter {
 
@@ -36,10 +37,17 @@ public class AuthFilter implements Filter {
         String uri = req.getRequestURI();
         String mode = req.getParameter("mode");
 
-        // OTP pages: require REG_EMAIL in session
+         /* =====================
+           [THÊM MỚI] CHO PHÉP SUBMIT-ERROR ĐI TIẾP MÀ KHÔNG BỊ CHẶN
+        ====================== */
+        if (uri.contains("/submit-error")) {
+            chain.doFilter(request, response);
+            return;
+        }
+         // OTP pages: require REG_EMAIL in session
         boolean isOtpPage = (uri.contains("/login") && "otp".equals(mode))
                 || OTP_PATHS.stream().anyMatch(uri::contains);
-
+ 
         if (isOtpPage) {
             if (session == null || session.getAttribute("REG_EMAIL") == null) {
                 res.sendRedirect(req.getContextPath() + "/login");
@@ -62,5 +70,7 @@ public class AuthFilter implements Filter {
         // OK → cho đi tiếp
         chain.doFilter(request, response);
     }
-}
+ }
+ }
 
+ 
