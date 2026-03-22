@@ -1,0 +1,9 @@
+         .tech-grid {
+            background-image: radial-gradient(#37ec13 0.5px, transparent 0.5px);
+            background-size: 24px 24px;
+            opacity: 0.1;
+        }
+        .bg-gradient-dark {
+            background: linear-gradient(135deg, #000000 0%, #0a1f05 100%);
+        }
+ 

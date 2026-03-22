@@ -1,0 +1,14 @@
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+.modal-body::-webkit-scrollbar {
+    width: 6px;
+}
+.modal-body::-webkit-scrollbar-track {
+    background: rgba(16, 185, 129, 0.05);
+}
+.modal-body::-webkit-scrollbar-thumb {
+    background: rgba(16, 185, 129, 0.2);
+    border-radius: 10px;
+}
