@@ -6,6 +6,7 @@
                 <html lang="en">
 
                 <head>
+    <script>window.IS_EDIT_ALLOWED = ${isEditAllowed};</script>
                     <meta charset="utf-8" />
                     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
                     <title>Course Details | DevLearn</title>
@@ -1846,6 +1847,7 @@
                         document.addEventListener("DOMContentLoaded", function() {
                             const isLoggedIn = ${sessionScope.USER != null};
                             if (isLoggedIn) {
+                                const freeCourseBtns = document.querySelectorAll('.free-course-btn');
                                 freeCourseBtns.forEach(btn => {
                                     const courseId = btn.getAttribute('data-course-id');
                                     fetch('${pageContext.request.contextPath}/api/courses/' + courseId + '/enrollment-status')

@@ -33,7 +33,7 @@ public class DailyAIDropoutJob implements ServletContextListener {
         ZonedDateTime zonedNextMidnight =zonedNow.withHour(0).withMinute(0).withSecond(0).withNano(0).plusDays(1);
         
         // Tính số giây cần chờ cho đến lần chạy đầu tiên
-        long initialDelay =5;//Duration.between(zonedNow, zonedNextMidnight).getSeconds();
+        long initialDelay =Duration.between(zonedNow, zonedNextMidnight).getSeconds();
         
         // 2. Thiết lập chu kỳ lặp lại là 24 giờ (tính bằng giây)
         long period = TimeUnit.DAYS.toSeconds(1); 

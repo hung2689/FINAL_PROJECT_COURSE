@@ -7,6 +7,7 @@ COPY pom.xml .
 COPY src ./src
 
 # Build the WAR file (skip tests to speed up deployment)
+# Cache invalidation trigger to fix Railway worker issue
 RUN mvn clean package -DskipTests
 
 # Stage 2: Set up the Tomcat server
