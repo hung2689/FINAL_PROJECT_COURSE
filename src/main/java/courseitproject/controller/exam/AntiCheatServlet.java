@@ -29,28 +29,27 @@ import java.util.UUID;
 /**
  * Anti-Cheat Detection Servlet.
  *
- * Receives a webcam snapshot from the frontend (key="file"),
- * forwards it to the Python YOLO detection server (key="image"),
- * evaluates the result, and manages a per-session warning counter.
+ * Receives a webcam snapshot from the frontend (key="file"), forwards it to the
+ * Python YOLO detection server (key="image"), evaluates the result, and manages
+ * a per-session warning counter.
  *
- * Python AI endpoint: POST http://localhost:5000/detect
- * Returns: [{ "class": 0, "conf": 0.85 }]
+ * Python AI endpoint: POST http://localhost:5000/detect Returns: [{ "class": 0,
+ * "conf": 0.85 }]
  *
- * Business rules:
- *   - conf > 0.7  →  increment warning count
- *   - warnings >= 3 →  block exam (force auto-submit)
+ * Business rules: - conf > 0.7 → increment warning count - warnings >= 3 →
+ * block exam (force auto-submit)
  */
 @WebServlet(name = "AntiCheatServlet", urlPatterns = {"/detect-cheat"})
 @MultipartConfig(
-        fileSizeThreshold = 1024 * 1024,      // 1 MB  – buffer in memory before writing to disk
-        maxFileSize       = 5 * 1024 * 1024,   // 5 MB  – max single file
-        maxRequestSize    = 10 * 1024 * 1024   // 10 MB – max total request
+        fileSizeThreshold = 1024 * 1024, // 1 MB  – buffer in memory before writing to disk
+        maxFileSize = 5 * 1024 * 1024, // 5 MB  – max single file
+        maxRequestSize = 10 * 1024 * 1024 // 10 MB – max total request
 )
 public class AntiCheatServlet extends HttpServlet {
 
-    private static final String AI_SERVER_URL = "http://localhost:5000/detect";
+    private static final String AI_SERVER_URL = "https://monocular-valene-oversocially.ngrok-free.dev/detect";
     private static final double CHEAT_CONFIDENCE_THRESHOLD = 0.7;
-    private static final int    MAX_WARNINGS = 3;
+    private static final int MAX_WARNINGS = 3;
 
     private static final String SESSION_KEY_PREFIX = "antiCheatWarnings_";
     private static final String EVIDENCE_FOLDER = "anticheat-evidence";
@@ -85,7 +84,9 @@ public class AntiCheatServlet extends HttpServlet {
 
         // ─── 3. Get current warning count for THIS attempt ──────────────
         Integer warnings = (Integer) session.getAttribute(sessionKey);
-        if (warnings == null) warnings = 0;
+        if (warnings == null) {
+            warnings = 0;
+        }
 
         // If already blocked, reject immediately
         if (warnings >= MAX_WARNINGS) {
@@ -140,7 +141,9 @@ public class AntiCheatServlet extends HttpServlet {
             for (int i = 0; i < detections.size(); i++) {
                 JsonObject det = detections.get(i).getAsJsonObject();
                 double conf = det.get("conf").getAsDouble();
-                if (conf > maxConf) maxConf = conf;
+                if (conf > maxConf) {
+                    maxConf = conf;
+                }
                 if (conf > CHEAT_CONFIDENCE_THRESHOLD) {
                     cheatingDetected = true;
                 }
@@ -185,7 +188,7 @@ public class AntiCheatServlet extends HttpServlet {
         } else if (cheatingDetected) {
             result.addProperty("message",
                     "Warning " + warnings + "/" + MAX_WARNINGS
-                            + ": suspicious activity detected (conf=" + String.format("%.0f%%", maxConf * 100) + ").");
+                    + ": suspicious activity detected (conf=" + String.format("%.0f%%", maxConf * 100) + ").");
         } else {
             result.addProperty("message", "OK");
         }
@@ -207,9 +210,12 @@ public class AntiCheatServlet extends HttpServlet {
         conn.setConnectTimeout(5000);
         conn.setReadTimeout(10000);
         conn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
+        conn.setRequestProperty("ngrok-skip-browser-warning", "true");
 
         String fileName = "capture.jpg";
-        if (contentType == null) contentType = "image/jpeg";
+        if (contentType == null) {
+            contentType = "image/jpeg";
+        }
 
         try (OutputStream os = conn.getOutputStream()) {
             PrintWriter writer = new PrintWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8), true);
@@ -258,16 +264,16 @@ public class AntiCheatServlet extends HttpServlet {
     // =====================================================================
     //  Save cheating evidence image to disk
     // =====================================================================
-
     /**
      * Saves the cheating snapshot to:
-     *   {webapp}/anticheat-evidence/user_{userId}/warning{n}_{timestamp}_{conf}.jpg
+     * {webapp}/anticheat-evidence/user_{userId}/warning{n}_{timestamp}_{conf}.jpg
      *
-     * Returns the relative web-accessible path (e.g. "/anticheat-evidence/user_5/warning1_20260321_193500_85.jpg")
-     * or null if saving fails.
+     * Returns the relative web-accessible path (e.g.
+     * "/anticheat-evidence/user_5/warning1_20260321_193500_85.jpg") or null if
+     * saving fails.
      */
     private String saveEvidenceImage(HttpServletRequest request, byte[] imageBytes,
-                                     int userId, int warningNumber, double confidence) {
+            int userId, int warningNumber, double confidence) {
         try {
             // Resolve the real path on disk for the webapp root
             String webappRoot = request.getServletContext().getRealPath("/");
@@ -304,8 +310,9 @@ public class AntiCheatServlet extends HttpServlet {
     // =====================================================================
     //  Helpers
     // =====================================================================
-
-    /** Send a JSON string with the given HTTP status code. */
+    /**
+     * Send a JSON string with the given HTTP status code.
+     */
     private void sendJson(HttpServletResponse response, int statusCode, String json) throws IOException {
         response.setStatus(statusCode);
         response.setContentType("application/json; charset=UTF-8");
@@ -315,7 +322,9 @@ public class AntiCheatServlet extends HttpServlet {
         }
     }
 
-    /** Standard error JSON body. */
+    /**
+     * Standard error JSON body.
+     */
     private String errorJson(String message) {
         JsonObject obj = new JsonObject();
         obj.addProperty("error", true);
@@ -323,7 +332,9 @@ public class AntiCheatServlet extends HttpServlet {
         return obj.toString();
     }
 
-    /** Response when exam is already blocked. */
+    /**
+     * Response when exam is already blocked.
+     */
     private String blockedJson(int warnings) {
         JsonObject obj = new JsonObject();
         obj.addProperty("cheatingDetected", false);
@@ -335,7 +346,9 @@ public class AntiCheatServlet extends HttpServlet {
         return obj.toString();
     }
 
-    /** Response when AI server is unavailable – graceful degradation. */
+    /**
+     * Response when AI server is unavailable – graceful degradation.
+     */
     private String degradedJson(String reason) {
         JsonObject obj = new JsonObject();
         obj.addProperty("cheatingDetected", false);
