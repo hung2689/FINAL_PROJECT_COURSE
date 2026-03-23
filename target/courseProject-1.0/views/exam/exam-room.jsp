@@ -371,7 +371,7 @@
         //  3. TIMER Logic
         // ═══════════════════════════════════════════════════════════════
         const durationMinutes = ${exam.durationMinutes};
-        const startedAt = new Date("${attempt.startedAt}").getTime();
+        const startedAt = ${attempt.startedAt.time};
         const endTime = startedAt + (durationMinutes * 60 * 1000);
         
         const timerDisplay = document.getElementById('timerDisplay');
