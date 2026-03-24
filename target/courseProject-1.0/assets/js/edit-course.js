@@ -21,9 +21,16 @@ function updateEditModeBtn() {
 
 // Restore Edit Mode on Page Load
 document.addEventListener('DOMContentLoaded', () => {
-    if (localStorage.getItem('courseEditMode') === 'true') {
+    const btn = document.getElementById('toggleEditModeBtn');
+    if (localStorage.getItem('courseEditMode') === 'true' && btn) {
         document.body.classList.add('edit-mode');
         updateEditModeBtn();
+    } else if (!btn) {
+        localStorage.setItem('courseEditMode', 'false');
+    }
+
+    if (!window.IS_EDIT_ALLOWED) {
+        document.querySelectorAll('.edit-only').forEach(el => el.remove());
     }
 });
 

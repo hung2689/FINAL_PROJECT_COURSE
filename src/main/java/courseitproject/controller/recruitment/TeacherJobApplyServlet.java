@@ -93,11 +93,15 @@ public class TeacherJobApplyServlet extends HttpServlet {
             cvUrl = uploadService.uploadCv(cvPart);
         }
 
-        applyService.applyForJob(user, job, cvUrl);
-        sendWebhook(user, cvUrl, job);
-
-        session.setAttribute("toastType", "success");
-        session.setAttribute("toastMsg", "Your application has been submitted.");
+        boolean success = applyService.applyForJob(user, job, cvUrl);
+        if (success) {
+            sendWebhook(user, cvUrl, job);
+            session.setAttribute("toastType", "success");
+            session.setAttribute("toastMsg", "Your application has been submitted.");
+        } else {
+            session.setAttribute("toastType", "error");
+            session.setAttribute("toastMsg", "You have already applied for this job.");
+        }
         resp.sendRedirect(req.getContextPath() + "/teacher-jobs");
     }
 

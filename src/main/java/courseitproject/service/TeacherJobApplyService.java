@@ -11,13 +11,18 @@ import java.util.Date;
 
 public class TeacherJobApplyService {
 
-    private final GenericDAO<Candidates> candidatesDAO = new GenericDAO<>(Candidates.class);
+    private final courseitproject.dao.CandidatesDAO candidatesDAO = new courseitproject.dao.CandidatesDAO();
 
-    public void applyForJob(Users user, TeacherJob job, String cvUrl) {
+    public boolean applyForJob(Users user, TeacherJob job, String cvUrl) {
         EntityManager em = JPAUtil.getEntityManager();
         EntityTransaction tx = em.getTransaction();
 
         try {
+            // Check if user has already applied for this job using the new DAO
+            if (candidatesDAO.existsByUserIdAndJobId(em, user, job)) {
+                return false; // Already applied
+            }
+
             tx.begin();
 
             Candidates c = new Candidates();
@@ -32,6 +37,7 @@ public class TeacherJobApplyService {
             candidatesDAO.save(em, c);
 
             tx.commit();
+            return true;
         } catch (Exception e) {
             if (tx.isActive()) {
                 tx.rollback();

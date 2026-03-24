@@ -244,7 +244,7 @@
                             <c:remove var="toastType" scope="session"/>
                         </c:if>
 
-                        <form action="${pageContext.request.contextPath}/teacher-apply" method="post" enctype="multipart/form-data" class="space-y-6">
+                        <form action="${pageContext.request.contextPath}/teacher-apply" method="post" enctype="multipart/form-data" class="space-y-6" onsubmit="return submitForm(this);">
                             <input type="hidden" name="jobId" value="${job.jobId}"/>
 
                             <div class="space-y-2">
@@ -284,6 +284,16 @@
     <jsp:include page="/views/common/userbuttom.jsp"/>
 
     <script>
+        // Prevent double submission
+        function submitForm(form) {
+            const btn = form.querySelector('button[type="submit"]');
+            if (btn.disabled) return false;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="material-symbols-outlined text-xl animate-spin">refresh</span> Sending...';
+            btn.classList.add('opacity-75', 'cursor-not-allowed');
+            return true;
+        }
+
         // File upload UI update
         function updateFileName(input) {
             const display = document.getElementById('fileNameDisplay');
