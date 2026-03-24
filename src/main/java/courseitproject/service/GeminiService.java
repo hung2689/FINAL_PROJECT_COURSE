@@ -186,18 +186,30 @@ public class GeminiService {
 
     private String callGroqAPI(String prompt) {
         // Build request body in OpenAI chat format
+        // System message anchors the AI's behavior for consistent scoring
+        JsonObject systemMessage = new JsonObject();
+        systemMessage.addProperty("role", "system");
+        systemMessage.addProperty("content",
+                "You are a deterministic code grading engine. "
+                + "You MUST produce the EXACT SAME score for the EXACT SAME code every time. "
+                + "Follow the rubric precisely. Use mathematical deduction, not intuition. "
+                + "Never randomize scores. Always show your calculation.");
+
         JsonObject userMessage = new JsonObject();
         userMessage.addProperty("role", "user");
         userMessage.addProperty("content", prompt);
 
         JsonArray messages = new JsonArray();
+        messages.add(systemMessage);
         messages.add(userMessage);
 
         JsonObject requestBody = new JsonObject();
         requestBody.addProperty("model", GROQ_MODEL);
         requestBody.add("messages", messages);
         requestBody.addProperty("max_tokens", 2048);
-        requestBody.addProperty("temperature", 0.3);
+        requestBody.addProperty("temperature", 0);   // 0 = fully deterministic, no randomness
+        requestBody.addProperty("top_p", 1);          // Use full probability distribution
+        requestBody.addProperty("seed", 42);          // Fixed seed for reproducible results
 
         String jsonBody = gson.toJson(requestBody);
 
