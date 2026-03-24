@@ -555,25 +555,22 @@ public class UserServiceImp implements IUserService {
     
     private boolean validateUser(Users user, String roleName) {
         if (user == null) {
-            System.err.println("Validation Error: User object is null.");
-            return false;
+            throw new IllegalArgumentException("User object is null.");
         }
-        if (user.getUsername() == null || user.getUsername().trim().isEmpty()) {
-            System.err.println("Validation Error: Username cannot be null or empty.");
-            return false;
-        }
+        // Allow empty username since Google users might not have completed their profiles yet
+        // and older accounts might have it as null in the DB
+        /* if (user.getUsername() == null || user.getUsername().trim().isEmpty()) {
+            throw new IllegalArgumentException("Username cannot be null or empty.");
+        } */
         if (user.getEmail() == null || !user.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
-            System.err.println("Validation Error: Invalid email format -> " + user.getEmail());
-            return false;
+            throw new IllegalArgumentException("Invalid email format: " + user.getEmail());
         }
         if (RoleName.fromString(roleName) == null) {
-            System.err.println("Validation Error: Invalid role -> " + roleName);
-            return false;
+            throw new IllegalArgumentException("Invalid role: " + roleName);
         }
         Set<String> validStatuses = Set.of("ACTIVE", "PENDING", "INACTIVE");
         if (user.getStatus() == null || !validStatuses.contains(user.getStatus())) {
-            System.err.println("Validation Error: Invalid status -> " + user.getStatus());
-            return false;
+            throw new IllegalArgumentException("Invalid status: " + user.getStatus());
         }
         return true;
     }
@@ -658,9 +655,7 @@ public class UserServiceImp implements IUserService {
             if (tx.isActive()) {
                 tx.rollback();
             }
-            System.err.println("Error adding user: " + e.getMessage());
-            e.printStackTrace();
-            return false;
+            throw new RuntimeException(e.getMessage(), e);
         } finally {
             em.close();
         }
@@ -756,9 +751,7 @@ public class UserServiceImp implements IUserService {
             if (tx.isActive()) {
                 tx.rollback();
             }
-            System.err.println("Error updating user: " + e.getMessage());
-            e.printStackTrace();
-            return false;
+            throw new RuntimeException(e.getMessage(), e);
         } finally {
             em.close();
         }

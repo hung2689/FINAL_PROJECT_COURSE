@@ -80,6 +80,13 @@
                     </div>
                 </header>
                 <div class="p-8">
+                    <c:if test="${not empty ERROR}">
+                        <div class="mb-6 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 px-4 py-3 rounded-xl flex items-center gap-3">
+                            <span class="material-icons">error_outline</span>
+                            <p class="font-medium text-sm">${ERROR}</p>
+                        </div>
+                    </c:if>
+                    
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                         <div
                             class="bg-white dark:bg-slate-800/50 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:-translate-y-1 hover:shadow-md transition-all duration-300">
