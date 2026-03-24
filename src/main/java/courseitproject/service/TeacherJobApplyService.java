@@ -6,7 +6,6 @@ import courseitproject.model.Users;
 import courseitproject.utils.JPAUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
-import java.util.Date;
 
 public class TeacherJobApplyService {
 
@@ -17,23 +16,37 @@ public class TeacherJobApplyService {
         EntityTransaction tx = em.getTransaction();
 
         try {
-            // Check if user has already applied for this job using the new DAO
-            if (candidatesDAO.existsByUserIdAndJobId(em, user, job)) {
-                return false; // Already applied
-            }
-
             tx.begin();
 
-            Candidates c = new Candidates();
-            c.setUserId(user);
-            c.setName(user.getFullName());
-            c.setEmail(user.getEmail());
-            c.setCvText(cvUrl);
-            c.setDecision("PENDING");
-            c.setCreatedAt(new Date());
-            c.setJobId(job);
+            Candidates existing = candidatesDAO.findLatestByUserIdAndJobId(em, user, job);
 
-            candidatesDAO.save(em, c);
+            if (existing != null) {
+                if (!"PENDING".equals(existing.getDecision())) {
+                    tx.rollback();
+                    return false; // Đã chấm (ACCEPTED/REJECTED) -> Chặn đứng
+                }
+
+                // Ghi đè CV bản nháp (PENDING)
+                existing.setCvText(cvUrl);
+                existing.setCreatedAt(new java.util.Date());
+                existing.setScore(null);
+                existing.setSkillsCount(null);
+                existing.setProjectsCount(null);
+
+                candidatesDAO.update(em, existing);
+            } else {
+                // Tạo mới hoàn toàn
+                Candidates c = new Candidates();
+                c.setUserId(user);
+                c.setName(user.getFullName());
+                c.setEmail(user.getEmail());
+                c.setCvText(cvUrl);
+                c.setDecision("PENDING");
+                c.setCreatedAt(new java.util.Date());
+                c.setJobId(job);
+
+                candidatesDAO.save(em, c);
+            }
 
             tx.commit();
             return true;

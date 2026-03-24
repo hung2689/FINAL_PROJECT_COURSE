@@ -15,15 +15,16 @@ public class CandidatesDAO extends GenericDAO<Candidates> {
     }
 
     /**
-     * Check if a candidate already exists for the given user and job.
+     * Tìm hồ sơ mới nhất của user cho job này
      */
-    public boolean existsByUserIdAndJobId(EntityManager em, Users user, TeacherJob job) {
-        String jpql = "SELECT c FROM Candidates c WHERE c.userId = :user AND c.jobId = :job";
+    public Candidates findLatestByUserIdAndJobId(EntityManager em, Users user, TeacherJob job) {
+        String jpql = "SELECT c FROM Candidates c WHERE c.userId = :user AND c.jobId = :job ORDER BY c.createdAt DESC";
         List<Candidates> existing = em.createQuery(jpql, Candidates.class)
                 .setParameter("user", user)
                 .setParameter("job", job)
+                .setMaxResults(1)
                 .getResultList();
 
-        return !existing.isEmpty();
+        return existing.isEmpty() ? null : existing.get(0);
     }
 }
