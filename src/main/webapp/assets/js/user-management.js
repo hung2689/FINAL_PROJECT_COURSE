@@ -32,9 +32,7 @@ function confirmDelete(id) {
 }
 
 function openUpdateUserModal(id) {
-    // find context path
-    const pathParts = window.location.pathname.split('/');
-    const contextPath = '/' + pathParts[1];
+    const contextPath = window.CONTEXT_PATH || '';
     
     fetch(contextPath + "/admin/users?action=getById&id=" + id)
         .then(response => {

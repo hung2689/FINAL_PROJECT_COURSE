@@ -565,6 +565,9 @@
             <input type="hidden" name="action" value="delete">
             <input type="hidden" name="user_id" id="deleteUserId">
         </form>
+        <script>
+            window.CONTEXT_PATH = '${pageContext.request.contextPath}';
+        </script>
         <script src="${pageContext.request.contextPath}/assets/js/user-management.js"></script>
         <script>
                                 let currentView = 'users';
@@ -658,8 +661,7 @@
 
                                 // ========= TEACHER MODAL =========
                                 function openUpdateTeacherModal(id) {
-                                    const pathParts = window.location.pathname.split('/');
-                                    const contextPath = '/' + pathParts[1];
+                                    const contextPath = window.CONTEXT_PATH || '';
                                     fetch(contextPath + '/admin/users?action=getTeacherById&id=' + id)
                                             .then(r => r.json())
                                             .then(data => {
@@ -689,8 +691,7 @@
 
                                 // ========= STUDENT MODAL =========
                                 function openUpdateStudentModal(id) {
-                                    const pathParts = window.location.pathname.split('/');
-                                    const contextPath = '/' + pathParts[1];
+                                    const contextPath = window.CONTEXT_PATH || '';
                                     fetch(contextPath + '/admin/users?action=getStudentById&id=' + id)
                                             .then(r => r.json())
                                             .then(data => {
