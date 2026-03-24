@@ -7,10 +7,12 @@ import java.util.List;
 public class TeacherAssignmentDAO {
 
     public List<RepoSubmission> getSubmissionsByTeacher(EntityManager em, int teacherId) {
-        String jpql = "SELECT r FROM RepoSubmission r " +
-                      "JOIN r.assignmentId a " +
-                      "JOIN a.lessonId l " +
-                      "JOIN l.courseId c " +
+        String jpql = "SELECT DISTINCT r FROM RepoSubmission r " +
+                      "JOIN FETCH r.assignmentId a " +
+                      "JOIN FETCH a.lessonId l " +
+                      "JOIN FETCH l.courseId c " +
+                      "JOIN FETCH r.studentId s " +
+                      "JOIN FETCH s.users u " +
                       "JOIN c.courseTeacherCollection ct " +
                       "WHERE ct.teacherId.teacherId = :teacherId " +
                       "ORDER BY r.submittedAt DESC";
