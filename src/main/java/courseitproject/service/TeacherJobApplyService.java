@@ -1,6 +1,5 @@
 package courseitproject.service;
 
-import courseitproject.dao.base.GenericDAO;
 import courseitproject.model.Candidates;
 import courseitproject.model.TeacherJob;
 import courseitproject.model.Users;

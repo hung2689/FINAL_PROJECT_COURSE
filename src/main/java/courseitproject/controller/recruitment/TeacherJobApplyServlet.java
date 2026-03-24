@@ -107,7 +107,7 @@ public class TeacherJobApplyServlet extends HttpServlet {
 
     private void sendWebhook(Users user, String cvUrl, TeacherJob jobId) {
         try {
-            String webhookUrl = "http://localhost:5678/webhook/teacher-apply";
+            String webhookUrl = "https://abcd-xyz.ngrok-free.app/webhook/teacher-apply";
 
             URL url = new URL(webhookUrl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
