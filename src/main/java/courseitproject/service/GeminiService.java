@@ -174,8 +174,8 @@ public class GeminiService {
     }
 
     // ==================== GROQ API CALL ====================
-    private static final int MAX_RETRIES = 5;
-    private static final long DEFAULT_RATE_LIMIT_WAIT_MS = 30_000; // 30 seconds default wait
+    private static final int MAX_RETRIES = 2; // Giảm từ 5 xuống 2 để web khỏi bị treo quá lâu
+    private static final long DEFAULT_RATE_LIMIT_WAIT_MS = 10_000; // Giảm từ 30s xuống 10s
 
     private String callGroqAPI(String prompt) {
         // Build request body in OpenAI chat format

@@ -169,7 +169,7 @@
                                             <c:forEach var="teacher" items="${courseDetail.teachers}">
                                                 <div class="flex items-center gap-3">
                                                     <div class="size-10 rounded-full bg-gray-200 border-2 border-primary"
-                                                        style="background-image: url('${empty teacher.users.providerId ? 'https://ui-avatars.com/api/?name='.concat(teacher.users.fullName).concat('&background=random') : 'default.jpg'}'); background-size: cover;">
+                                                        style="background-image: url('https://ui-avatars.com/api/?name=${teacher.users.fullName}&background=random'); background-size: cover;">
                                                     </div>
                                                     <div>
                                                         <p class="text-xs text-slate-500 font-medium uppercase">
