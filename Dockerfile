@@ -16,6 +16,9 @@ FROM tomcat:10.1-jdk17
 # Set memory limits mapped to Render's Free tier (512MB limit) to prevent OOM Kills
 ENV JAVA_OPTS="-Xms256m -Xmx350m -XX:MaxMetaspaceSize=128m"
 
+# Install git (required for cloning student GitHub repos for AI grading)
+RUN apt-get update && apt-get install -y --no-install-recommends git && rm -rf /var/lib/apt/lists/*
+
 # Remove default Tomcat webapps
 RUN rm -rf /usr/local/tomcat/webapps/*
 

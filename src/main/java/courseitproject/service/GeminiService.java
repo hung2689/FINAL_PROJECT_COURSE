@@ -20,7 +20,8 @@ public class GeminiService {
     private static final Logger LOG = Logger.getLogger(GeminiService.class.getName());
 
     // ===== GROQ API Configuration =====
-    private static final String GROQ_API_KEY = "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";
+    private static final String GROQ_API_KEY = System.getenv("GROQ_API_KEY") != null
+            ? System.getenv("GROQ_API_KEY") : "MISSING_KEY";
     private static final String GROQ_MODEL = "llama-3.1-8b-instant";
     private static final String API_URL = "https://api.groq.com/openai/v1/chat/completions";
 
