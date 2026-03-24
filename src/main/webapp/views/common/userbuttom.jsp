@@ -89,6 +89,20 @@
                                     View Study
                                 </a>
                             </c:when>
+                            <c:when test="${sessionScope.ROLE == 'TEACHER'}">
+                                <a href="${pageContext.request.contextPath}/teacherDashboard"
+                                    class="flex items-center gap-3 px-5 py-2.5 text-sm font-medium ${param.isSidebar == 'true' ? 'text-slate-300 hover:bg-slate-700/50 hover:text-primary' : 'text-gray-600 hover:bg-gray-100 hover:text-emerald-600'} transition-colors"
+                                    style="text-decoration: none;">
+                                    <span class="material-symbols-outlined text-[20px]">dashboard</span>
+                                    View Teacher
+                                </a>
+                                <a href="${pageContext.request.contextPath}/home"
+                                    class="flex items-center gap-3 px-5 py-2.5 text-sm font-medium ${param.isSidebar == 'true' ? 'text-slate-300 hover:bg-slate-700/50 hover:text-primary' : 'text-gray-600 hover:bg-gray-100 hover:text-emerald-600'} transition-colors"
+                                    style="text-decoration: none;">
+                                    <span class="material-symbols-outlined text-[20px]">school</span>
+                                    View Study
+                                </a>
+                            </c:when>
                             <c:otherwise>
                                 <a href="${pageContext.request.contextPath}/student"
                                     class="flex items-center gap-3 px-5 py-2.5 text-sm font-medium ${param.isSidebar == 'true' ? 'text-slate-300 hover:bg-slate-700/50' : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900'} transition-colors"
@@ -113,13 +127,16 @@
                     </div>
 
                     <div class="py-2 border-t ${param.isSidebar == 'true' ? 'border-slate-700' : 'border-gray-200'}">
-                        <div class="flex items-center justify-between px-4 py-2 mb-2 rounded-lg mx-3 ${param.isSidebar == 'true' ? 'bg-emerald-500/10 border border-emerald-500/20' : 'bg-emerald-50 border border-emerald-100'}">
-                             <div class="flex items-center gap-2">
-                                <span class="material-symbols-outlined text-emerald-500 text-[20px]">monetization_on</span>
-                                <span class="text-sm font-bold ${param.isSidebar == 'true' ? 'text-emerald-400' : 'text-emerald-600'}">Study Coins</span>
-                             </div>
-                             <span class="text-sm font-black text-emerald-500">${sessionScope.USER.studyCoins != null ? sessionScope.USER.studyCoins : 0}</span>
-                        </div>
+                        
+                        <c:if test="${sessionScope.ROLE != 'TEACHER' && sessionScope.ROLE != 'ADMIN'}">
+                            <div class="flex items-center justify-between px-4 py-2 mb-2 rounded-lg mx-3 ${param.isSidebar == 'true' ? 'bg-emerald-500/10 border border-emerald-500/20' : 'bg-emerald-50 border border-emerald-100'}">
+                                 <div class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-emerald-500 text-[20px]">monetization_on</span>
+                                    <span class="text-sm font-bold ${param.isSidebar == 'true' ? 'text-emerald-400' : 'text-emerald-600'}">Study Coins</span>
+                                 </div>
+                                 <span class="text-sm font-black text-emerald-500">${sessionScope.USER.studyCoins != null ? sessionScope.USER.studyCoins : 0}</span>
+                            </div>
+                        </c:if>
 
                         <a href="${pageContext.request.contextPath}/logout"
                             class="flex items-center gap-3 px-5 py-2.5 text-sm font-medium text-red-500 ${param.isSidebar == 'true' ? 'hover:bg-red-500/10' : 'hover:bg-red-50 hover:text-red-600'} transition-colors"

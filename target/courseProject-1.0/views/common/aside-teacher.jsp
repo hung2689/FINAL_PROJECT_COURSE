@@ -17,6 +17,11 @@
                 <span class="material-icons text-xl">dashboard</span>
                 <span class="font-medium">Dashboard</span>
             </a>
+            <a class="flex items-center gap-3 px-4 py-3 rounded-lg ${activeMenu == 'assignments' ? 'bg-primary/10 text-primary' : 'hover:bg-slate-800'} transition-colors"
+                href="${pageContext.request.contextPath}/teacher/assignments">
+                <span class="material-icons text-xl">assignment_turned_in</span>
+                <span class="font-medium">Assignment Results</span>
+            </a>
         </nav>
         <div class="p-4 border-t border-slate-800">
             <jsp:include page="/views/common/userbuttom.jsp">

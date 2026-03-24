@@ -67,6 +67,7 @@ D:\FPTU\semeter_4\MAIN_COURSEIT\FINAL_PROJECT_COURSE\src\main\java\courseitproje
 D:\FPTU\semeter_4\MAIN_COURSEIT\FINAL_PROJECT_COURSE\src\main\java\courseitproject\controller\details\CourseServlet.java
 D:\FPTU\semeter_4\MAIN_COURSEIT\FINAL_PROJECT_COURSE\src\main\java\courseitproject\service\CodeScannerService.java
 D:\FPTU\semeter_4\MAIN_COURSEIT\FINAL_PROJECT_COURSE\src\main\java\courseitproject\utils\AIPredictorUtil.java
+D:\FPTU\semeter_4\MAIN_COURSEIT\FINAL_PROJECT_COURSE\src\main\java\courseitproject\controller\auther\SwitchRoleServlet.java
 D:\FPTU\semeter_4\MAIN_COURSEIT\FINAL_PROJECT_COURSE\src\main\java\courseitproject\dao\AIPredictionDAO.java
 D:\FPTU\semeter_4\MAIN_COURSEIT\FINAL_PROJECT_COURSE\src\main\java\courseitproject\model\Answer.java
 D:\FPTU\semeter_4\MAIN_COURSEIT\FINAL_PROJECT_COURSE\src\main\java\courseitproject\controller\admin\DropoutRiskApiServlet.java
