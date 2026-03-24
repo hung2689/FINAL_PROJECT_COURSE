@@ -137,7 +137,17 @@ public class AntiCheatServlet extends HttpServlet {
         double maxConf = 0.0;
 
         try {
-            JsonArray detections = JsonParser.parseString(aiResponse).getAsJsonArray();
+            com.google.gson.JsonElement parsedElement = JsonParser.parseString(aiResponse);
+            JsonArray detections = null;
+            
+            if (parsedElement.isJsonArray()) {
+                detections = parsedElement.getAsJsonArray();
+            } else if (parsedElement.isJsonObject() && parsedElement.getAsJsonObject().has("detections")) {
+                detections = parsedElement.getAsJsonObject().getAsJsonArray("detections");
+            } else {
+                throw new IllegalStateException("Unexpected JSON structure: " + aiResponse);
+            }
+
             for (int i = 0; i < detections.size(); i++) {
                 JsonObject det = detections.get(i).getAsJsonObject();
                 double conf = det.get("conf").getAsDouble();
